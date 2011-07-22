@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<otrs_package version="1.0">
+    <CVS>$Id: QuickClose.sopm,v 1.1.1.1 2011/04/15 07:49:58 rb Exp $</CVS>
+    <Name>QuickClose</Name>
+    <Version>0.0.0</Version>
+    <Framework>3.0.x</Framework>
+    <Vendor>Perl-Services.de</Vendor>
+    <URL>http://www.perl-services.de/</URL>
+    <License>GNU AFFERO GENERAL PUBLIC LICENSE Version 3, November 2007</License>
+    <Description Lang="en">A module to close tickets more quickly.</Description>
+    <Description Lang="de">Ein Modul, mit dem Tickets schneller/einfacher geschlossen werden können.</Description>
+    <Filelist>
+        <File Permission="644" Location="Kernel/Config/Files/QuickClose.xml"/>
+        <File Permission="644" Location="Kernel/Language/de_QuickClose.pm"/>
+        <File Permission="644" Location="Kernel/Modules/AdminQuickClose.pm"/>
+        <File Permission="644" Location="Kernel/Modules/AgentQuickClose.pm"/>
+        <File Permission="644" Location="Kernel/Output/HTML/Standard/AdminQuickCloseList.dtl"/>
+        <File Permission="644" Location="Kernel/Output/HTML/Standard/AdminQuickCloseForm.dtl"/>
+        <File Permission="644" Location="Kernel/Output/HTML/Standard/QuickCloseSnippet.dtl"/>
+        <File Permission="644" Location="Kernel/System/QuickClose.pm"/>
+    </Filelist>
+    <DatabaseInstall Type="post">
+        <TableCreate Name="ps_quick_close">
+            <Column Name="id" Required="true" AutoIncrement="true" Type="INTEGER" PrimaryKey="true"/>
+            <Column Name="close_name" Required="true" Type="VARCHAR" Size="250"/>
+            <Column Name="comments" Required="true" Type="VARCHAR" Size="250"/>
+            <Column Name="body" Required="true" Type="VARCHAR" Size="3000"/>
+            <Column Name="state_id" Required="true" Type="SMALLINT"/>
+            <Column Name="valid_id" Required="true" Type="SMALLINT"/>
+            <Column Name="create_time" Required="true" Type="DATE"/>
+            <Column Name="create_by" Required="true" Type="INTEGER"/>
+            <Column Name="change_time" Required="true" Type="DATE"/>
+            <Column Name="change_by" Required="true" Type="INTEGER"/>
+            <ForeignKey ForeignTable="system_user">
+                <Reference Local="create_by" Foreign="id" />
+                <Reference Local="change_by" Foreign="id" />
+            </ForeignKey>
+            <ForeignKey ForeignTable="valid">
+                <Reference Local="valid_id" Foreign="id" />
+            </ForeignKey>
+            <ForeignKey ForeignTable="ticket_state">
+                <Reference Local="state_id" Foreign="id" />
+            </ForeignKey>
+        </TableCreate>
+    </DatabaseInstall>
+    <DatabaseUninstall>
+        <TableDrop Name="ps_quick_close"/>
+    </DatabaseUninstall>
+</otrs_package>

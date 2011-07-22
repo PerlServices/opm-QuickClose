@@ -1,0 +1,55 @@
+# --
+# QuickCloseSnippet.dtl - provides HTML for QuickCloseSnippet.pm
+# Copyright (C) 2011 Perl-Services.de, http://www.perl-services.de 
+# --
+# $Id: QuickCloseSnippet.dtl,v 1.33 2011/01/27 18:44:38 rb Exp $
+# --
+# This software comes with ABSOLUTELY NO WARRANTY. For details, see
+# the enclosed file COPYING for license information (AGPL). If you
+# did not receive this file, see http://www.gnu.org/licenses/agpl.txt.
+# --
+
+                    <li class="$QData{"Class"}">
+                        <form title="$Text{"QuickClose ticket"}" action="$Env{"CGIHandle"}" method="post">
+                            <input type="hidden" name="Action" value="AgentTicketClose"/>
+                            <input type="hidden" name="TicketID" value="$QData{"TicketID"}"/>
+                            <input type="hidden" name="Subject" value="$Text{"Close"}"/>
+                            <input type="hidden" name="StateID" id="QCStateID" value="" />
+                            <input type="hidden" name="Body" id="QCBody" value="" />
+                            <label for="QuickClose" class="InvisibleText">$Text{"QuickClose"}:</label>
+                            $Data{"QuickCloseSelect"}
+                        </form>
+<!-- dtl:js_on_document_complete -->
+<script type="text/javascript">//<![CDATA[
+    $('#QuickClose').bind('change', function (Event) {
+        // retrieve body for quickclose
+        var URL = Core.Config.Get('Baselink');
+        var TID = this.val();
+
+        jQuery.ajax({
+            url: URL,
+            data: {
+                Action: 'AgentQuickClose',
+                ID: TID
+            },
+            dataType: 'json',
+            success: function (Response){
+                if ( !Response ) {
+                    Core.Exception.Throw('Invalid JSON from ' + URL, 'CommunicationError');
+                }
+                else {
+                    $('#QCBody').val( Response.Body );
+                    $('#QCStateID').val( Response.StateID );
+                };
+            },
+            error: function() {
+                Core.Exception.Throw('Error during AJAX communication', 'CommunicationError');
+            }
+        });
+
+
+        $(this).closest('form').submit();
+    });
+//]]></script>
+<!-- dtl:js_on_document_complete -->
+                    </li>
