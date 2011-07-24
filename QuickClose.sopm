@@ -14,6 +14,7 @@
         <File Permission="644" Location="Kernel/Language/de_QuickClose.pm"/>
         <File Permission="644" Location="Kernel/Modules/AdminQuickClose.pm"/>
         <File Permission="644" Location="Kernel/Modules/AgentQuickClose.pm"/>
+        <File Permission="644" Location="Kernel/Output/HTML/OutputFilterClose.pm"/>
         <File Permission="644" Location="Kernel/Output/HTML/Standard/AdminQuickCloseList.dtl"/>
         <File Permission="644" Location="Kernel/Output/HTML/Standard/AdminQuickCloseForm.dtl"/>
         <File Permission="644" Location="Kernel/Output/HTML/Standard/QuickCloseSnippet.dtl"/>
