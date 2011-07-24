@@ -30,7 +30,10 @@ sub new {
     bless( $Self, $Type );
 
     # check all needed objects
-    for my $Needed (qw(ParamObject DBObject LayoutObject ConfigObject LogObject)) {
+    my @Objects = qw(
+        ParamObject DBObject LayoutObject ConfigObject LogObject TicketObject 
+    );
+    for my $Needed (@Objects) {
         if ( !$Self->{$Needed} ) {
             $Self->{LayoutObject}->FatalError( Message => "Got no $Needed!" );
         }
@@ -42,13 +45,16 @@ sub new {
     $Self->{HTMLUtilsObject}  = Kernel::System::HTMLUtils->new(%Param);
     $Self->{StateObject}      = Kernel::System::State->new(%Param);
 
+    # get config of frontend module
+    $Self->{Config} = $Self->{ConfigObject}->Get("Ticket::Frontend::AgentTicketClose");
+
     return $Self;
 }
 
 sub Run {
     my ( $Self, %Param ) = @_;
 
-    my @Params = (qw(ID Name StateID Body ValidID UserID));
+    my @Params = (qw(ID Name StateID Body ValidID UserID ArticleTypeID));
     my %GetParam;
     for (@Params) {
         $GetParam{$_} = $Self->{ParamObject}->GetParam( Param => $_ ) || '';
@@ -201,6 +207,14 @@ sub _MaskQuickCloseForm {
         }
     }
 
+    # add rich text editor
+    if ( $Self->{ConfigObject}->Get( 'Frontend::RichText' ) ) {
+        $Self->{LayoutObject}->Block(
+            Name => 'RichText',
+            Data => \%Param,
+        );
+    }
+
     my $ValidID = $Self->{ValidObject}->ValidLookup( Valid => 'valid' );
 
     $Param{ValidSelect} = $Self->{LayoutObject}->BuildSelection(
@@ -222,6 +236,29 @@ sub _MaskQuickCloseForm {
         Size       => 1,
         SelectedID => $Param{StateID},
         HTMLQuote  => 1,
+    );
+
+    # build ArticleTypeID string
+    my %ArticleType;
+    if ( !$Param{ArticleTypeID} ) {
+        $ArticleType{SelectedValue} = $Self->{Config}->{ArticleTypeDefault};
+    }
+    else {
+        $ArticleType{SelectedID} = $Param{ArticleTypeID};
+    }
+
+    # get possible notes
+    my %DefaultNoteTypes = %{ $Self->{Config}->{ArticleTypes} };
+    my %NoteTypes = $Self->{TicketObject}->ArticleTypeList( Result => 'HASH' );
+    for my $KeyNoteType ( keys %NoteTypes ) {
+        if ( !$DefaultNoteTypes{ $NoteTypes{$KeyNoteType} } ) {
+            delete $NoteTypes{$KeyNoteType};
+        }
+    }
+    $Param{ArticleTypeSelect} = $Self->{LayoutObject}->BuildSelection(
+        Data => \%NoteTypes,
+        Name => 'ArticleTypeID',
+        %ArticleType,
     );
 
     if ( $Self->{Subaction} ne 'Edit' && $Self->{Subaction} ne 'Add' ) {

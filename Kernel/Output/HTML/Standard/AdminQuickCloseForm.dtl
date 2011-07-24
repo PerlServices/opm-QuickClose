@@ -54,13 +54,18 @@
                         </div>
                         <div class="Clear"></div>
 
-                        <label for="Body" class="Mandatory">
+                        <label for="RichText" class="Mandatory">
                             <span class="Marker">*</span>
                             $Text{"Body"}:
                         </label>
-                        <div class="Field">
-                            <textarea id="Body" name="Body" class="W75pc Validate_Required $QData{"BodyInvalid"}">$QData{"Body"}</textarea>
-                            <div id="BodyError" class="TooltipErrorMessage">
+                        <div class="RichTextField">
+ 
+<!-- dtl:block:RichText -->
+$Include{"RichTextEditor"}
+<!-- dtl:block:RichText -->
+
+                            <textarea id="RichText" name="Body" class="W75pc RichText Validate_Required $QData{"BodyInvalid"}" rows="15" cols="$Config{"Ticket::Frontend::TextAreaNote"}">$QData{"Body"}</textarea>
+                            <div id="RichTextError" class="TooltipErrorMessage">
                                 <p>$Text{"A news text is required."}</p>
                             </div>
                             <div id="BodyServerError" class="TooltipErrorMessage">
@@ -84,6 +89,15 @@
                         </label>
                         <div class="Field">
                             $Data{"ValidSelect"}
+                        </div>
+                        <div class="Clear"></div>
+
+                        <label for="ArticleTypeID" class="Mandatory">
+                            <span class="Marker">*</span>
+                            $Text{"Article Type"}:
+                        </label>
+                        <div class="Field">
+                            $Data{"ArticleTypeSelect"}
                         </div>
                         <div class="Clear"></div>
 

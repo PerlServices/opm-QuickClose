@@ -96,11 +96,12 @@ sub new {
 to add a news 
 
     my $ID = $QuickCloseObject->QuickCloseAdd(
-        Name => 'A name for the news',
-        StateID   => 'A state_id for the news',
-        Body     => 'Anything is happened',
-        ValidID  => 1,
-        UserID   => 123,
+        Name          => 'A name for the news',
+        StateID       => 'A state_id for the news',
+        Body          => 'Anything is happened',
+        ArticleTypeID => 1,
+        ValidID       => 1,
+        UserID        => 123,
     );
 
 =cut
@@ -109,7 +110,7 @@ sub QuickCloseAdd {
     my ( $Self, %Param ) = @_;
 
     # check needed stuff
-    for my $Needed (qw(Name StateID Body ValidID UserID)) {
+    for my $Needed (qw(Name StateID Body ValidID UserID ArticleTypeID)) {
         if ( !$Param{$Needed} ) {
             $Self->{LogObject}->Log(
                 Priority => 'error',
@@ -122,14 +123,16 @@ sub QuickCloseAdd {
     # insert new news
     return if !$Self->{DBObject}->Do(
         SQL => 'INSERT INTO ps_quick_close '
-            . '(close_name, state_id, body, create_time, create_by, valid_id, change_time, change_by) '
-            . 'VALUES (?, ?, ?, current_timestamp, ?, ?, current_timestamp, ?)',
+            . '(close_name, state_id, body, create_time, create_by, valid_id, '
+            . ' article_type_id, change_time, change_by) '
+            . 'VALUES (?, ?, ?, current_timestamp, ?, ?, ?, current_timestamp, ?)',
         Bind => [
             \$Param{Name},
             \$Param{StateID},
             \$Param{Body},
             \$Param{UserID},
             \$Param{ValidID},
+            \$Param{ArticleTypeID},
             \$Param{UserID},
         ],
     );
@@ -161,12 +164,13 @@ sub QuickCloseAdd {
 to update news 
 
     my $Success = $QuickCloseObject->QuickCloseUpdate(
-        ID   => 3,
-        Name => 'A name for the news',
-        StateID   => 'A state_id for the news',
-        Body     => 'Anything is happened',
-        ValidID  => 1,
-        UserID   => 123,
+        ID            => 3,
+        Name          => 'A name for the news',
+        StateID       => 'A state_id for the news',
+        Body          => 'Anything is happened',
+        ArticleTypeID => 1,
+        ValidID       => 1,
+        UserID        => 123,
     );
 
 =cut
@@ -175,7 +179,7 @@ sub QuickCloseUpdate {
     my ( $Self, %Param ) = @_;
 
     # check needed stuff
-    for my $Needed (qw(ID Name StateID Body ValidID UserID)) {
+    for my $Needed (qw(ID Name StateID Body ValidID UserID ArticleTypeID)) {
         if ( !$Param{$Needed} ) {
             $Self->{LogObject}->Log(
                 Priority => 'error',
@@ -188,7 +192,7 @@ sub QuickCloseUpdate {
     # insert new news
     return if !$Self->{DBObject}->Do(
         SQL => 'UPDATE ps_quick_close SET close_name = ?, state_id = ?, body = ?, '
-            . 'valid_id = ?, change_time = current_timestamp, change_by = ? '
+            . 'valid_id = ?, change_time = current_timestamp, change_by = ?, article_type_id = ? '
             . 'WHERE id = ?',
         Bind => [
             \$Param{Name},
@@ -196,6 +200,7 @@ sub QuickCloseUpdate {
             \$Param{Body},
             \$Param{ValidID},
             \$Param{UserID},
+            \$Param{ArticleTypeID},
             \$Param{ID},
         ],
     );
@@ -212,12 +217,13 @@ returns a hash with news data
 This returns something like:
 
     %QuickCloseData = (
-        'ID'     => 2,
-        'Name'   => 'This is the name',
-        'StateID'     => 'A short abstract',
-        'Body'       => 'This is the long text of the news',
-        'CreateTime' => '2010-04-07 15:41:15',
-        'CreateBy'   => 123,
+        'ID'            => 2,
+        'Name'          => 'This is the name',
+        'StateID'       => 'A short abstract',
+        'Body'          => 'This is the long text of the news',
+        'ArticleTypeID' => 3,
+        'CreateTime'    => '2010-04-07 15:41:15',
+        'CreateBy'      => 123,
     );
 
 =cut
@@ -236,7 +242,8 @@ sub QuickCloseGet {
 
     # sql
     return if !$Self->{DBObject}->Prepare(
-        SQL => 'SELECT id, close_name, state_id, body, create_time, create_by, valid_id '
+        SQL => 'SELECT id, close_name, state_id, body, create_time, create_by, valid_id, '
+            . 'article_type_id '
             . 'FROM ps_quick_close WHERE id = ?',
         Bind  => [ \$Param{ID} ],
         Limit => 1,
@@ -245,13 +252,14 @@ sub QuickCloseGet {
     my %QuickClose;
     while ( my @Data = $Self->{DBObject}->FetchrowArray() ) {
         %QuickClose = (
-            ID         => $Data[0],
-            Name       => $Data[1],
-            StateID    => $Data[2],
-            Body       => $Data[3],
-            CreateTime => $Data[4],
-            CreateBy   => $Data[5],
-            ValidID    => $Data[6],
+            ID            => $Data[0],
+            Name          => $Data[1],
+            StateID       => $Data[2],
+            Body          => $Data[3],
+            CreateTime    => $Data[4],
+            CreateBy      => $Data[5],
+            ValidID       => $Data[6],
+            ArticleTypeID => $Data[7],
         );
     }
 

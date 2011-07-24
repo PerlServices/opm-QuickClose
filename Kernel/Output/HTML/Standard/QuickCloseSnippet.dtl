@@ -12,10 +12,13 @@
                     <li class="$QData{"Class"}">
                         <form title="$Text{"QuickClose ticket"}" action="$Env{"CGIHandle"}" method="post">
                             <input type="hidden" name="Action" value="AgentTicketClose"/>
+                            <input type="hidden" name="Subaction" value="Store"/>
                             <input type="hidden" name="TicketID" value="$QData{"TicketID"}"/>
                             <input type="hidden" name="Subject" value="$Text{"Close"}"/>
-                            <input type="hidden" name="StateID" id="QCStateID" value="" />
+                            <input type="hidden" name="NewStateID" id="QCStateID" value="" />
                             <input type="hidden" name="Body" id="QCBody" value="" />
+                            <input type="hidden" name="ArticleTypeID" id="QCArticleTypeID" value="" />
+                            <input type="hidden" name="FormID" value="$QData{"FormID"}" />
                             <label for="QuickClose" class="InvisibleText">$Text{"QuickClose"}:</label>
                             $Data{"QuickCloseSelect"}
                         </form>
@@ -24,31 +27,34 @@
     $('#QuickClose').bind('change', function (Event) {
         // retrieve body for quickclose
         var URL = Core.Config.Get('Baselink');
-        var TID = this.val();
+        var TID = $(this).val();
 
-        jQuery.ajax({
-            url: URL,
-            data: {
-                Action: 'AgentQuickClose',
-                ID: TID
-            },
-            dataType: 'json',
-            success: function (Response){
-                if ( !Response ) {
-                    Core.Exception.Throw('Invalid JSON from ' + URL, 'CommunicationError');
+        var thisObject = $(this);
+
+        if ( TID ) {
+            jQuery.ajax({
+                url: URL,
+                data: {
+                    Action: 'AgentQuickClose',
+                    ID: TID
+                },
+                dataType: 'json',
+                success: function (Response){
+                    if ( !Response ) {
+                        Core.Exception.Throw('Invalid JSON from ' + URL, 'CommunicationError');
+                    }
+                    else {
+                        $('#QCBody').val( Response.Body );
+                        $('#QCStateID').val( Response.StateID );
+                        $('#QCArticleTypeID').val( Response.ArticleTypeID );
+                        thisObject.closest('form').submit();
+                    };
+                },
+                error: function() {
+                    Core.Exception.Throw('Error during AJAX communication', 'CommunicationError');
                 }
-                else {
-                    $('#QCBody').val( Response.Body );
-                    $('#QCStateID').val( Response.StateID );
-                };
-            },
-            error: function() {
-                Core.Exception.Throw('Error during AJAX communication', 'CommunicationError');
-            }
-        });
-
-
-        $(this).closest('form').submit();
+            });
+        }
     });
 //]]></script>
 <!-- dtl:js_on_document_complete -->

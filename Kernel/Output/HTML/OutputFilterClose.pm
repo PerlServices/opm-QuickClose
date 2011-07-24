@@ -17,6 +17,7 @@ use warnings;
 use Kernel::System::Encode;
 use Kernel::System::Time;
 use Kernel::System::QuickClose;
+use Kernel::System::Web::UploadCache;
 
 use vars qw($VERSION);
 $VERSION = qw($Revision: 1.1 $) [1];
@@ -55,6 +56,11 @@ sub new {
             %{$Self},
             DBObject => $Self->{LayoutObject}->{DBObject},
         );
+
+        $Self->{UploadCacheObject} = Kernel::System::Web::UploadCache->new(
+            %{$Self},
+            DBObject => $Self->{LayoutObject}->{DBObject},
+        );
     }
 
     return $Self;
@@ -69,6 +75,7 @@ sub Run {
 
     if ( $Templatename eq 'AgentTicketZoom' ) {
         my ($TicketID) = ${$Param{Data}} =~ m{TicketID=(\d+)};
+        my $FormID     = $Self->{UploadCacheObject}->FormIDCreate();
 
         my %List   = $Self->{QuickCloseObject}->QuickCloseList( Valid => 1 );
         my $Select = $Self->{LayoutObject}->BuildSelection(
@@ -84,6 +91,7 @@ sub Run {
             Data         => {
                 TicketID         => $TicketID,
                 QuickCloseSelect => $Select,
+                FormID           => $FormID,
             },
         ); 
 

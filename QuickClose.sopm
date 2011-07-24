@@ -27,6 +27,7 @@
             <Column Name="body" Required="true" Type="VARCHAR" Size="3000"/>
             <Column Name="state_id" Required="true" Type="SMALLINT"/>
             <Column Name="valid_id" Required="true" Type="SMALLINT"/>
+            <Column Name="article_type_id" Required="true" Type="SMALLINT"/>
             <Column Name="create_time" Required="true" Type="DATE"/>
             <Column Name="create_by" Required="true" Type="INTEGER"/>
             <Column Name="change_time" Required="true" Type="DATE"/>
@@ -40,6 +41,9 @@
             </ForeignKey>
             <ForeignKey ForeignTable="ticket_state">
                 <Reference Local="state_id" Foreign="id" />
+            </ForeignKey>
+            <ForeignKey ForeignTable="article_type">
+                <Reference Local="article_type_id" Foreign="id" />
             </ForeignKey>
         </TableCreate>
     </DatabaseInstall>
