@@ -96,8 +96,15 @@ sub Run {
         ); 
 
         #scan html output and generate new html input
-        ${ $Param{Data} } =~ s{(<select name="DestQueueID".*?</li>)}{$1 $Snippet}mgs;
+        my $LinkType = $Self->{ConfigObject}->Get('Ticket::Frontend::MoveType');
+        if ( $LinkType eq 'form' ) {
+            ${ $Param{Data} } =~ s{(<select name="DestQueueID".*?</li>)}{$1 $Snippet}mgs;
+        }
+        else {
+            ${ $Param{Data} } =~ s{(<a href=".*?Action=AgentTicketMove;TicketID=\d+;".*?</li>)}{$1 $Snippet}mgs;
+        }
     }
+
     return ${ $Param{Data} };
 }
 
