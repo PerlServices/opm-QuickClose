@@ -73,7 +73,7 @@ sub Run {
     my $Templatename = $Param{TemplateFile} || '';
     return 1 if !$Templatename;
 
-    if ( $Templatename eq 'AgentTicketZoom' ) {
+    if ( $Templatename  =~ m{AgentTicketZoom\z} ) {
         my ($TicketID) = ${$Param{Data}} =~ m{TicketID=(\d+)};
         my $FormID     = $Self->{UploadCacheObject}->FormIDCreate();
 
@@ -82,7 +82,10 @@ sub Run {
         my @Indexes = sort{ $List{$a} cmp $List{$b} }keys %List;
         my @Data    = map{ { Key => $_, Value => $List{$_} } }@Indexes;
         
-        unshift @Data, { Key => '', Value => $Self->{ConfigObject}->Get( 'QuickClose###NoneLabel' ) || 'QuickClose' };
+        unshift @Data, {
+            Key => '', 
+            Value => ' - ' . ($Self->{ConfigObject}->Get( 'QuickClose###NoneLabel' ) || 'QuickClose')  . ' - ',
+        };
         
         my $Select = $Self->{LayoutObject}->BuildSelection(
             Data         => \@Data,
