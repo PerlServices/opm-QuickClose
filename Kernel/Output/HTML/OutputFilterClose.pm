@@ -78,12 +78,17 @@ sub Run {
         my $FormID     = $Self->{UploadCacheObject}->FormIDCreate();
 
         my %List   = $Self->{QuickCloseObject}->QuickCloseList( Valid => 1 );
+        
+        my @Indexes = sort{ $List{$a} cmp $List{$b} }keys %List;
+        my @Data    = map{ { Key => $_, Value => $List{$_} } }@Indexes;
+        
+        unshift @Data, { Key => '', Value => $Self->{ConfigObject}->Get( 'QuickClose###NoneLabel' ) || 'QuickClose' };
+        
         my $Select = $Self->{LayoutObject}->BuildSelection(
-            Data         => \%List,
+            Data         => \@Data,
             Name         => 'QuickClose',
             Size         => 1,
             HTMLQuote    => 1,
-            PossibleNone => 1,
         );
 
         my $Snippet = $Self->{LayoutObject}->Output(

@@ -46,4 +46,13 @@
             </Hash>
         </Setting>
     </ConfigItem>
+    <ConfigItem Name="QuickClose###NoneLabel" Required="0" Valid="1">
+        <Description Lang="en">Label for the NULL option in dropdown.</Description>
+        <Description Lang="de">Text für die Leer-Option im Dropdown.</Description>
+        <Group>QuickClose</Group>
+        <SubGroup>Core</SubGroup>
+        <Setting>
+            <String Regex="">QuickClose</String>
+        </Setting>
+    </ConfigItem>
 </otrs_config>
