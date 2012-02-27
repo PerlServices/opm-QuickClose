@@ -74,7 +74,7 @@ sub Run {
     return 1 if !$Templatename;
 
     if ( $Templatename  =~ m{AgentTicketZoom\z} ) {
-        my ($TicketID) = ${$Param{Data}} =~ m{TicketID=(\d+)};
+        my ($TicketID) = ${$Param{Data}} =~ m{<ul \s+ class="Actions" .*? TicketID=(\d+)}xms;
         my $FormID     = $Self->{UploadCacheObject}->FormIDCreate();
 
         my %List   = $Self->{QuickCloseObject}->QuickCloseList( Valid => 1 );
