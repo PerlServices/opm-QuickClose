@@ -26,5 +26,20 @@ This package was written by Renee Baecker E<lt>otrs@perl-services.deE<gt>.
 The package is licensed unter AGPL. If you
 did not receive this file, see L<http://www.gnu.org/licenses/agpl.txt>.
 
+=head1 CHANGES
+
+=over 4
+
+=item * 0.0.7
+
+  + Under some circumstances the ticket id wasn't detected correctly (happened with parent-child-tickets).
+    This is fixed now. Thanks to Sebastian for filing the bug.
+
+=item * 0.0.6
+
+  + activate QuickClose for ticket overviews (status view, queue view, ...)
+
+=back
+
 =cut
 
