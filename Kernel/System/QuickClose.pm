@@ -124,8 +124,8 @@ sub QuickCloseAdd {
     return if !$Self->{DBObject}->Do(
         SQL => 'INSERT INTO ps_quick_close '
             . '(close_name, state_id, body, create_time, create_by, valid_id, '
-            . ' article_type_id, change_time, change_by) '
-            . 'VALUES (?, ?, ?, current_timestamp, ?, ?, ?, current_timestamp, ?)',
+            . ' article_type_id, change_time, change_by, comments) '
+            . 'VALUES (?, ?, ?, current_timestamp, ?, ?, ?, current_timestamp, ?, ?)',
         Bind => [
             \$Param{Name},
             \$Param{StateID},
@@ -134,6 +134,7 @@ sub QuickCloseAdd {
             \$Param{ValidID},
             \$Param{ArticleTypeID},
             \$Param{UserID},
+            \' ', # empty comment as we have no comments field
         ],
     );
 
