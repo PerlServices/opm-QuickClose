@@ -127,6 +127,7 @@ sub Run {
             HistoryComment => $Self->{Config}->{HistoryComment}, 
             ArticleTypeID  => $CloseData{ArticleTypeID},
             %GetParam,
+            %CloseData,
         );
         if ( !$ArticleID ) {
             return $Self->{LayoutObject}->ErrorScreen();
