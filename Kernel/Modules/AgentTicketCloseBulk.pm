@@ -133,6 +133,14 @@ sub Run {
             return $Self->{LayoutObject}->ErrorScreen();
         }
 
+        if ( $Self->{ConfigObject}->Get( 'QuickClose::QueueMove' ) && $CloseData{QueueID} ) {
+            $Self->{TicketObject}->TicketQueueSet(
+                TicketID => $TicketID,
+                QueueID  => $CloseData{QueueID},
+                UserID   => $Self->{UserID},
+            );
+        }
+
         # set state
         $Self->{TicketObject}->TicketStateSet(
             TicketID => $TicketID,

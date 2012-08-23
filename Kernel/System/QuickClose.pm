@@ -17,6 +17,7 @@ use warnings;
 use Kernel::System::User;
 use Kernel::System::Valid;
 use Kernel::System::State;
+use Kernel::System::Queue;
 
 use vars qw($VERSION);
 $VERSION = qw($Revision: 1.1.1.1 $) [1];
@@ -87,6 +88,7 @@ sub new {
     $Self->{UserObject}  = Kernel::System::User->new( %{$Self} );
     $Self->{ValidObject} = Kernel::System::Valid->new( %{$Self} );
     $Self->{StateObject} = Kernel::System::State->new( %{$Self} );
+    $Self->{QueueObject} = Kernel::System::Queue->new( %{$Self} );
     
     return $Self;
 }
@@ -102,6 +104,7 @@ to add a news
         ArticleTypeID => 1,
         ValidID       => 1,
         UserID        => 123,
+        QueueID       => 123,
     );
 
 =cut
@@ -124,8 +127,8 @@ sub QuickCloseAdd {
     return if !$Self->{DBObject}->Do(
         SQL => 'INSERT INTO ps_quick_close '
             . '(close_name, state_id, body, create_time, create_by, valid_id, '
-            . ' article_type_id, change_time, change_by, comments) '
-            . 'VALUES (?, ?, ?, current_timestamp, ?, ?, ?, current_timestamp, ?, ?)',
+            . ' article_type_id, change_time, change_by, comments, queue_id) '
+            . 'VALUES (?, ?, ?, current_timestamp, ?, ?, ?, current_timestamp, ?, ?, ?)',
         Bind => [
             \$Param{Name},
             \$Param{StateID},
@@ -135,6 +138,7 @@ sub QuickCloseAdd {
             \$Param{ArticleTypeID},
             \$Param{UserID},
             \' ', # empty comment as we have no comments field
+            \$Param{QueueID},
         ],
     );
 
@@ -172,6 +176,7 @@ to update news
         ArticleTypeID => 1,
         ValidID       => 1,
         UserID        => 123,
+        QueueID       => 123,
     );
 
 =cut
@@ -193,7 +198,8 @@ sub QuickCloseUpdate {
     # insert new news
     return if !$Self->{DBObject}->Do(
         SQL => 'UPDATE ps_quick_close SET close_name = ?, state_id = ?, body = ?, '
-            . 'valid_id = ?, change_time = current_timestamp, change_by = ?, article_type_id = ? '
+            . 'valid_id = ?, change_time = current_timestamp, change_by = ?, article_type_id = ?, '
+            . 'queue_id = ? '
             . 'WHERE id = ?',
         Bind => [
             \$Param{Name},
@@ -202,6 +208,7 @@ sub QuickCloseUpdate {
             \$Param{ValidID},
             \$Param{UserID},
             \$Param{ArticleTypeID},
+            \$Param{QueueID},
             \$Param{ID},
         ],
     );
@@ -225,6 +232,7 @@ This returns something like:
         'ArticleTypeID' => 3,
         'CreateTime'    => '2010-04-07 15:41:15',
         'CreateBy'      => 123,
+        'QueueID'       => 123,
     );
 
 =cut
@@ -244,7 +252,7 @@ sub QuickCloseGet {
     # sql
     return if !$Self->{DBObject}->Prepare(
         SQL => 'SELECT id, close_name, state_id, body, create_time, create_by, valid_id, '
-            . 'article_type_id '
+            . 'article_type_id, queue_id '
             . 'FROM ps_quick_close WHERE id = ?',
         Bind  => [ \$Param{ID} ],
         Limit => 1,
@@ -261,12 +269,17 @@ sub QuickCloseGet {
             CreateBy      => $Data[5],
             ValidID       => $Data[6],
             ArticleTypeID => $Data[7],
+            QueueID       => $Data[8],
         );
     }
 
     $QuickClose{Valid}  = $Self->{ValidObject}->ValidLookup( ValidID => $QuickClose{ValidID} );
     $QuickClose{Author} = $Self->{UserObject}->UserLookup( UserID => $QuickClose{CreateBy} );
     $QuickClose{State}  = $Self->{StateObject}->StateLookup( StateID => $QuickClose{StateID} );
+
+    if ( $QuickClose{QueueID} ) {
+        $QuickClose{Queue}  = $Self->{QueueObject}->QueueLookup( QueueID => $QuickClose{QueueID} );
+    }
 
     return %QuickClose;
 }

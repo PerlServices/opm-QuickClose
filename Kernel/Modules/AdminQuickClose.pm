@@ -18,6 +18,7 @@ use Kernel::System::QuickClose;
 use Kernel::System::HTMLUtils;
 use Kernel::System::Valid;
 use Kernel::System::State;
+use Kernel::System::Queue;
 
 use vars qw($VERSION);
 $VERSION = qw($Revision: 1.1.1.1 $) [1];
@@ -44,6 +45,7 @@ sub new {
     $Self->{ValidObject}      = Kernel::System::Valid->new(%Param);
     $Self->{HTMLUtilsObject}  = Kernel::System::HTMLUtils->new(%Param);
     $Self->{StateObject}      = Kernel::System::State->new(%Param);
+    $Self->{QueueObject}      = Kernel::System::Queue->new(%Param);
 
     # get config of frontend module
     $Self->{Config} = $Self->{ConfigObject}->Get("Ticket::Frontend::AgentTicketClose");
@@ -54,7 +56,7 @@ sub new {
 sub Run {
     my ( $Self, %Param ) = @_;
 
-    my @Params = (qw(ID Name StateID Body ValidID UserID ArticleTypeID));
+    my @Params = (qw(ID Name StateID Body ValidID UserID ArticleTypeID QueueID));
     my %GetParam;
     for (@Params) {
         $GetParam{$_} = $Self->{ParamObject}->GetParam( Param => $_ ) || '';
@@ -236,6 +238,22 @@ sub _MaskQuickCloseForm {
         Size       => 1,
         SelectedID => $Param{StateID},
         HTMLQuote  => 1,
+    );
+
+    my %Queues;
+
+    if ( $Self->{ConfigObject}->Get( 'QuickClose::QueueMove' ) ) {
+        %Queues = $Self->{QueueObject}->QueueList();
+    }
+
+    $Param{QueueSelect} = $Self->{LayoutObject}->BuildSelection(
+        Data         => \%Queues,
+        Name         => 'QueueID',
+        Size         => 1,
+        SelectedID   => $Param{QueueID},
+        HTMLQuote    => 1,
+        PossibleNone => 1,
+        TreeView     => 1,
     );
 
     # build ArticleTypeID string

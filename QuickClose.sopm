@@ -2,7 +2,7 @@
 <otrs_package version="1.0">
     <CVS>$Id: QuickClose.sopm,v 1.1.1.1 2011/04/15 07:49:58 rb Exp $</CVS>
     <Name>QuickClose</Name>
-    <Version>0.0.9</Version>
+    <Version>0.0.10</Version>
     <Framework>3.0.x</Framework>
     <Vendor>Perl-Services.de</Vendor>
     <URL>http://www.perl-services.de/</URL>
@@ -32,6 +32,7 @@
             <Column Name="body" Required="true" Type="VARCHAR" Size="3000"/>
             <Column Name="state_id" Required="true" Type="SMALLINT"/>
             <Column Name="valid_id" Required="true" Type="SMALLINT"/>
+            <Column Name="queue_id" Required="false" Type="SMALLINT"/>
             <Column Name="article_type_id" Required="true" Type="SMALLINT"/>
             <Column Name="create_time" Required="true" Type="DATE"/>
             <Column Name="create_by" Required="true" Type="INTEGER"/>
@@ -52,6 +53,11 @@
             </ForeignKey>
         </TableCreate>
     </DatabaseInstall>
+    <DatabaseUpgrade>
+        <TableAlter Name="ps_quick_close" Version="0.0.10">
+            <ColumnAdd Name="queue_id" Required="false" Type="SMALLINT"/>
+        </TableAlter>
+    </DatabaseUpgrade>
     <DatabaseUninstall>
         <TableDrop Name="ps_quick_close"/>
     </DatabaseUninstall>
