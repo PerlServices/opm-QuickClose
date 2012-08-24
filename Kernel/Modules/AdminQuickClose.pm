@@ -227,8 +227,10 @@ sub _MaskQuickCloseForm {
         HTMLQuote  => 1,
     );
 
+    my $StateTypes = $Self->{ConfigObject}->Get( 'QuickClose::StateTypes' ) || [ 'closed' ];
+
     my %States = $Self->{StateObject}->StateGetStatesByType(
-        StateType => [ 'closed' ],
+        StateType => $StateTypes,
         Result    => 'HASH',
     );
 

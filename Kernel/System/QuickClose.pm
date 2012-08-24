@@ -123,6 +123,8 @@ sub QuickCloseAdd {
         }
     }
 
+    $Param{QueueID} ||= 0;
+
     # insert new news
     return if !$Self->{DBObject}->Do(
         SQL => 'INSERT INTO ps_quick_close '
@@ -194,6 +196,8 @@ sub QuickCloseUpdate {
             return;
         }
     }
+
+    $Param{QueueID} ||= 0;
 
     # insert new news
     return if !$Self->{DBObject}->Do(
