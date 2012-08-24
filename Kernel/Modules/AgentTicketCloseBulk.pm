@@ -165,9 +165,12 @@ sub Run {
 
     # redirect parent window to last screen overview on closed tickets
     if ( !@NoAccess ) {
+        my $LastView = $Self->{LastScreenOverview} || $Self->{LastScreenView} || 'Action=AgentDashboard';
+
         return $Self->{LayoutObject}->Redirect(
-            URL => ( $Self->{LastScreenOverview} || 'Action=AgentDashboard' ),
+            OP => $LastView,
         );
+
     }
     else {
         return $Self->{LayoutObject}->ErrorScreen(

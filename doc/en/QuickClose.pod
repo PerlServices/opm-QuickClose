@@ -30,6 +30,19 @@ did not receive this file, see L<http://www.gnu.org/licenses/agpl.txt>.
 
 =over 4
 
+=item * 0.0.12
+
+  + redirect to last screen after close
+
+=item * 0.0.10 - 0.0.11
+
+  + allow non-closed states for quick closes
+  + enable queue moves with quick closes
+
+=item * 0.0.8/0.0.9
+
+  + fix bug when tickets were closed from overview
+
 =item * 0.0.7
 
   + Under some circumstances the ticket id wasn't detected correctly (happened with parent-child-tickets).
