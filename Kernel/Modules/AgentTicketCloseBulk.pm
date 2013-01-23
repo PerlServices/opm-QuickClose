@@ -1,6 +1,6 @@
 # --
 # Kernel/Modules/AgentTicketCloseBulk.pm - bulk closing of tickets
-# Copyright (C) 2012 Perl-Services.de, http://perl-services.de
+# Copyright (C) 2012-2013 Perl-Services.de, http://perl-services.de
 # --
 # $Id: AgentTicketCloseBulk.pm,v 1.16 2011/08/26 06:45:08 ub Exp $
 # --
@@ -76,6 +76,10 @@ sub Run {
             Message => 'No TicketID is given!',
             Comment => 'Please contact the admin.',
         );
+    }
+
+    if ( !$ID ) {
+        $ID = $Self->{ConfigObject}->Get( 'QuickClose::DefaultID' ) || 1;
     }
 
     # get QuickClose data

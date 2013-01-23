@@ -101,6 +101,15 @@
             <String Regex="">Close</String>
         </Setting>
     </ConfigItem>
+    <ConfigItem Name="QuickClose::DefaultID" Required="0" Valid="1">
+        <Description Lang="en">Default "close". This is used when no "CloseID" is passed.</Description>
+        <Description Lang="de">Standardgrund für das Schließen. Wird verwendet wenn keine "CloseID" übergeben wird.</Description>
+        <Group>QuickClose</Group>
+        <SubGroup>Core</SubGroup>
+        <Setting>
+            <String Regex="^\d+$">1</String>
+        </Setting>
+    </ConfigItem>
     <ConfigItem Name="QuickClose::QueueMove" Required="1" Valid="1">
         <Description Translatable="1">Use queue move functionality for quick close.</Description>
         <Group>QuickClose</Group>
