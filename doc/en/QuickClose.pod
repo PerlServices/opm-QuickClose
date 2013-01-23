@@ -30,6 +30,11 @@ did not receive this file, see L<http://www.gnu.org/licenses/agpl.txt>.
 
 =over 4
 
+=item * 0.0.14
+
+Added a new config option: DefaultID. This is used when no CloseID was passed
+to frontend modules.
+
 =item * 0.0.12
 
   + redirect to last screen after close
