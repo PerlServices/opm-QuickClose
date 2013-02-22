@@ -64,6 +64,12 @@ sub Run {
         $GetParam{$WebParam} = $Self->{ParamObject}->GetParam( Param => $WebParam ) || '';
     }
 
+    if ( !$GetParam{Subject} ) {
+        $GetParam{Subject} =
+            $Self->{ConfigObject}->Get( 'QuickClose::DefaultSubject' ) ||
+            $Self->{LayoutObject}->{LanguageObject}->Get( 'Close' );
+    }
+
     # check needed stuff
     if ( !@TicketIDs ) {
         return $Self->{LayoutObject}->ErrorScreen(
@@ -81,6 +87,8 @@ sub Run {
             Comment => 'Please contact the admin.',
         );
     }
+
+    delete $CloseData{Subject} if !length $CloseData{Subject};
 
     my @NoAccess;
 

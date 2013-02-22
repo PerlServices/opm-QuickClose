@@ -4,6 +4,7 @@
     <Name>QuickClose</Name>
     <Version>0.0.12</Version>
     <Framework>3.0.x</Framework>
+    <Framework>3.1.x</Framework>
     <Vendor>Perl-Services.de</Vendor>
     <URL>http://www.perl-services.de/</URL>
     <License>GNU AFFERO GENERAL PUBLIC LICENSE Version 3, November 2007</License>
@@ -29,6 +30,7 @@
             <Column Name="id" Required="true" AutoIncrement="true" Type="INTEGER" PrimaryKey="true"/>
             <Column Name="close_name" Required="true" Type="VARCHAR" Size="250"/>
             <Column Name="comments" Required="true" Type="VARCHAR" Size="250"/>
+            <Column Name="subject" Required="false" Type="VARCHAR" Size="250"/>
             <Column Name="body" Required="true" Type="VARCHAR" Size="3000"/>
             <Column Name="state_id" Required="true" Type="SMALLINT"/>
             <Column Name="valid_id" Required="true" Type="SMALLINT"/>
@@ -56,6 +58,9 @@
     <DatabaseUpgrade>
         <TableAlter Name="ps_quick_close" Version="0.0.10">
             <ColumnAdd Name="queue_id" Required="false" Type="SMALLINT"/>
+        </TableAlter>
+        <TableAlter Name="ps_quick_close" Version="0.0.13">
+            <ColumnAdd Name="subject" Required="false" Type="VARCHAR" Size="250"/>
         </TableAlter>
     </DatabaseUpgrade>
     <DatabaseUninstall>

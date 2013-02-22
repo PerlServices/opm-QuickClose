@@ -54,6 +54,14 @@
                         </div>
                         <div class="Clear"></div>
 
+                        <label for="Subject">
+                            $Text{"Subject"}:
+                        </label>
+                        <div class="Field">
+                            <input type="text" id="Subject" name="Subject" value="$QData{"Subject"}" class="W75pc" />
+                        </div>
+                        <div class="Clear"></div>
+
                         <label for="RichText" class="Mandatory">
                             <span class="Marker">*</span>
                             $Text{"Body"}:

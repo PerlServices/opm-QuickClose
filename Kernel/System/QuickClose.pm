@@ -101,6 +101,7 @@ to add a news
         Name          => 'A name for the news',
         StateID       => 'A state_id for the news',
         Body          => 'Anything is happened',
+        Subject       => 'A subject',
         ArticleTypeID => 1,
         ValidID       => 1,
         UserID        => 123,
@@ -129,8 +130,8 @@ sub QuickCloseAdd {
     return if !$Self->{DBObject}->Do(
         SQL => 'INSERT INTO ps_quick_close '
             . '(close_name, state_id, body, create_time, create_by, valid_id, '
-            . ' article_type_id, change_time, change_by, comments, queue_id) '
-            . 'VALUES (?, ?, ?, current_timestamp, ?, ?, ?, current_timestamp, ?, ?, ?)',
+            . ' article_type_id, change_time, change_by, comments, queue_id, subject) '
+            . 'VALUES (?, ?, ?, current_timestamp, ?, ?, ?, current_timestamp, ?, ?, ?, ?)',
         Bind => [
             \$Param{Name},
             \$Param{StateID},
@@ -141,6 +142,7 @@ sub QuickCloseAdd {
             \$Param{UserID},
             \' ', # empty comment as we have no comments field
             \$Param{QueueID},
+            \$Param{Subject},
         ],
     );
 
@@ -174,6 +176,7 @@ to update news
         ID            => 3,
         Name          => 'A name for the news',
         StateID       => 'A state_id for the news',
+        Subject       => 'A subject',
         Body          => 'Anything is happened',
         ArticleTypeID => 1,
         ValidID       => 1,
@@ -203,7 +206,7 @@ sub QuickCloseUpdate {
     return if !$Self->{DBObject}->Do(
         SQL => 'UPDATE ps_quick_close SET close_name = ?, state_id = ?, body = ?, '
             . 'valid_id = ?, change_time = current_timestamp, change_by = ?, article_type_id = ?, '
-            . 'queue_id = ? '
+            . 'queue_id = ?, subject = ? '
             . 'WHERE id = ?',
         Bind => [
             \$Param{Name},
@@ -213,6 +216,7 @@ sub QuickCloseUpdate {
             \$Param{UserID},
             \$Param{ArticleTypeID},
             \$Param{QueueID},
+            \$Param{Subject},
             \$Param{ID},
         ],
     );
@@ -233,6 +237,7 @@ This returns something like:
         'Name'          => 'This is the name',
         'StateID'       => 'A short abstract',
         'Body'          => 'This is the long text of the news',
+        'Subject'       => 'A subject',
         'ArticleTypeID' => 3,
         'CreateTime'    => '2010-04-07 15:41:15',
         'CreateBy'      => 123,
@@ -256,7 +261,7 @@ sub QuickCloseGet {
     # sql
     return if !$Self->{DBObject}->Prepare(
         SQL => 'SELECT id, close_name, state_id, body, create_time, create_by, valid_id, '
-            . 'article_type_id, queue_id '
+            . 'article_type_id, queue_id, subject '
             . 'FROM ps_quick_close WHERE id = ?',
         Bind  => [ \$Param{ID} ],
         Limit => 1,
@@ -274,6 +279,7 @@ sub QuickCloseGet {
             ValidID       => $Data[6],
             ArticleTypeID => $Data[7],
             QueueID       => $Data[8],
+            Subject       => $Data[9],
         );
     }
 
