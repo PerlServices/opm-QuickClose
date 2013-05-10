@@ -153,6 +153,14 @@ sub Run {
             );
         }
 
+        if ( $CloseData{OwnerID} ) {
+            $Self->{TicketObject}->TicketOwnerSet(
+                TicketID  => $TicketID,
+                NewUserID => $CloseData{OwnerID},
+                UserID    => $Self->{UserID},
+            );
+        }
+
         # set state
         $Self->{TicketObject}->TicketStateSet(
             TicketID => $TicketID,

@@ -9,6 +9,8 @@
 # did not receive this file, see http://www.gnu.org/licenses/agpl.txt.
 # --
 
+$Include{"AdminQuickCloseUserSearch"}
+
 <div class="MainBox ARIARoleMain LayoutFixedSidebar SidebarFirst">
     <h1>$Text{"QuickClose Management"}</h1>
     <div class="SidebarColumn">
@@ -90,6 +92,19 @@ $Include{"RichTextEditor"}
                             $Data{"StateSelect"}
                         </div>
                         <div class="Clear"></div>
+
+                        <label for="Owner"> $Text{"Owner"}: </label>
+                        <div class="Field">
+                            <input id="Owner" name="Owner" type="text"   value="$QData{"Owner"}" class="W75pc $Data{"OwnerError"}" />
+                            <input id="OwnerSelected" name="OwnerSelected" type="hidden" value="$QData{"OwnerID"}" />
+                            <input id="OwnerType" name="OwnerType" type="hidden" value="$QData{"OwnerType"}" />
+
+                            <div id="OwnerIDServerError" class="TooltipErrorMessage"><p>$Text{"User invalid."}</p></div>
+                        </div>
+
+                        <div id="UserServerError" class="TooltipErrorMessage">
+                            <p>$Text{"Invalid User"}</p>
+                        </div>
 
                         <label for="Unlock">
                             $Text{"Unlock Ticket"} <br />

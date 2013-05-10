@@ -289,6 +289,33 @@ sub _MaskQuickCloseForm {
         %ArticleType,
     );
 
+    my $UserAutoCompleteConfig
+        = $Self->{ConfigObject}->Get('QuickClose::Frontend::UserSearchAutoComplete');
+
+
+    $Self->{LayoutObject}->Block(
+        Name => 'UserSearchAutoComplete',
+        Data => {
+            minQueryLength      => $UserAutoCompleteConfig->{MinQueryLength}      || 2,
+            queryDelay          => $UserAutoCompleteConfig->{QueryDelay}          || 0.1,
+            maxResultsDisplayed => $UserAutoCompleteConfig->{MaxResultsDisplayed} || 20,
+            dynamicWidth        => $UserAutoCompleteConfig->{DynamicWidth}        || 'false',
+        },
+    );
+
+    my $ActiveAutoComplete = 'true';
+    if ( !$UserAutoCompleteConfig->{Active} ) {
+        $ActiveAutoComplete = 'false';
+    }
+
+    $Self->{LayoutObject}->Block(
+        Name => 'UserSearchInit',
+        Data => {
+            ActiveAutoComplete => $ActiveAutoComplete,
+            ItemID             => 'Owner',
+        },
+    );
+
     if ( $Self->{Subaction} ne 'Edit' && $Self->{Subaction} ne 'Add' ) {
 
         my %QuickCloseList = $Self->{QuickCloseObject}->QuickCloseList();

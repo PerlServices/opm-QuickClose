@@ -131,7 +131,7 @@ sub QuickCloseAdd {
         SQL => 'INSERT INTO ps_quick_close '
             . '(close_name, state_id, body, create_time, create_by, valid_id, '
             . ' article_type_id, change_time, change_by, comments, queue_id, '
-            . ' subject, unlock) '
+            . ' subject, unlock, owner_id) '
             . 'VALUES (?, ?, ?, current_timestamp, ?, ?, ?, current_timestamp, ?, ?, ?, ?)',
         Bind => [
             \$Param{Name},
@@ -145,6 +145,7 @@ sub QuickCloseAdd {
             \$Param{QueueID},
             \$Param{Subject},
             \$Param{Unlock},
+            \$Param{OwnerID},
         ],
     );
 
@@ -208,7 +209,7 @@ sub QuickCloseUpdate {
     return if !$Self->{DBObject}->Do(
         SQL => 'UPDATE ps_quick_close SET close_name = ?, state_id = ?, body = ?, '
             . 'valid_id = ?, change_time = current_timestamp, change_by = ?, article_type_id = ?, '
-            . 'queue_id = ?, subject = ?, unlock = ? '
+            . 'queue_id = ?, subject = ?, unlock = ?, owner_id = ? '
             . 'WHERE id = ?',
         Bind => [
             \$Param{Name},
@@ -220,6 +221,7 @@ sub QuickCloseUpdate {
             \$Param{QueueID},
             \$Param{Subject},
             \$Param{Unlock},
+            \$Param{OwnerID},
             \$Param{ID},
         ],
     );
@@ -265,7 +267,7 @@ sub QuickCloseGet {
     # sql
     return if !$Self->{DBObject}->Prepare(
         SQL => 'SELECT id, close_name, state_id, body, create_time, create_by, valid_id, '
-            . 'article_type_id, queue_id, subject, unlock '
+            . 'article_type_id, queue_id, subject, unlock, owner_id '
             . 'FROM ps_quick_close WHERE id = ?',
         Bind  => [ \$Param{ID} ],
         Limit => 1,
@@ -285,6 +287,7 @@ sub QuickCloseGet {
             QueueID       => $Data[8],
             Subject       => $Data[9],
             Unlock        => $Data[10],
+            OwnerID       => $Data[11],
         );
     }
 
@@ -294,6 +297,10 @@ sub QuickCloseGet {
 
     if ( $QuickClose{QueueID} ) {
         $QuickClose{Queue}  = $Self->{QueueObject}->QueueLookup( QueueID => $QuickClose{QueueID} );
+    }
+
+    if ( $QuickClose{OwnerID} ) {
+        $QuickClose{Owner}  = $Self->{UserObject}->UserLookup( UserID => $QuickClose{OwnerID} );
     }
 
     return %QuickClose;

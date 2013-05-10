@@ -35,6 +35,8 @@ did not receive this file, see L<http://www.gnu.org/licenses/agpl.txt>.
 Added new option: Unlock ticket. If enabled the ticket is unlocked no matter what
 state is selected. By default tickets are unlocked on closed states.
 
+Added new option: Owner. You can set an owner for the ticket.
+
 =item * 0.0.14
 
 Added a new config option: DefaultID. This is used when no CloseID was passed
