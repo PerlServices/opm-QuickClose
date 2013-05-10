@@ -165,8 +165,8 @@ sub Run {
             ID => $CloseData{StateID},
         );
 
-        # set unlock on close state
-        if ( $StateData{TypeName} =~ /^close/i ) {
+        # set unlock on close state or unlock is configured
+        if ( $StateData{TypeName} =~ /^close/i || $CloseData{Unlock} ) {
             $Self->{TicketObject}->TicketLockSet(
                 TicketID => $TicketID,
                 Lock     => 'unlock',

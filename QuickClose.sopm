@@ -2,7 +2,7 @@
 <otrs_package version="1.0">
     <CVS>$Id: QuickClose.sopm,v 1.1.1.1 2011/04/15 07:49:58 rb Exp $</CVS>
     <Name>QuickClose</Name>
-    <Version>0.0.14</Version>
+    <Version>1.0.1</Version>
     <Framework>3.0.x</Framework>
     <Framework>3.1.x</Framework>
     <Framework>3.2.x</Framework>
@@ -36,6 +36,7 @@
             <Column Name="state_id" Required="true" Type="SMALLINT"/>
             <Column Name="valid_id" Required="true" Type="SMALLINT"/>
             <Column Name="queue_id" Required="false" Type="SMALLINT"/>
+            <Column Name="unlock" Required="false" Type="SMALLINT" />
             <Column Name="article_type_id" Required="true" Type="SMALLINT"/>
             <Column Name="create_time" Required="true" Type="DATE"/>
             <Column Name="create_by" Required="true" Type="INTEGER"/>
@@ -62,6 +63,9 @@
         </TableAlter>
         <TableAlter Name="ps_quick_close" Version="0.0.13">
             <ColumnAdd Name="subject" Required="false" Type="VARCHAR" Size="250"/>
+        </TableAlter>
+        <TableAlter Name="ps_quick_close" Version="1.0.1">
+            <ColumnAdd Name="unlock" Required="false" Type="SMALLINT" />
         </TableAlter>
     </DatabaseUpgrade>
     <DatabaseUninstall>

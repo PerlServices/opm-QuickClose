@@ -1,6 +1,6 @@
 # --
 # Kernel/System/QuickClose.pm - All QuickClose related functions should be here eventually
-# Copyright (C) 2011 Perl-Services.de, http://www.perl-services.de
+# Copyright (C) 2011-2013 Perl-Services.de, http://www.perl-services.de
 # --
 # $Id: QuickClose.pm,v 1.1.1.1 2011/04/15 07:49:58 rb Exp $
 # --
@@ -130,7 +130,8 @@ sub QuickCloseAdd {
     return if !$Self->{DBObject}->Do(
         SQL => 'INSERT INTO ps_quick_close '
             . '(close_name, state_id, body, create_time, create_by, valid_id, '
-            . ' article_type_id, change_time, change_by, comments, queue_id, subject) '
+            . ' article_type_id, change_time, change_by, comments, queue_id, '
+            . ' subject, unlock) '
             . 'VALUES (?, ?, ?, current_timestamp, ?, ?, ?, current_timestamp, ?, ?, ?, ?)',
         Bind => [
             \$Param{Name},
@@ -143,6 +144,7 @@ sub QuickCloseAdd {
             \' ', # empty comment as we have no comments field
             \$Param{QueueID},
             \$Param{Subject},
+            \$Param{Unlock},
         ],
     );
 
@@ -206,7 +208,7 @@ sub QuickCloseUpdate {
     return if !$Self->{DBObject}->Do(
         SQL => 'UPDATE ps_quick_close SET close_name = ?, state_id = ?, body = ?, '
             . 'valid_id = ?, change_time = current_timestamp, change_by = ?, article_type_id = ?, '
-            . 'queue_id = ?, subject = ? '
+            . 'queue_id = ?, subject = ?, unlock = ? '
             . 'WHERE id = ?',
         Bind => [
             \$Param{Name},
@@ -217,6 +219,7 @@ sub QuickCloseUpdate {
             \$Param{ArticleTypeID},
             \$Param{QueueID},
             \$Param{Subject},
+            \$Param{Unlock},
             \$Param{ID},
         ],
     );
@@ -242,6 +245,7 @@ This returns something like:
         'CreateTime'    => '2010-04-07 15:41:15',
         'CreateBy'      => 123,
         'QueueID'       => 123,
+        'Unlock'        => 1,
     );
 
 =cut
@@ -261,7 +265,7 @@ sub QuickCloseGet {
     # sql
     return if !$Self->{DBObject}->Prepare(
         SQL => 'SELECT id, close_name, state_id, body, create_time, create_by, valid_id, '
-            . 'article_type_id, queue_id, subject '
+            . 'article_type_id, queue_id, subject, unlock '
             . 'FROM ps_quick_close WHERE id = ?',
         Bind  => [ \$Param{ID} ],
         Limit => 1,
@@ -280,6 +284,7 @@ sub QuickCloseGet {
             ArticleTypeID => $Data[7],
             QueueID       => $Data[8],
             Subject       => $Data[9],
+            Unlock        => $Data[10],
         );
     }
 

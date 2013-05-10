@@ -91,6 +91,15 @@ $Include{"RichTextEditor"}
                         </div>
                         <div class="Clear"></div>
 
+                        <label for="Unlock">
+                            $Text{"Unlock Ticket"} <br />
+                            $Text{"Tickets are unlocked automatically on 'closed' states"}:
+                        </label>
+                        <div class="Field">
+                            $Data{"UnlockSelect"}
+                        </div>
+                        <div class="Clear"></div>
+
                         <label for="ValidID" class="Mandatory">
                             <span class="Marker">*</span>
                             $Text{"Valid"}:

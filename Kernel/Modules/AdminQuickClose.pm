@@ -56,7 +56,7 @@ sub new {
 sub Run {
     my ( $Self, %Param ) = @_;
 
-    my @Params = (qw(ID Name StateID Body ValidID UserID ArticleTypeID QueueID Subject));
+    my @Params = (qw(ID Name StateID Body ValidID UserID ArticleTypeID QueueID Subject Unlock));
     my %GetParam;
     for (@Params) {
         $GetParam{$_} = $Self->{ParamObject}->GetParam( Param => $_ ) || '';
@@ -240,6 +240,14 @@ sub _MaskQuickCloseForm {
         Size       => 1,
         SelectedID => $Param{StateID},
         HTMLQuote  => 1,
+    );
+
+    $Param{UnlockSelect} = $Self->{LayoutObject}->BuildSelection(
+        Data        => { 0 => 'No', 1 => 'Yes' },
+        Name        => 'Unlock',
+        Size        => 1,
+        SelectedID  => $Param{Unlock},
+        Translation => 1,
     );
 
     my %Queues;
