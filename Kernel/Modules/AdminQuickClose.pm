@@ -56,7 +56,7 @@ sub new {
 sub Run {
     my ( $Self, %Param ) = @_;
 
-    my @Params = (qw(ID Name StateID Body ValidID UserID ArticleTypeID QueueID Subject Unlock));
+    my @Params = (qw(ID Name StateID Body ValidID UserID ArticleTypeID QueueID Subject Unlock OwnerSelected));
     my %GetParam;
     for (@Params) {
         $GetParam{$_} = $Self->{ParamObject}->GetParam( Param => $_ ) || '';
@@ -123,7 +123,8 @@ sub Run {
 
         my $Update = $Self->{QuickCloseObject}->QuickCloseUpdate(
             %GetParam,
-            UserID => $Self->{UserID},
+            UserID  => $Self->{UserID},
+            OwnerID => $GetParam{OwnerSelected},
         );
 
         if ( !$Update ) {
@@ -173,7 +174,8 @@ sub Run {
 
         my $Success = $Self->{QuickCloseObject}->QuickCloseAdd(
             %GetParam,
-            UserID => $Self->{UserID},
+            UserID  => $Self->{UserID},
+            OwnerID => $GetParam{OwnerSelected},
         );
 
         if ( !$Success ) {

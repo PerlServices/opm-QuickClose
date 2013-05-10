@@ -17,6 +17,7 @@
         <File Permission="644" Location="Kernel/Modules/AdminQuickClose.pm"/>
         <File Permission="644" Location="Kernel/Modules/AgentQuickClose.pm"/>
         <File Permission="644" Location="Kernel/Modules/AgentTicketCloseBulk.pm"/>
+        <File Permission="644" Location="Kernel/Modules/AgentQuickCloseUserSearch.pm"/>
         <File Permission="644" Location="Kernel/Output/HTML/OutputFilterClose.pm"/>
         <File Permission="644" Location="Kernel/Output/HTML/OutputFilterCloseTicketView.pm"/>
         <File Permission="644" Location="Kernel/Output/HTML/Standard/AdminQuickCloseList.dtl"/>
@@ -38,7 +39,7 @@
             <Column Name="state_id" Required="true" Type="SMALLINT"/>
             <Column Name="valid_id" Required="true" Type="SMALLINT"/>
             <Column Name="queue_id" Required="false" Type="SMALLINT"/>
-            <Column Name="unlock" Required="false" Type="SMALLINT" />
+            <Column Name="ticket_unlock" Required="false" Type="SMALLINT" />
             <Column Name="owner_id" Required="false" Type="SMALLINT" />
             <Column Name="article_type_id" Required="true" Type="SMALLINT"/>
             <Column Name="create_time" Required="true" Type="DATE"/>
@@ -68,7 +69,7 @@
             <ColumnAdd Name="subject" Required="false" Type="VARCHAR" Size="250"/>
         </TableAlter>
         <TableAlter Name="ps_quick_close" Version="1.0.1">
-            <ColumnAdd Name="unlock" Required="false" Type="SMALLINT" />
+            <ColumnAdd Name="ticket_unlock" Required="false" Type="SMALLINT" />
             <ColumnAdd Name="owner_id" Required="false" Type="SMALLINT" />
         </TableAlter>
     </DatabaseUpgrade>

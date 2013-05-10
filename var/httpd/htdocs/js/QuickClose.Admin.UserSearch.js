@@ -41,7 +41,7 @@ QuickClose.Admin.UserSearch = (function (TargetNS) {
                 delay: Core.Config.Get('UserAutocomplete.QueryDelay'),
                 source: function (Request, Response) {
                     var URL = Core.Config.Get('Baselink'), Data = {
-                        Action: 'AdminQuickCloseUserSearch',
+                        Action: 'AgentQuickCloseUserSearch',
                         Term: Request.term + '*',
                         MaxResults: Core.Config.Get('UserAutocomplete.MaxResultsDisplayed'),
                         Groups : Core.Config.Get('UserAutocomplete.Groups') || ''

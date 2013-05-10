@@ -15,7 +15,7 @@
         </Setting>
     </ConfigItem>
     <ConfigItem Name="Frontend::Module###AdminQuickClose" Required="0" Valid="1">
-        <Description Translatable="1">Frontend module registration for the invoice states interface.</Description>
+        <Description Translatable="1">Frontend module registration for the quick close administration.</Description>
         <Group>QuickClose</Group>
         <SubGroup>Frontend::Admin::ModuleRegistration</SubGroup>
         <Setting>
@@ -31,6 +31,18 @@
                     <Block>System</Block>
                     <Prio>1100</Prio>
                 </NavBarModule>
+            </FrontendModuleReg>
+        </Setting>
+    </ConfigItem>
+    <ConfigItem Name="Frontend::Module###AgentQuickCloseUserSearch" Required="0" Valid="1">
+        <Description Translatable="1">Frontend module registration for the user search.</Description>
+        <Group>QuickClose</Group>
+        <SubGroup>Frontend::Admin::ModuleRegistration</SubGroup>
+        <Setting>
+            <FrontendModuleReg>
+                <Description>Search for owners.</Description>
+                <NavBarName></NavBarName>
+                <Title>QuickClose</Title>
             </FrontendModuleReg>
         </Setting>
     </ConfigItem>
