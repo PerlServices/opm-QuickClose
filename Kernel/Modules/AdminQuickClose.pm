@@ -56,7 +56,7 @@ sub new {
 sub Run {
     my ( $Self, %Param ) = @_;
 
-    my @Params = (qw(ID Name StateID Body ValidID UserID ArticleTypeID QueueID));
+    my @Params = (qw(ID Name StateID Body ValidID UserID ArticleTypeID QueueID PendingDiff));
     my %GetParam;
     for (@Params) {
         $GetParam{$_} = $Self->{ParamObject}->GetParam( Param => $_ ) || '';

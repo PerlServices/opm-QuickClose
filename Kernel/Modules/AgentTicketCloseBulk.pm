@@ -27,7 +27,7 @@ sub new {
 
     # check needed objects
     for my $Needed (
-        qw(ParamObject DBObject TicketObject LayoutObject LogObject QueueObject ConfigObject)
+        qw(ParamObject DBObject TicketObject LayoutObject LogObject QueueObject ConfigObject TimeObject)
         )
     {
         if ( !$Self->{$Needed} ) {
@@ -148,13 +148,32 @@ sub Run {
             UserID   => $Self->{UserID},
         );
 
-        # unlock the ticket after close
-        my %StateData = $Self->{TicketObject}->{StateObject}->StateGet(
-            ID => $CloseData{StateID},
+        my $Type = $Self->{QuickCloseObject}->TicketStateTypeByStateGet(
+            StateID => $CloseData{StateID},
         );
 
+        if ( $Type =~ m{^pending}xms ) {
+            my $Diff = $CloseData{PendingDiff} ||
+                $Self->{ConfigObject}->Get( 'QuickClose::PendingDiffDefault' ) ||
+                ( 1 * 24 * 60 );
+
+            my ($Sec, $Min, $Hour, $Day, $Month, $Year) = $Self->{TimeObject}->SystemTime2Date(
+                SystemTime => $Self->{TimeObject}->SystemTime() + ( $Diff * 60 ),
+            );
+
+            $Self->{TicketObject}->TicketPendingTimeSet(
+                Year     => $Year,
+                Month    => $Month,
+                Day      => $Day,
+                Hour     => $Hour,
+                Minute   => $Min,
+                TicketID => $TicketID,
+                UserID   => $Self->{UserID},
+            );
+        }
+
         # set unlock on close state
-        if ( $StateData{TypeName} =~ /^close/i ) {
+        if ( $Type =~ /^close/i ) {
             $Self->{TicketObject}->TicketLockSet(
                 TicketID => $TicketID,
                 Lock     => 'unlock',

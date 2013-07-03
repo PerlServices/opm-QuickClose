@@ -129,8 +129,8 @@ sub QuickCloseAdd {
     return if !$Self->{DBObject}->Do(
         SQL => 'INSERT INTO ps_quick_close '
             . '(close_name, state_id, body, create_time, create_by, valid_id, '
-            . ' article_type_id, change_time, change_by, comments, queue_id) '
-            . 'VALUES (?, ?, ?, current_timestamp, ?, ?, ?, current_timestamp, ?, ?, ?)',
+            . ' article_type_id, change_time, change_by, comments, queue_id, pending_diff) '
+            . 'VALUES (?, ?, ?, current_timestamp, ?, ?, ?, current_timestamp, ?, ?, ?, ?)',
         Bind => [
             \$Param{Name},
             \$Param{StateID},
@@ -141,6 +141,7 @@ sub QuickCloseAdd {
             \$Param{UserID},
             \' ', # empty comment as we have no comments field
             \$Param{QueueID},
+            \$Param{PendingDiff},
         ],
     );
 
@@ -203,7 +204,7 @@ sub QuickCloseUpdate {
     return if !$Self->{DBObject}->Do(
         SQL => 'UPDATE ps_quick_close SET close_name = ?, state_id = ?, body = ?, '
             . 'valid_id = ?, change_time = current_timestamp, change_by = ?, article_type_id = ?, '
-            . 'queue_id = ? '
+            . 'queue_id = ?, pending_diff = ? '
             . 'WHERE id = ?',
         Bind => [
             \$Param{Name},
@@ -213,6 +214,7 @@ sub QuickCloseUpdate {
             \$Param{UserID},
             \$Param{ArticleTypeID},
             \$Param{QueueID},
+            \$Param{PendingDiff},
             \$Param{ID},
         ],
     );
@@ -256,7 +258,7 @@ sub QuickCloseGet {
     # sql
     return if !$Self->{DBObject}->Prepare(
         SQL => 'SELECT id, close_name, state_id, body, create_time, create_by, valid_id, '
-            . 'article_type_id, queue_id '
+            . 'article_type_id, queue_id, pending_diff '
             . 'FROM ps_quick_close WHERE id = ?',
         Bind  => [ \$Param{ID} ],
         Limit => 1,
@@ -274,6 +276,7 @@ sub QuickCloseGet {
             ValidID       => $Data[6],
             ArticleTypeID => $Data[7],
             QueueID       => $Data[8],
+            PendingDiff   => $Data[9],
         );
     }
 
@@ -356,6 +359,38 @@ sub QuickCloseList {
     }
 
     return %QuickClose;
+}
+
+sub TicketStateTypeByStateGet {
+    my ($Self, %Param) = @_;
+
+    for my $Needed (qw(StateID)) {
+        if ( !$Param{$Needed} ) {
+            $Self->{LogObject}->Log(
+                Priority => 'error',
+                Message  => "Need $Needed!",
+            );
+
+            return;
+        }
+    }
+
+    my $SQL = 'SELECT tst.name FROM ticket_state_type tst '
+        . ' INNER JOIN ticket_state ts ON tst.id = ts.type_id '
+        . ' WHERE ts.id = ?';
+
+    return if !$Self->{DBObject}->Prepare(
+        SQL   => $SQL,
+        Bind  => [ \$Param{StateID} ],
+        Limit => 1,
+    );
+
+    my $Type;
+    while ( my @Row = $Self->{DBObject}->FetchrowArray() ) {
+        $Type = $Row[0];
+    }
+
+    return $Type;
 }
 
 1;

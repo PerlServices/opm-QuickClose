@@ -83,6 +83,14 @@ $Include{"RichTextEditor"}
                         </div>
                         <div class="Clear"></div>
 
+                        <label for="PendingDiff">
+                            $Text{"Pending Diff (in minutes)"}:
+                        </label>
+                        <div class="Field">
+                            <input type="text" name="PendingDiff" id="PendingDiff" value="$QData{"PendingDiff"}" />
+                        </div>
+                        <div class="Clear"></div>
+
                         <label for="ValidID" class="Mandatory">
                             <span class="Marker">*</span>
                             $Text{"Valid"}:

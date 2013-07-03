@@ -2,13 +2,14 @@
 <otrs_package version="1.0">
     <CVS>$Id: QuickClose.sopm,v 1.1.1.1 2011/04/15 07:49:58 rb Exp $</CVS>
     <Name>QuickClose</Name>
-    <Version>0.0.12</Version>
+    <Version>0.1.13</Version>
     <Framework>3.0.x</Framework>
     <Vendor>Perl-Services.de</Vendor>
     <URL>http://www.perl-services.de/</URL>
     <License>GNU AFFERO GENERAL PUBLIC LICENSE Version 3, November 2007</License>
     <Description Lang="en">A module to close tickets more quickly.</Description>
     <Description Lang="de">Ein Modul, mit dem Tickets schneller/einfacher geschlossen werden können.</Description>
+    <PackageRequired Version="1.0.0">KIXCore</PackageRequired>
     <Filelist>
         <File Permission="644" Location="Kernel/Config/Files/QuickClose.xml"/>
         <File Permission="644" Location="Kernel/Language/de_QuickClose.pm"/>
@@ -23,6 +24,7 @@
         <File Permission="644" Location="Kernel/Output/HTML/Standard/QuickCloseSnippetTicketView.dtl"/>
         <File Permission="644" Location="Kernel/System/QuickClose.pm"/>
         <File Permission="644" Location="doc/en/QuickClose.pod"/>
+        <File Permission="644" Location="var/packagesetup/QuickClose.pm"/>
     </Filelist>
     <DatabaseInstall Type="post">
         <TableCreate Name="ps_quick_close">
@@ -33,6 +35,7 @@
             <Column Name="state_id" Required="true" Type="SMALLINT"/>
             <Column Name="valid_id" Required="true" Type="SMALLINT"/>
             <Column Name="queue_id" Required="false" Type="SMALLINT"/>
+            <Column Name="pending_diff" Required="false" Type="SMALLINT"/>
             <Column Name="article_type_id" Required="true" Type="SMALLINT"/>
             <Column Name="create_time" Required="true" Type="DATE"/>
             <Column Name="create_by" Required="true" Type="INTEGER"/>
@@ -57,8 +60,143 @@
         <TableAlter Name="ps_quick_close" Version="0.0.10">
             <ColumnAdd Name="queue_id" Required="false" Type="SMALLINT"/>
         </TableAlter>
+        <TableAlter Name="ps_quick_close" Version="0.1.13">
+            <ColumnAdd Name="pending_diff" Required="false" Type="SMALLINT"/>
+        </TableAlter>
     </DatabaseUpgrade>
     <DatabaseUninstall>
         <TableDrop Name="ps_quick_close"/>
     </DatabaseUninstall>
+    <CodeInstall Type="post">
+        my $FunctionName = 'CodeInstall';
+        my $CodeModule = 'var::packagesetup::' . $Param{Structure}-&gt;{Name}-&gt;{Content};
+
+        # The code module has just recently been copied to it's location in the file system.
+        # In a persistent Perl environment an old version of the module might still be loaded,
+        # as watchdogs like Apache2::Reload haven't had a chance to reload it.
+        # So we need to make sure that the new version is being loaded.
+        # Kernel::System::Main::Require() checks the relative file path, so we need to remove that from %INC.
+        # This is only needed in persistent Perl environment, but does no harm in a CGI environment.
+        my $CodeModulePath = $CodeModule;
+        $CodeModulePath =~ s/::/\//g;
+        $CodeModulePath .= '.pm';
+        delete $INC{$CodeModulePath};
+
+        if ( $Self-&gt;{MainObject}-&gt;Require($CodeModule) ) {
+            my $CodeObject = $CodeModule-&gt;new( %{$Self} );
+            if ($CodeObject) {
+                if ( !$CodeObject-&gt;$FunctionName(%{$Self}) ) {
+                    $Self-&gt;{LogObject}-&gt;Log(
+                        Priority =&gt; 'error',
+                        Message  =&gt; "Could not call method $FunctionName() on $CodeModule.pm."
+                    );
+                }
+            }
+            else {
+                $Self-&gt;{LogObject}-&gt;Log(
+                    Priority =&gt; 'error',
+                    Message  =&gt; "Could not call method new() on $CodeModule.pm."
+                );
+            }
+        }
+    </CodeInstall>
+    <CodeUpgrade Type="post">
+        my $FunctionName = 'CodeUpgrade';
+        my $CodeModule = 'var::packagesetup::' . $Param{Structure}-&gt;{Name}-&gt;{Content};
+
+        # The code module has just recently been copied to it's location in the file system.
+        # In a persistent Perl environment an old version of the module might still be loaded,
+        # as watchdogs like Apache2::Reload haven't had a chance to reload it.
+        # So we need to make sure that the new version is being loaded.
+        # Kernel::System::Main::Require() checks the relative file path, so we need to remove that from %INC.
+        # This is only needed in persistent Perl environment, but does no harm in a CGI environment.
+        my $CodeModulePath = $CodeModule;
+        $CodeModulePath =~ s/::/\//g;
+        $CodeModulePath .= '.pm';
+        delete $INC{$CodeModulePath};
+
+        if ( $Self-&gt;{MainObject}-&gt;Require($CodeModule) ) {
+            my $CodeObject = $CodeModule-&gt;new( %{$Self} );
+            if ($CodeObject) {
+                if ( !$CodeObject-&gt;$FunctionName(%{$Self}) ) {
+                    $Self-&gt;{LogObject}-&gt;Log(
+                        Priority =&gt; 'error',
+                        Message  =&gt; "Could not call method $FunctionName() on $CodeModule.pm."
+                    );
+                }
+            }
+            else {
+                $Self-&gt;{LogObject}-&gt;Log(
+                    Priority =&gt; 'error',
+                    Message  =&gt; "Could not call method new() on $CodeModule.pm."
+                );
+            }
+        }
+    </CodeUpgrade>
+    <CodeUninstall Type="pre">
+        my $FunctionName = 'CodeUninstall';
+        my $CodeModule = 'var::packagesetup::' . $Param{Structure}-&gt;{Name}-&gt;{Content};
+
+        # The code module has just recently been copied to it's location in the file system.
+        # In a persistent Perl environment an old version of the module might still be loaded,
+        # as watchdogs like Apache2::Reload haven't had a chance to reload it.
+        # So we need to make sure that the new version is being loaded.
+        # Kernel::System::Main::Require() checks the relative file path, so we need to remove that from %INC.
+        # This is only needed in persistent Perl environment, but does no harm in a CGI environment.
+        my $CodeModulePath = $CodeModule;
+        $CodeModulePath =~ s/::/\//g;
+        $CodeModulePath .= '.pm';
+        delete $INC{$CodeModulePath};
+
+        if ( $Self-&gt;{MainObject}-&gt;Require($CodeModule) ) {
+            my $CodeObject = $CodeModule-&gt;new( %{$Self} );
+            if ($CodeObject) {
+                if ( !$CodeObject-&gt;$FunctionName(%{$Self}) ) {
+                    $Self-&gt;{LogObject}-&gt;Log(
+                        Priority =&gt; 'error',
+                        Message  =&gt; "Could not call method $FunctionName() on $CodeModule.pm."
+                    );
+                }
+            }
+            else {
+                $Self-&gt;{LogObject}-&gt;Log(
+                    Priority =&gt; 'error',
+                    Message  =&gt; "Could not call method new() on $CodeModule.pm."
+                );
+            }
+        }
+    </CodeUninstall>
+    <CodeReinstall Type="post">
+        my $FunctionName = 'CodeReinstall';
+        my $CodeModule = 'var::packagesetup::' . $Param{Structure}-&gt;{Name}-&gt;{Content};
+
+        # The code module has just recently been copied to it's location in the file system.
+        # In a persistent Perl environment an old version of the module might still be loaded,
+        # as watchdogs like Apache2::Reload haven't had a chance to reload it.
+        # So we need to make sure that the new version is being loaded.
+        # Kernel::System::Main::Require() checks the relative file path, so we need to remove that from %INC.
+        # This is only needed in persistent Perl environment, but does no harm in a CGI environment.
+        my $CodeModulePath = $CodeModule;
+        $CodeModulePath =~ s/::/\//g;
+        $CodeModulePath .= '.pm';
+        delete $INC{$CodeModulePath};
+
+        if ( $Self-&gt;{MainObject}-&gt;Require($CodeModule) ) {
+            my $CodeObject = $CodeModule-&gt;new( %{$Self} );
+            if ($CodeObject) {
+                if ( !$CodeObject-&gt;$FunctionName(%{$Self}) ) {
+                    $Self-&gt;{LogObject}-&gt;Log(
+                        Priority =&gt; 'error',
+                        Message  =&gt; "Could not call method $FunctionName() on $CodeModule.pm."
+                    );
+                }
+            }
+            else {
+                $Self-&gt;{LogObject}-&gt;Log(
+                    Priority =&gt; 'error',
+                    Message  =&gt; "Could not call method new() on $CodeModule.pm."
+                );
+            }
+        }
+    </CodeReinstall>
 </otrs_package>
