@@ -1,6 +1,6 @@
 # --
 # Kernel/System/QuickClose.pm - All QuickClose related functions should be here eventually
-# Copyright (C) 2011 Perl-Services.de, http://www.perl-services.de
+# Copyright (C) 2011-2013 Perl-Services.de, http://www.perl-services.de
 # --
 # $Id: QuickClose.pm,v 1.1.1.1 2011/04/15 07:49:58 rb Exp $
 # --
@@ -101,6 +101,7 @@ to add a news
         Name          => 'A name for the news',
         StateID       => 'A state_id for the news',
         Body          => 'Anything is happened',
+        Subject       => 'A subject',
         ArticleTypeID => 1,
         ValidID       => 1,
         UserID        => 123,
@@ -129,8 +130,9 @@ sub QuickCloseAdd {
     return if !$Self->{DBObject}->Do(
         SQL => 'INSERT INTO ps_quick_close '
             . '(close_name, state_id, body, create_time, create_by, valid_id, '
-            . ' article_type_id, change_time, change_by, comments, queue_id, pending_diff) '
-            . 'VALUES (?, ?, ?, current_timestamp, ?, ?, ?, current_timestamp, ?, ?, ?, ?)',
+            . ' article_type_id, change_time, change_by, comments, queue_id, '
+            . ' subject, ticket_unlock, owner_id, pending_diff) '
+            . 'VALUES (?, ?, ?, current_timestamp, ?, ?, ?, current_timestamp, ?, ?, ?, ?, ?, ?, ?)',
         Bind => [
             \$Param{Name},
             \$Param{StateID},
@@ -141,6 +143,9 @@ sub QuickCloseAdd {
             \$Param{UserID},
             \' ', # empty comment as we have no comments field
             \$Param{QueueID},
+            \$Param{Subject},
+            \$Param{Unlock},
+            \$Param{OwnerID},
             \$Param{PendingDiff},
         ],
     );
@@ -175,6 +180,7 @@ to update news
         ID            => 3,
         Name          => 'A name for the news',
         StateID       => 'A state_id for the news',
+        Subject       => 'A subject',
         Body          => 'Anything is happened',
         ArticleTypeID => 1,
         ValidID       => 1,
@@ -204,7 +210,7 @@ sub QuickCloseUpdate {
     return if !$Self->{DBObject}->Do(
         SQL => 'UPDATE ps_quick_close SET close_name = ?, state_id = ?, body = ?, '
             . 'valid_id = ?, change_time = current_timestamp, change_by = ?, article_type_id = ?, '
-            . 'queue_id = ?, pending_diff = ? '
+            . 'queue_id = ?, subject = ?, ticket_unlock = ?, owner_id = ?, pending_diff = ? '
             . 'WHERE id = ?',
         Bind => [
             \$Param{Name},
@@ -214,6 +220,9 @@ sub QuickCloseUpdate {
             \$Param{UserID},
             \$Param{ArticleTypeID},
             \$Param{QueueID},
+            \$Param{Subject},
+            \$Param{Unlock},
+            \$Param{OwnerID},
             \$Param{PendingDiff},
             \$Param{ID},
         ],
@@ -235,10 +244,12 @@ This returns something like:
         'Name'          => 'This is the name',
         'StateID'       => 'A short abstract',
         'Body'          => 'This is the long text of the news',
+        'Subject'       => 'A subject',
         'ArticleTypeID' => 3,
         'CreateTime'    => '2010-04-07 15:41:15',
         'CreateBy'      => 123,
         'QueueID'       => 123,
+        'Unlock'        => 1,
     );
 
 =cut
@@ -258,7 +269,7 @@ sub QuickCloseGet {
     # sql
     return if !$Self->{DBObject}->Prepare(
         SQL => 'SELECT id, close_name, state_id, body, create_time, create_by, valid_id, '
-            . 'article_type_id, queue_id, pending_diff '
+            . 'article_type_id, queue_id, subject, ticket_unlock, owner_id, pending_diff '
             . 'FROM ps_quick_close WHERE id = ?',
         Bind  => [ \$Param{ID} ],
         Limit => 1,
@@ -276,7 +287,10 @@ sub QuickCloseGet {
             ValidID       => $Data[6],
             ArticleTypeID => $Data[7],
             QueueID       => $Data[8],
-            PendingDiff   => $Data[9],
+            Subject       => $Data[9],
+            Unlock        => $Data[10],
+            OwnerID       => $Data[11],
+            PendingDiff   => $Data[12],
         );
     }
 
@@ -286,6 +300,10 @@ sub QuickCloseGet {
 
     if ( $QuickClose{QueueID} ) {
         $QuickClose{Queue}  = $Self->{QueueObject}->QueueLookup( QueueID => $QuickClose{QueueID} );
+    }
+
+    if ( $QuickClose{OwnerID} ) {
+        $QuickClose{Owner}  = $Self->{UserObject}->UserLookup( UserID => $QuickClose{OwnerID} );
     }
 
     return %QuickClose;

@@ -1,6 +1,6 @@
 # --
 # Kernel/Modules/AgentTicketCloseBulk.pm - bulk closing of tickets
-# Copyright (C) 2012 Perl-Services.de, http://perl-services.de
+# Copyright (C) 2012-2013 Perl-Services.de, http://perl-services.de
 # --
 # $Id: AgentTicketCloseBulk.pm,v 1.16 2011/08/26 06:45:08 ub Exp $
 # --
@@ -64,12 +64,22 @@ sub Run {
         $GetParam{$WebParam} = $Self->{ParamObject}->GetParam( Param => $WebParam ) || '';
     }
 
+    if ( !$GetParam{Subject} ) {
+        $GetParam{Subject} =
+            $Self->{ConfigObject}->Get( 'QuickClose::DefaultSubject' ) ||
+            $Self->{LayoutObject}->{LanguageObject}->Get( 'Close' );
+    }
+
     # check needed stuff
     if ( !@TicketIDs ) {
         return $Self->{LayoutObject}->ErrorScreen(
             Message => 'No TicketID is given!',
             Comment => 'Please contact the admin.',
         );
+    }
+
+    if ( !$ID ) {
+        $ID = $Self->{ConfigObject}->Get( 'QuickClose::DefaultID' ) || 1;
     }
 
     # get QuickClose data
@@ -81,6 +91,8 @@ sub Run {
             Comment => 'Please contact the admin.',
         );
     }
+
+    delete $CloseData{Subject} if !length $CloseData{Subject};
 
     my @NoAccess;
 
@@ -138,6 +150,14 @@ sub Run {
                 TicketID => $TicketID,
                 QueueID  => $CloseData{QueueID},
                 UserID   => $Self->{UserID},
+            );
+        }
+
+        if ( $CloseData{OwnerID} ) {
+            $Self->{TicketObject}->TicketOwnerSet(
+                TicketID  => $TicketID,
+                NewUserID => $CloseData{OwnerID},
+                UserID    => $Self->{UserID},
             );
         }
 

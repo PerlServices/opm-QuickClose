@@ -56,7 +56,7 @@ sub new {
 sub Run {
     my ( $Self, %Param ) = @_;
 
-    my @Params = (qw(ID Name StateID Body ValidID UserID ArticleTypeID QueueID PendingDiff));
+    my @Params = (qw(ID Name StateID Body ValidID UserID ArticleTypeID QueueID Subject Unlock OwnerSelected PendingDiff));
     my %GetParam;
     for (@Params) {
         $GetParam{$_} = $Self->{ParamObject}->GetParam( Param => $_ ) || '';
@@ -123,7 +123,8 @@ sub Run {
 
         my $Update = $Self->{QuickCloseObject}->QuickCloseUpdate(
             %GetParam,
-            UserID => $Self->{UserID},
+            UserID  => $Self->{UserID},
+            OwnerID => $GetParam{OwnerSelected},
         );
 
         if ( !$Update ) {
@@ -173,7 +174,8 @@ sub Run {
 
         my $Success = $Self->{QuickCloseObject}->QuickCloseAdd(
             %GetParam,
-            UserID => $Self->{UserID},
+            UserID  => $Self->{UserID},
+            OwnerID => $GetParam{OwnerSelected},
         );
 
         if ( !$Success ) {
@@ -242,6 +244,14 @@ sub _MaskQuickCloseForm {
         HTMLQuote  => 1,
     );
 
+    $Param{UnlockSelect} = $Self->{LayoutObject}->BuildSelection(
+        Data        => { 0 => 'No', 1 => 'Yes' },
+        Name        => 'Unlock',
+        Size        => 1,
+        SelectedID  => $Param{Unlock},
+        Translation => 1,
+    );
+
     my %Queues;
 
     if ( $Self->{ConfigObject}->Get( 'QuickClose::QueueMove' ) ) {
@@ -279,6 +289,33 @@ sub _MaskQuickCloseForm {
         Data => \%NoteTypes,
         Name => 'ArticleTypeID',
         %ArticleType,
+    );
+
+    my $UserAutoCompleteConfig
+        = $Self->{ConfigObject}->Get('QuickClose::Frontend::UserSearchAutoComplete');
+
+
+    $Self->{LayoutObject}->Block(
+        Name => 'UserSearchAutoComplete',
+        Data => {
+            minQueryLength      => $UserAutoCompleteConfig->{MinQueryLength}      || 2,
+            queryDelay          => $UserAutoCompleteConfig->{QueryDelay}          || 0.1,
+            maxResultsDisplayed => $UserAutoCompleteConfig->{MaxResultsDisplayed} || 20,
+            dynamicWidth        => $UserAutoCompleteConfig->{DynamicWidth}        || 'false',
+        },
+    );
+
+    my $ActiveAutoComplete = 'true';
+    if ( !$UserAutoCompleteConfig->{Active} ) {
+        $ActiveAutoComplete = 'false';
+    }
+
+    $Self->{LayoutObject}->Block(
+        Name => 'UserSearchInit',
+        Data => {
+            ActiveAutoComplete => $ActiveAutoComplete,
+            ItemID             => 'Owner',
+        },
     );
 
     if ( $Self->{Subaction} ne 'Edit' && $Self->{Subaction} ne 'Add' ) {

@@ -24,11 +24,14 @@ sub Data {
 
     return if ref $Lang ne 'HASH';
 
-    $Lang->{'Add text'}        = 'Neuer QuickClose';
-    $Lang->{'Author'}          = 'Autor';
+    $Lang->{'Add text'}              = 'Neuer QuickClose';
+    $Lang->{'Author'}                = 'Autor';
     $Lang->{'Add/Change QuickClose'} = 'QuickClose hinzufügen/ändern';
     $Lang->{'QuickClose Management'} = 'QuickClose verwalten';
-    $Lang->{'edit'}            = 'bearbeiten';
+    $Lang->{'edit'}                  = 'bearbeiten';
+    $Lang->{'Unlock Ticket'}         = 'Ticket freigeben';
+
+    $Lang->{"Tickets are unlocked automatically on 'closed' states"} = "Tickets werden bei 'geschlossen' Status automatisch freigegeben";
 
     return 1;
 }
