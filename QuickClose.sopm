@@ -66,9 +66,6 @@
         <TableAlter Name="ps_quick_close" Version="0.0.10">
             <ColumnAdd Name="queue_id" Required="false" Type="SMALLINT"/>
         </TableAlter>
-        <TableAlter Name="ps_quick_close" Version="1.0.3">
-            <ColumnAdd Name="pending_diff" Required="false" Type="SMALLINT"/>
-        </TableAlter>
         <TableAlter Name="ps_quick_close" Version="0.0.13">
             <ColumnAdd Name="subject" Required="false" Type="VARCHAR" Size="250"/>
         </TableAlter>
@@ -78,6 +75,9 @@
         </TableAlter>
         <TableAlter Name="ps_quick_close" Version="1.0.2">
             <ColumnChange NameOld="unlock" NameNew="ticket_unlock" Required="false" Type="SMALLINT" />
+        </TableAlter>
+        <TableAlter Name="ps_quick_close" Version="1.0.3">
+            <ColumnAdd Name="pending_diff" Required="false" Type="SMALLINT"/>
         </TableAlter>
     </DatabaseUpgrade>
     <DatabaseUninstall>
