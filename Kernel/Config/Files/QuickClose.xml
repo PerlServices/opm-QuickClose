@@ -31,6 +31,9 @@
                     <Block>System</Block>
                     <Prio>1100</Prio>
                 </NavBarModule>
+                <Loader>
+                    <JavaScript>QuickClose.Admin.UserSearch.js</JavaScript>
+                </Loader>
             </FrontendModuleReg>
         </Setting>
     </ConfigItem>
