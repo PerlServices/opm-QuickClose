@@ -2,7 +2,7 @@
 <otrs_package version="1.0">
     <CVS>$Id: QuickClose.sopm,v 1.1.1.1 2011/04/15 07:49:58 rb Exp $</CVS>
     <Name>QuickClose</Name>
-    <Version>3.3.2</Version>
+    <Version>3.3.3</Version>
     <Framework>3.3.x</Framework>
     <Vendor>Perl-Services.de</Vendor>
     <URL>http://www.perl-services.de/</URL>
@@ -45,7 +45,7 @@
             <Column Name="create_by" Required="true" Type="INTEGER"/>
             <Column Name="change_time" Required="true" Type="DATE"/>
             <Column Name="change_by" Required="true" Type="INTEGER"/>
-            <ForeignKey ForeignTable="system_user">
+            <ForeignKey ForeignTable="users">
                 <Reference Local="create_by" Foreign="id" />
                 <Reference Local="change_by" Foreign="id" />
             </ForeignKey>
