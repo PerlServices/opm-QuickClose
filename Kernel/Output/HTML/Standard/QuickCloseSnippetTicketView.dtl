@@ -9,7 +9,7 @@
 # did not receive this file, see http://www.gnu.org/licenses/agpl.txt.
 # --
 
-                    <li class="Bulk $QData{"Class"}">
+                    <li class="Bulk AlwaysPresent $QData{"Class"}">
                         <form title="$Text{"QuickClose ticket"}" action="$Env{"CGIHandle"}" method="post" name="quickclose" id="quickclose">
                             <input type="hidden" name="Action" value="AgentTicketCloseBulk"/>
                             <input type="hidden" name="Subject" value="$Text{"Close"}"/>
