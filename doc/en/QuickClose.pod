@@ -30,6 +30,12 @@ did not receive this file, see L<http://www.gnu.org/licenses/agpl.txt>.
 
 =over 4
 
+=item * 3.3.3
+
+- Fix #1: OwnerID and PendingDiff should be set to 0 if no value is passed (thanks to Torsten Thau, c.a.p.e IT)
+
+- Do not capture ticket ID from source, but get it with param object
+
 =item * 1.0.1
 
 Added new option: Unlock ticket. If enabled the ticket is unlocked no matter what
