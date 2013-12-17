@@ -30,7 +30,7 @@ did not receive this file, see L<http://www.gnu.org/licenses/agpl.txt>.
 
 =over 4
 
-=item * 3.3.3
+=item * 3.3.4
 
 - Fix #1: OwnerID and PendingDiff should be set to 0 if no value is passed (thanks to Torsten Thau, c.a.p.e IT)
 
