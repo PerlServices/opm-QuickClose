@@ -2,8 +2,6 @@
 # Kernel/Language/de_QuickClose.pm - the german translation of QuickClose
 # Copyright (C) 2011 Perl-Services, http://www.perl-services.de
 # --
-# $Id: de_QuickClose.pm,v 1.1.1.1 2011/04/15 07:49:58 rb Exp $
-# --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
 # did not receive this file, see http://www.gnu.org/licenses/agpl.txt.
@@ -14,8 +12,9 @@ package Kernel::Language::de_QuickClose;
 use strict;
 use warnings;
 
-use vars qw($VERSION);
-$VERSION = qw($Revision: 1.1.1.1 $) [1];
+use utf8;
+
+our $VERSION = '0.01';
 
 sub Data {
     my $Self = shift;
@@ -26,8 +25,8 @@ sub Data {
 
     $Lang->{'Add text'}              = 'Neuer QuickClose';
     $Lang->{'Author'}                = 'Autor';
-    $Lang->{'Add/Change QuickClose'} = 'QuickClose hinzufügen/ändern';
-    $Lang->{'Add/Change QuickClose texts'} = 'QuickClose hinzufügen/ändern';
+    $Lang->{'Add/Change QuickClose'} = 'QuickClose hinzufÃ¼gen/Ã¤ndern';
+    $Lang->{'Add/Change QuickClose texts'} = 'QuickClose hinzufÃ¼gen/Ã¤ndern';
     $Lang->{'QuickClose Management'} = 'QuickClose verwalten';
     $Lang->{'edit'}                  = 'bearbeiten';
     $Lang->{'Unlock Ticket'}         = 'Ticket freigeben';
