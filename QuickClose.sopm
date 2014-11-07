@@ -17,11 +17,11 @@
         <File Permission="644" Location="Kernel/Modules/AgentQuickCloseUserSearch.pm"/>
         <File Permission="644" Location="Kernel/Output/HTML/OutputFilterClose.pm"/>
         <File Permission="644" Location="Kernel/Output/HTML/OutputFilterCloseTicketView.pm"/>
-        <File Permission="644" Location="Kernel/Output/HTML/Standard/AdminQuickCloseList.dtl"/>
-        <File Permission="644" Location="Kernel/Output/HTML/Standard/AdminQuickCloseForm.dtl"/>
-        <File Permission="644" Location="Kernel/Output/HTML/Standard/QuickCloseSnippet.dtl"/>
-        <File Permission="644" Location="Kernel/Output/HTML/Standard/QuickCloseSnippetTicketView.dtl"/>
-        <File Permission="644" Location="Kernel/Output/HTML/Standard/AdminQuickCloseUserSearch.dtl"/>
+        <File Permission="644" Location="Kernel/Output/HTML/Standard/AdminQuickCloseList.tt"/>
+        <File Permission="644" Location="Kernel/Output/HTML/Standard/AdminQuickCloseForm.tt"/>
+        <File Permission="644" Location="Kernel/Output/HTML/Standard/QuickCloseSnippet.tt"/>
+        <File Permission="644" Location="Kernel/Output/HTML/Standard/QuickCloseSnippetTicketView.tt"/>
+        <File Permission="644" Location="Kernel/Output/HTML/Standard/AdminQuickCloseUserSearch.tt"/>
         <File Permission="644" Location="Kernel/System/QuickClose.pm"/>
         <File Permission="644" Location="doc/en/QuickClose.pod"/>
         <File Permission="644" Location="var/httpd/htdocs/js/QuickClose.Admin.UserSearch.js"/>
