@@ -35,6 +35,7 @@ sub Data {
     $Lang->{'Pending Diff (in minutes)'} = 'Wartezeit (in Minuten)';
 
     $Lang->{"Tickets are unlocked automatically on 'closed' states"} = "Tickets werden bei 'geschlossen' Status automatisch freigegeben";
+    $Lang->{"Create and manage QuickClose texts."} = "Erstellen und verwalten von QuickClose-Einstellungen.";
 
     return 1;
 }

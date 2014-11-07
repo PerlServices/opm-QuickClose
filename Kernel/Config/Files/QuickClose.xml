@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="iso-8859-1" ?>
 <otrs_config version="1.0" init="Application">
     <CVS>$Id: QuickClose.xml,v 1.1.1.1 2011/04/15 07:49:58 rb Exp $</CVS>
     <ConfigItem Name="Frontend::Module###AgentQuickClose" Required="0" Valid="1">

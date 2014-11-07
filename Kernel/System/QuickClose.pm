@@ -1,8 +1,6 @@
 # --
 # Kernel/System/QuickClose.pm - All QuickClose related functions should be here eventually
-# Copyright (C) 2011-2013 Perl-Services.de, http://www.perl-services.de
-# --
-# $Id: QuickClose.pm,v 1.1.1.1 2011/04/15 07:49:58 rb Exp $
+# Copyright (C) 2011-2014 Perl-Services.de, http://www.perl-services.de
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -14,13 +12,19 @@ package Kernel::System::QuickClose;
 use strict;
 use warnings;
 
-use Kernel::System::User;
-use Kernel::System::Valid;
-use Kernel::System::State;
-use Kernel::System::Queue;
+our $VERSION = 0.02;
 
-use vars qw($VERSION);
-$VERSION = qw($Revision: 1.1.1.1 $) [1];
+our @ObjectDependencies = qw(
+    Kernel::Config
+    Kernel::System::Encode
+    Kernel::System::Log
+    Kernel::System::Main
+    Kernel::System::DB
+    Kernel::System::User
+    Kernel::System::Valid
+    Kernel::System::State
+    Kernel::System::Queue
+);
 
 =head1 NAME
 
@@ -36,40 +40,6 @@ Kernel::System::QuickClose - backend for product news
 
 create an object
 
-    use Kernel::Config;
-    use Kernel::System::Encode;
-    use Kernel::System::Log;
-    use Kernel::System::Main;
-    use Kernel::System::DB;
-    use Kernel::System::QuickClose;
-
-    my $ConfigObject = Kernel::Config->new();
-    my $EncodeObject = Kernel::System::Encode->new(
-        ConfigObject => $ConfigObject,
-    );
-    my $LogObject = Kernel::System::Log->new(
-        ConfigObject => $ConfigObject,
-        EncodeObject => $EncodeObject,
-    );
-    my $MainObject = Kernel::System::Main->new(
-        ConfigObject => $ConfigObject,
-        EncodeObject => $EncodeObject,
-        LogObject    => $LogObject,
-    );
-    my $DBObject = Kernel::System::DB->new(
-        ConfigObject => $ConfigObject,
-        EncodeObject => $EncodeObject,
-        LogObject    => $LogObject,
-        MainObject   => $MainObject,
-    );
-    my $QuickCloseObject = Kernel::System::QuickClose->new(
-        ConfigObject => $ConfigObject,
-        LogObject    => $LogObject,
-        DBObject     => $DBObject,
-        MainObject   => $MainObject,
-        EncodeObject => $EncodeObject,
-    );
-
 =cut
 
 sub new {
@@ -79,17 +49,6 @@ sub new {
     my $Self = {};
     bless( $Self, $Type );
 
-    # check needed objects
-    for my $Object (qw(DBObject ConfigObject MainObject LogObject EncodeObject TimeObject)) {
-        $Self->{$Object} = $Param{$Object} || die "Got no $Object!";
-    }
-
-    # create needed objects
-    $Self->{UserObject}  = Kernel::System::User->new( %{$Self} );
-    $Self->{ValidObject} = Kernel::System::Valid->new( %{$Self} );
-    $Self->{StateObject} = Kernel::System::State->new( %{$Self} );
-    $Self->{QueueObject} = Kernel::System::Queue->new( %{$Self} );
-    
     return $Self;
 }
 
@@ -113,10 +72,13 @@ to add a news
 sub QuickCloseAdd {
     my ( $Self, %Param ) = @_;
 
+    my $LogObject = $Kernel::OM->Get('Kernel::System::Log');
+    my $DBObject  = $Kernel::OM->Get('Kernel::System::DB');
+
     # check needed stuff
     for my $Needed (qw(Name StateID Body ValidID UserID ArticleTypeID)) {
         if ( !$Param{$Needed} ) {
-            $Self->{LogObject}->Log(
+            $LogObject->Log(
                 Priority => 'error',
                 Message  => "Need $Needed!",
             );
@@ -129,7 +91,7 @@ sub QuickCloseAdd {
     $Param{PendingDiff} ||= 0;
 
     # insert new news
-    return if !$Self->{DBObject}->Do(
+    return if !$DBObject->Do(
         SQL => 'INSERT INTO ps_quick_close '
             . '(close_name, state_id, body, create_time, create_by, valid_id, '
             . ' article_type_id, change_time, change_by, comments, queue_id, '
@@ -153,19 +115,19 @@ sub QuickCloseAdd {
     );
 
     # get new invoice id
-    return if !$Self->{DBObject}->Prepare(
+    return if !$DBObject->Prepare(
         SQL   => 'SELECT MAX(id) FROM ps_quick_close WHERE close_name = ?',
         Bind  => [ \$Param{Name}, ],
         Limit => 1,
     );
 
     my $ID;
-    while ( my @Row = $Self->{DBObject}->FetchrowArray() ) {
+    while ( my @Row = $DBObject->FetchrowArray() ) {
         $ID = $Row[0];
     }
 
     # log notice
-    $Self->{LogObject}->Log(
+    $LogObject->Log(
         Priority => 'notice',
         Message  => "QuickClose '$ID' created successfully ($Param{UserID})!",
     );
@@ -195,10 +157,13 @@ to update news
 sub QuickCloseUpdate {
     my ( $Self, %Param ) = @_;
 
+    my $LogObject = $Kernel::OM->Get('Kernel::System::Log');
+    my $DBObject  = $Kernel::OM->Get('Kernel::System::DB');
+
     # check needed stuff
     for my $Needed (qw(ID Name StateID Body ValidID UserID ArticleTypeID)) {
         if ( !$Param{$Needed} ) {
-            $Self->{LogObject}->Log(
+            $LogObject->Log(
                 Priority => 'error',
                 Message  => "Need $Needed!",
             );
@@ -211,7 +176,7 @@ sub QuickCloseUpdate {
     $Param{PendingDiff} ||= 0;
 
     # insert new news
-    return if !$Self->{DBObject}->Do(
+    return if !$DBObject->Do(
         SQL => 'UPDATE ps_quick_close SET close_name = ?, state_id = ?, body = ?, '
             . 'valid_id = ?, change_time = current_timestamp, change_by = ?, article_type_id = ?, '
             . 'queue_id = ?, subject = ?, ticket_unlock = ?, owner_id = ?, pending_diff = ? '
@@ -261,9 +226,16 @@ This returns something like:
 sub QuickCloseGet {
     my ( $Self, %Param ) = @_;
 
+    my $LogObject   = $Kernel::OM->Get('Kernel::System::Log');
+    my $DBObject    = $Kernel::OM->Get('Kernel::System::DB');
+    my $ValidObject = $Kernel::OM->Get('Kernel::System::Valid');
+    my $UserObject  = $Kernel::OM->Get('Kernel::System::User');
+    my $StateObject = $Kernel::OM->Get('Kernel::System::State');
+    my $QueueObject = $Kernel::OM->Get('Kernel::System::Queue');
+
     # check needed stuff
     if ( !$Param{ID} ) {
-        $Self->{LogObject}->Log(
+        $LogObject->Log(
             Priority => 'error',
             Message  => 'Need ID!',
         );
@@ -271,7 +243,7 @@ sub QuickCloseGet {
     }
 
     # sql
-    return if !$Self->{DBObject}->Prepare(
+    return if !$DBObject->Prepare(
         SQL => 'SELECT id, close_name, state_id, body, create_time, create_by, valid_id, '
             . 'article_type_id, queue_id, subject, ticket_unlock, owner_id, pending_diff '
             . 'FROM ps_quick_close WHERE id = ?',
@@ -280,7 +252,7 @@ sub QuickCloseGet {
     );
 
     my %QuickClose;
-    while ( my @Data = $Self->{DBObject}->FetchrowArray() ) {
+    while ( my @Data = $DBObject->FetchrowArray() ) {
         %QuickClose = (
             ID            => $Data[0],
             Name          => $Data[1],
@@ -298,16 +270,16 @@ sub QuickCloseGet {
         );
     }
 
-    $QuickClose{Valid}  = $Self->{ValidObject}->ValidLookup( ValidID => $QuickClose{ValidID} );
-    $QuickClose{Author} = $Self->{UserObject}->UserLookup( UserID => $QuickClose{CreateBy} );
-    $QuickClose{State}  = $Self->{StateObject}->StateLookup( StateID => $QuickClose{StateID} );
+    $QuickClose{Valid}  = $ValidObject->ValidLookup( ValidID => $QuickClose{ValidID} );
+    $QuickClose{Author} = $UserObject->UserLookup( UserID => $QuickClose{CreateBy} );
+    $QuickClose{State}  = $StateObject->StateLookup( StateID => $QuickClose{StateID} );
 
     if ( $QuickClose{QueueID} ) {
-        $QuickClose{Queue}  = $Self->{QueueObject}->QueueLookup( QueueID => $QuickClose{QueueID} );
+        $QuickClose{Queue}  = $QueueObject->QueueLookup( QueueID => $QuickClose{QueueID} );
     }
 
     if ( $QuickClose{OwnerID} ) {
-        $QuickClose{Owner}  = $Self->{UserObject}->UserLookup( UserID => $QuickClose{OwnerID} );
+        $QuickClose{Owner}  = $UserObject->UserLookup( UserID => $QuickClose{OwnerID} );
     }
 
     return %QuickClose;
@@ -326,16 +298,19 @@ deletes a news entry. Returns 1 if it was successful, undef otherwise.
 sub QuickCloseDelete {
     my ( $Self, %Param ) = @_;
 
+    my $LogObject = $Kernel::OM->Get('Kernel::System::Log');
+    my $DBObject  = $Kernel::OM->Get('Kernel::System::DB');
+
     # check needed stuff
     if ( !$Param{ID} ) {
-        $Self->{LogObject}->Log(
+        $LogObject->Log(
             Priority => 'error',
             Message  => 'Need ID!',
         );
         return;
     }
 
-    return $Self->{DBObject}->Do(
+    return $DBObject->Do(
         SQL  => 'DELETE FROM ps_quick_close WHERE id = ?',
         Bind => [ \$Param{ID} ],
     );
@@ -360,23 +335,26 @@ the result looks like
 sub QuickCloseList {
     my ( $Self, %Param ) = @_;
 
+    my $ValidObject = $Kernel::OM->Get('Kernel::System::Valid');
+    my $DBObject    = $Kernel::OM->Get('Kernel::System::DB');
+
     my $Where = '';
     my @Bind;
 
     if ( $Param{Valid} ) {
-        my $ValidID = $Self->{ValidObject}->ValidLookup( Valid => 'valid' );
+        my $ValidID = $ValidObject->ValidLookup( Valid => 'valid' );
         $Where = 'WHERE valid_id = ?';
         @Bind  = ( \$ValidID );
     }
 
     # sql
-    return if !$Self->{DBObject}->Prepare(
+    return if !$DBObject->Prepare(
         SQL  => "SELECT id, close_name FROM ps_quick_close $Where",
         Bind => \@Bind,
     );
 
     my %QuickClose;
-    while ( my @Data = $Self->{DBObject}->FetchrowArray() ) {
+    while ( my @Data = $DBObject->FetchrowArray() ) {
         $QuickClose{ $Data[0] } = $Data[1];
     }
 
@@ -386,9 +364,12 @@ sub QuickCloseList {
 sub TicketStateTypeByStateGet {
     my ($Self, %Param) = @_;
 
+    my $LogObject = $Kernel::OM->Get('Kernel::System::Log');
+    my $DBObject  = $Kernel::OM->Get('Kernel::System::DB');
+
     for my $Needed (qw(StateID)) {
         if ( !$Param{$Needed} ) {
-            $Self->{LogObject}->Log(
+            $LogObject->Log(
                 Priority => 'error',
                 Message  => "Need $Needed!",
             );
@@ -401,14 +382,14 @@ sub TicketStateTypeByStateGet {
         . ' INNER JOIN ticket_state ts ON tst.id = ts.type_id '
         . ' WHERE ts.id = ?';
 
-    return if !$Self->{DBObject}->Prepare(
+    return if !$DBObject->Prepare(
         SQL   => $SQL,
         Bind  => [ \$Param{StateID} ],
         Limit => 1,
     );
 
     my $Type;
-    while ( my @Row = $Self->{DBObject}->FetchrowArray() ) {
+    while ( my @Row = $DBObject->FetchrowArray() ) {
         $Type = $Row[0];
     }
 
@@ -427,8 +408,3 @@ did not receive this file, see L<http://www.gnu.org/licenses/agpl.txt>.
 
 =cut
 
-=head1 VERSION
-
-$Revision: 1.1.1.1 $ $Date: 2011/04/15 07:49:58 $
-
-=cut

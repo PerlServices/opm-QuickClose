@@ -1,8 +1,6 @@
 # --
 # Kernel/Modules/AgentQuickClose.pm - provides admin notification translations
-# Copyright (C) 2011 Perl-Services.de, http://www.perl-services.de
-# --
-# $Id: AgentQuickClose.pm,v 1.1.1.1 2011/04/15 07:49:58 rb Exp $
+# Copyright (C) 2011 - 2014 Perl-Services.de, http://www.perl-services.de
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -14,10 +12,18 @@ package Kernel::Modules::AgentQuickClose;
 use strict;
 use warnings;
 
-use Kernel::System::QuickClose;
+our $VERSION = 0.02;
 
-use vars qw($VERSION);
-$VERSION = qw($Revision: 1.1.1.1 $) [1];
+our @ObjectDependencies = qw(
+    Kernel::Config
+    Kernel::System::Log
+    Kernel::System::Encode
+    Kernel::System::Main
+    Kernel::System::DB
+    Kernel::System::QuickClose
+    Kernel::System::Web::Request
+    Kernel::Output::HTML::Layout
+);
 
 sub new {
     my ( $Type, %Param ) = @_;
@@ -26,37 +32,31 @@ sub new {
     my $Self = {%Param};
     bless( $Self, $Type );
 
-    # check all needed objects
-    for my $Needed (qw(ParamObject DBObject LayoutObject ConfigObject LogObject)) {
-        if ( !$Self->{$Needed} ) {
-            $Self->{LayoutObject}->FatalError( Message => "Got no $Needed!" );
-        }
-    }
-
-    # create needed objects
-    $Self->{QuickCloseObject} = Kernel::System::QuickClose->new(%Param);
-
     return $Self;
 }
 
 sub Run {
     my ( $Self, %Param ) = @_;
 
+    my $ParamObject      = $Kernel::OM->Get('Kernel::System::Web::Request');
+    my $QuickCloseObject = $Kernel::OM->Get('Kernel::System::QuickClose');
+    my $LayoutObject     = $Kernel::OM->Get('Kernel::Output::HTML::Layout');
+
     my @Params = (qw(ID));
     my %GetParam;
     for (@Params) {
-        $GetParam{$_} = $Self->{ParamObject}->GetParam( Param => $_ ) || '';
+        $GetParam{$_} = $ParamObject->GetParam( Param => $_ ) || '';
     }
 
-    my %Data = $Self->{QuickCloseObject}->QuickCloseGet(
+    my %Data = $QuickCloseObject->QuickCloseGet(
         ID => $GetParam{ID},
     );
 
     my $JSON = my $TemplateDump
-        = $Self->{LayoutObject}->JSONEncode( Data => \%Data );
+        = $LayoutObject->JSONEncode( Data => \%Data );
 
-    return $Self->{LayoutObject}->Attachment(
-        ContentType => 'application/json; charset=' . $Self->{LayoutObject}->{Charset},
+    return $LayoutObject->Attachment(
+        ContentType => 'application/json; charset=' . $LayoutObject->{Charset},
         Content     => $JSON || '',
         Type        => 'inline',
         NoCache     => 0,

@@ -1,8 +1,6 @@
 # --
 # Kernel/Modules/AgentTicketCloseBulk.pm - bulk closing of tickets
-# Copyright (C) 2012-2013 Perl-Services.de, http://perl-services.de
-# --
-# $Id: AgentTicketCloseBulk.pm,v 1.16 2011/08/26 06:45:08 ub Exp $
+# Copyright (C) 2012-2014 Perl-Services.de, http://perl-services.de
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -14,9 +12,24 @@ package Kernel::Modules::AgentTicketCloseBulk;
 use strict;
 use warnings;
 
-use Kernel::System::State;
-use Kernel::System::Web::UploadCache;
-use Kernel::System::QuickClose;
+our $VERSION = 0.02;
+
+our @ObjectDependencies = qw(
+    Kernel::Config
+    Kernel::System::Log
+    Kernel::System::Encode
+    Kernel::System::Main
+    Kernel::System::DB
+    Kernel::System::State
+    Kernel::System::Ticket
+    Kernel::System::Queue
+    Kernel::System::Time
+    Kernel::System::QuickClose
+    Kernel::System::Web::UploadCache
+    Kernel::System::Web::Request
+    Kernel::Output::HTML::Layout
+    Kernel::Language
+);
 
 sub new {
     my ( $Type, %Param ) = @_;
@@ -25,30 +38,20 @@ sub new {
     my $Self = {%Param};
     bless( $Self, $Type );
 
-    # check needed objects
-    for my $Needed (
-        qw(ParamObject DBObject TicketObject LayoutObject LogObject QueueObject ConfigObject TimeObject)
-        )
-    {
-        if ( !$Self->{$Needed} ) {
-            $Self->{LayoutObject}->FatalError( Message => "Got no $Needed!" );
-        }
-    }
-
-    $Self->{StateObject}       = Kernel::System::State->new(%Param);
-    $Self->{UploadCacheObject} = Kernel::System::Web::UploadCache->new(%Param);
-    $Self->{QuickCloseObject}  = Kernel::System::QuickClose->new(%Param);
+    my $ParamObject       = $Kernel::OM->Get('Kernel::System::Web::Request');
+    my $UploadCacheObject = $Kernel::OM->Get('Kernel::System::Web::UploadCache');
+    my $ConfigObject      = $Kernel::OM->Get('Kernel::Config');
 
     # get form id
-    $Self->{FormID} = $Self->{ParamObject}->GetParam( Param => 'FormID' );
+    $Self->{FormID} = $ParamObject->GetParam( Param => 'FormID' );
 
     # create form id
     if ( !$Self->{FormID} ) {
-        $Self->{FormID} = $Self->{UploadCacheObject}->FormIDCreate();
+        $Self->{FormID} = $UploadCacheObject->FormIDCreate();
     }
 
     # get config of frontend module
-    $Self->{Config} = $Self->{ConfigObject}->Get("Ticket::Frontend::AgentTicketClose");
+    $Self->{Config} = $ConfigObject->Get("Ticket::Frontend::AgentTicketClose");
 
     return $Self;
 }
@@ -56,37 +59,46 @@ sub new {
 sub Run {
     my ( $Self, %Param ) = @_;
 
-    my @TicketIDs = $Self->{ParamObject}->GetArray( Param => 'TicketID' );
-    my $ID        = $Self->{ParamObject}->GetParam( Param => 'QuickClose' );
+    my $ParamObject       = $Kernel::OM->Get('Kernel::System::Web::Request');
+    my $UploadCacheObject = $Kernel::OM->Get('Kernel::System::Web::UploadCache');
+    my $ConfigObject      = $Kernel::OM->Get('Kernel::Config');
+    my $LanguageObject    = $Kernel::OM->Get('Kernel::Language');
+    my $LayoutObject      = $Kernel::OM->Get('Kernel::Output::HTML::Layout');
+    my $QuickCloseObject  = $Kernel::OM->Get('Kernel::System::QuickClose');
+    my $TicketObject      = $Kernel::OM->Get('Kernel::System::Ticket');
+    my $TimeObject        = $Kernel::OM->Get('Kernel::System::Time');
+
+    my @TicketIDs = $ParamObject->GetArray( Param => 'TicketID' );
+    my $ID        = $ParamObject->GetParam( Param => 'QuickClose' );
 
     my %GetParam;
     for my $WebParam ( qw(Subject) ) {
-        $GetParam{$WebParam} = $Self->{ParamObject}->GetParam( Param => $WebParam ) || '';
+        $GetParam{$WebParam} = $ParamObject->GetParam( Param => $WebParam ) || '';
     }
 
     if ( !$GetParam{Subject} ) {
         $GetParam{Subject} =
-            $Self->{ConfigObject}->Get( 'QuickClose::DefaultSubject' ) ||
-            $Self->{LayoutObject}->{LanguageObject}->Get( 'Close' );
+            $ConfigObject->Get( 'QuickClose::DefaultSubject' ) ||
+            $LanguageObject->Get( 'Close' );
     }
 
     # check needed stuff
     if ( !@TicketIDs ) {
-        return $Self->{LayoutObject}->ErrorScreen(
+        return $LayoutObject->ErrorScreen(
             Message => 'No TicketID is given!',
             Comment => 'Please contact the admin.',
         );
     }
 
     if ( !$ID ) {
-        $ID = $Self->{ConfigObject}->Get( 'QuickClose::DefaultID' ) || 1;
+        $ID = $ConfigObject->Get( 'QuickClose::DefaultID' ) || 1;
     }
 
     # get QuickClose data
-    my %CloseData = $Self->{QuickCloseObject}->QuickCloseGet( ID => $ID );
+    my %CloseData = $QuickCloseObject->QuickCloseGet( ID => $ID );
 
     if ( !%CloseData ) {
-        return $Self->{LayoutObject}->ErrorScreen(
+        return $LayoutObject->ErrorScreen(
             Message => 'No QuickClose data found!',
             Comment => 'Please contact the admin.',
         );
@@ -100,7 +112,7 @@ sub Run {
     for my $TicketID ( @TicketIDs ) {
 
         # check permissions
-        my $Access = $Self->{TicketObject}->TicketPermission(
+        my $Access = $TicketObject->TicketPermission(
             Type     => $Self->{Config}->{Permission},
             TicketID => $TicketID,
             UserID   => $Self->{UserID}
@@ -113,7 +125,7 @@ sub Run {
         }
 
         # challenge token check for write action
-        $Self->{LayoutObject}->ChallengeTokenCheck();
+        $LayoutObject->ChallengeTokenCheck();
 
         # add note
         my $ArticleID = '';
@@ -122,18 +134,18 @@ sub Run {
             $MimeType = 'text/html';
 
             # verify html document
-            $CloseData{Body} = $Self->{LayoutObject}->RichTextDocumentComplete(
+            $CloseData{Body} = $LayoutObject->RichTextDocumentComplete(
                 String => $CloseData{Body},
             );
         }
 
         my $From = "$Self->{UserFirstname} $Self->{UserLastname} <$Self->{UserEmail}>"; 
-        $ArticleID = $Self->{TicketObject}->ArticleCreate(
+        $ArticleID = $TicketObject->ArticleCreate(
             TicketID       => $TicketID,
             SenderType     => 'agent',
             From           => $From,
             MimeType       => $MimeType,
-            Charset        => $Self->{LayoutObject}->{UserCharset},
+            Charset        => $LayoutObject->{UserCharset},
             UserID         => $Self->{UserID},
             HistoryType    => $Self->{Config}->{HistoryType}, 
             HistoryComment => $Self->{Config}->{HistoryComment}, 
@@ -142,11 +154,11 @@ sub Run {
             %CloseData,
         );
         if ( !$ArticleID ) {
-            return $Self->{LayoutObject}->ErrorScreen();
+            return $LayoutObject->ErrorScreen();
         }
 
-        if ( $Self->{ConfigObject}->Get( 'QuickClose::QueueMove' ) && $CloseData{QueueID} ) {
-            $Self->{TicketObject}->TicketQueueSet(
+        if ( $ConfigObject->Get( 'QuickClose::QueueMove' ) && $CloseData{QueueID} ) {
+            $TicketObject->TicketQueueSet(
                 TicketID => $TicketID,
                 QueueID  => $CloseData{QueueID},
                 UserID   => $Self->{UserID},
@@ -154,7 +166,7 @@ sub Run {
         }
 
         if ( $CloseData{OwnerID} ) {
-            $Self->{TicketObject}->TicketOwnerSet(
+            $TicketObject->TicketOwnerSet(
                 TicketID  => $TicketID,
                 NewUserID => $CloseData{OwnerID},
                 UserID    => $Self->{UserID},
@@ -162,26 +174,26 @@ sub Run {
         }
 
         # set state
-        $Self->{TicketObject}->TicketStateSet(
+        $TicketObject->TicketStateSet(
             TicketID => $TicketID,
             StateID  => $CloseData{StateID},
             UserID   => $Self->{UserID},
         );
 
-        my $Type = $Self->{QuickCloseObject}->TicketStateTypeByStateGet(
+        my $Type = $QuickCloseObject->TicketStateTypeByStateGet(
             StateID => $CloseData{StateID},
         );
 
         if ( $Type =~ m{^pending}xms ) {
             my $Diff = $CloseData{PendingDiff} ||
-                $Self->{ConfigObject}->Get( 'QuickClose::PendingDiffDefault' ) ||
+                $ConfigObject->Get( 'QuickClose::PendingDiffDefault' ) ||
                 ( 1 * 24 * 60 );
 
-            my ($Sec, $Min, $Hour, $Day, $Month, $Year) = $Self->{TimeObject}->SystemTime2Date(
+            my ($Sec, $Min, $Hour, $Day, $Month, $Year) = $TimeObject->SystemTime2Date(
                 SystemTime => $Self->{TimeObject}->SystemTime() + ( $Diff * 60 ),
             );
 
-            $Self->{TicketObject}->TicketPendingTimeSet(
+            $TicketObject->TicketPendingTimeSet(
                 Year     => $Year,
                 Month    => $Month,
                 Day      => $Day,
@@ -194,7 +206,7 @@ sub Run {
 
         # set unlock on close state
         if ( $Type =~ /^close/i ) {
-            $Self->{TicketObject}->TicketLockSet(
+            $TicketObject->TicketLockSet(
                 TicketID => $TicketID,
                 Lock     => 'unlock',
                 UserID   => $Self->{UserID},
@@ -206,13 +218,13 @@ sub Run {
     if ( !@NoAccess ) {
         my $LastView = $Self->{LastScreenOverview} || $Self->{LastScreenView} || 'Action=AgentDashboard';
 
-        return $Self->{LayoutObject}->Redirect(
+        return $LayoutObject->Redirect(
             OP => $LastView,
         );
 
     }
     else {
-        return $Self->{LayoutObject}->ErrorScreen(
+        return $LayoutObject->ErrorScreen(
             Message => 'No Access to these Tickets (IDs: ' . join( ", ", @NoAccess ) . ')',
             Comment => 'Please contact the admin.',
         );

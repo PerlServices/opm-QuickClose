@@ -1,5 +1,5 @@
 # --
-# AgentQuickCloseForm.dtl - provides HTML form for Quick Close texts
+# AgentQuickCloseForm.tt - provides HTML form for Quick Close texts
 # Copyright (C) 2011 Perl-Services.de, http://www.perl-services.de
 # --
 # $Id: AdminQuickCloseForm.dtl,v 1.1.1.1 2011/04/15 07:49:58 rb Exp $
@@ -9,19 +9,19 @@
 # did not receive this file, see http://www.gnu.org/licenses/agpl.txt.
 # --
 
-$Include{"AdminQuickCloseUserSearch"}
+[% InsertTemplate("AdminQuickCloseUserSearch.tt") %]
 
 <div class="MainBox ARIARoleMain LayoutFixedSidebar SidebarFirst">
-    <h1>$Text{"QuickClose Management"}</h1>
+    <h1>[% Translate("QuickClose Management") | html %]</h1>
     <div class="SidebarColumn">
         <div class="WidgetSimple">
             <div class="Header">
-                <h2>$Text{"Actions"}</h2>
+                <h2>[% Translate("Actions") | html %]</h2>
             </div>
             <div class="Content">
                 <ul class="ActionList">
                     <li>
-                        <a href="$Env{"Baselink"}Action=$Env{"Action"}" class="CallForAction"><span>$Text{"Go to overview"}</span></a>
+                        <a href="[% Env("Baselink") %]Action=[% Env("Action") %]" class="CallForAction"><span>[% Translate("Go to overview") | html %]</span></a>
                     </li>
                 </ul>
             </div>
@@ -31,128 +31,128 @@ $Include{"AdminQuickCloseUserSearch"}
     <div class="ContentColumn">
         <div class="WidgetSimple">
             <div class="Header">
-                <h2>$Text{"Add/Change QuickClose texts"}</h2>
+                <h2>[% Translate("Add/Change QuickClose texts") | html %]</h2>
             </div>
             <div class="Content">
-                <form action="$Env{"CGIHandle"}" method="post" class="Validate">
+                <form action="[% Env("CGIHandle") %]" method="post" class="Validate">
 
-                    <input type="hidden" name="Action" value="$Env{"Action"}"/>
-                    <input type="hidden" name="Subaction" value="$QData{"Subaction"}"/>
-                    <input type="hidden" name="ID" value="$QData{"ID"}"/>
+                    <input type="hidden" name="Action" value="[% Env("Action") %]"/>
+                    <input type="hidden" name="Subaction" value="[% Data.Subaction | html %]"/>
+                    <input type="hidden" name="ID" value="[% Data.ID | html %]"/>
 
                     <fieldset class="TableLike">
                         <label for="Name" class="Mandatory">
                             <span class="Marker">*</span>
-                            $Text{"Name"}:
+                            [% Translate("Name") | html %]:
                         </label>
                         <div class="Field">
-                            <input type="text" id="Name" name="Name" value="$QData{"Name"}" class="W75pc Validate_Required $QData{"NameInvalid"}"/>
+                            <input type="text" id="Name" name="Name" value="[% Data.Name | html %]" class="W75pc Validate_Required [% Data.NameInvalid | html %]"/>
                             <div id="NameError" class="TooltipErrorMessage">
-                                <p>$Text{"A headline for the news is required."}</p>
+                                <p>[% Translate("A headline for the news is required.") | html %]</p>
                             </div>
                             <div id="NameServerError" class="TooltipErrorMessage">
-                                <p>$Text{"A headline for the news is required."}</p>
+                                <p>[% Translate("A headline for the news is required.") | html %]</p>
                             </div>
                         </div>
                         <div class="Clear"></div>
 
                         <label for="Subject">
-                            $Text{"Subject"}:
+                            [% Translate("Subject") | html %]:
                         </label>
                         <div class="Field">
-                            <input type="text" id="Subject" name="Subject" value="$QData{"Subject"}" class="W75pc" />
+                            <input type="text" id="Subject" name="Subject" value="[% Data.Subject | html %]" class="W75pc" />
                         </div>
                         <div class="Clear"></div>
 
                         <label for="RichText" class="Mandatory">
                             <span class="Marker">*</span>
-                            $Text{"Body"}:
+                            [% Translate("Body") | html %]:
                         </label>
                         <div class="RichTextField">
  
-<!-- dtl:block:RichText -->
-$Include{"RichTextEditor"}
-<!-- dtl:block:RichText -->
+[% RenderBlockStart("RichText") %]
+[% InsertTemplate("RichTextEditor.tt") %]
+[% RenderBlockEnd("RichText") %]
 
-                            <textarea id="RichText" name="Body" class="W75pc RichText Validate_Required $QData{"BodyInvalid"}" rows="15" cols="$Config{"Ticket::Frontend::TextAreaNote"}">$QData{"Body"}</textarea>
+                            <textarea id="RichText" name="Body" class="W75pc RichText Validate_Required [% Data.BodyInvalid | html %]" rows="15" cols="[% Config("Ticket::Frontend::TextAreaNote") %]">[% Data.Body | html %]</textarea>
                             <div id="RichTextError" class="TooltipErrorMessage">
-                                <p>$Text{"A news text is required."}</p>
+                                <p>[% Translate("A news text is required.") | html %]</p>
                             </div>
                             <div id="BodyServerError" class="TooltipErrorMessage">
-                                <p>$Text{"A news text is required."}</p>
+                                <p>[% Translate("A news text is required.") | html %]</p>
                             </div>
                         </div>
                         <div class="Clear"></div>
 
                         <label for="StateID" class="Mandatory">
                             <span class="Marker">*</span>
-                            $Text{"State after close"}:
+                            [% Translate("State after close") | html %]:
                         </label>
                         <div class="Field">
-                            $Data{"StateSelect"}
+                            [% Data.StateSelect %]
                         </div>
                         <div class="Clear"></div>
 
                         <label for="PendingDiff">
-                            $Text{"Pending Diff (in minutes)"}:
+                            [% Translate("Pending Diff (in minutes)") | html %]:
                         </label>
                         <div class="Field">
-                            <input type="text" name="PendingDiff" id="PendingDiff" value="$QData{"PendingDiff"}" />
+                            <input type="text" name="PendingDiff" id="PendingDiff" value="[% Data.PendingDiff | html %]" />
                         </div>
                         <div class="Clear"></div>
 
-                        <label for="Owner"> $Text{"Owner"}: </label>
+                        <label for="Owner"> [% Translate("Owner") | html %]: </label>
                         <div class="Field">
-                            <input id="Owner" name="Owner" type="text"   value="$QData{"Owner"}" class="W75pc $Data{"OwnerError"}" />
-                            <input id="OwnerSelected" name="OwnerSelected" type="hidden" value="$QData{"OwnerID"}" />
-                            <input id="OwnerType" name="OwnerType" type="hidden" value="$QData{"OwnerType"}" />
+                            <input id="Owner" name="Owner" type="text"   value="[% Data.Owner | html %]" class="W75pc [% Data.OwnerError %]" />
+                            <input id="OwnerSelected" name="OwnerSelected" type="hidden" value="[% Data.OwnerID | html %]" />
+                            <input id="OwnerType" name="OwnerType" type="hidden" value="[% Data.OwnerType | html %]" />
 
-                            <div id="OwnerIDServerError" class="TooltipErrorMessage"><p>$Text{"User invalid."}</p></div>
+                            <div id="OwnerIDServerError" class="TooltipErrorMessage"><p>[% Translate("User invalid.") | html %]</p></div>
                         </div>
 
                         <div id="UserServerError" class="TooltipErrorMessage">
-                            <p>$Text{"Invalid User"}</p>
+                            <p>[% Translate("Invalid User") | html %]</p>
                         </div>
 
                         <label for="Unlock">
-                            $Text{"Unlock Ticket"} <br />
-                            $Text{"Tickets are unlocked automatically on 'closed' states"}:
+                            [% Translate("Unlock Ticket") | html %] <br />
+                            [% Translate("Tickets are unlocked automatically on 'closed' states") | html %]:
                         </label>
                         <div class="Field">
-                            $Data{"UnlockSelect"}
+                            [% Data.UnlockSelect %]
                         </div>
                         <div class="Clear"></div>
 
                         <label for="ValidID" class="Mandatory">
                             <span class="Marker">*</span>
-                            $Text{"Valid"}:
+                            [% Translate("Valid") | html %]:
                         </label>
                         <div class="Field">
-                            $Data{"ValidSelect"}
+                            [% Data.ValidSelect %]
                         </div>
                         <div class="Clear"></div>
 
                         <label for="ArticleTypeID" class="Mandatory">
                             <span class="Marker">*</span>
-                            $Text{"Article Type"}:
+                            [% Translate("Article Type") | html %]:
                         </label>
                         <div class="Field">
-                            $Data{"ArticleTypeSelect"}
+                            [% Data.ArticleTypeSelect %]
                         </div>
                         <div class="Clear"></div>
 
                         <label for="QueueID">
-                            $Text{"Queue"}:
+                            [% Translate("Queue") | html %]:
                         </label>
                         <div class="Field">
-                            $Data{"QueueSelect"}
+                            [% Data.QueueSelect %]
                         </div>
                         <div class="Clear"></div>
 
                         <div class="Field">
-                            <button class="Primary" type="submit" value="$Text{"Save"}">$Text{"Save"}</button>
-                            $Text{"or"}
-                            <a href="$Env{"Baselink"}Action=$Env{"Action"}">$Text{"Cancel"}</a>
+                            <button class="Primary" type="submit" value="[% Translate("Save") | html %]">[% Translate("Save") | html %]</button>
+                            [% Translate("or") | html %]
+                            <a href="[% Env("Baselink") %]Action=[% Env("Action") %]">[% Translate("Cancel") | html %]</a>
                         </div>
                         <div class="Clear"></div>
                     </fieldset>

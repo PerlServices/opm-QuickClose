@@ -1,5 +1,5 @@
 # --
-# QuickCloseSnippet.dtl - provides HTML for QuickCloseSnippet.pm
+# QuickCloseSnippet.tt - provides HTML for QuickCloseSnippet.pm
 # Copyright (C) 2011 Perl-Services.de, http://www.perl-services.de 
 # --
 # $Id: QuickCloseSnippet.dtl,v 1.33 2011/01/27 18:44:38 rb Exp $
@@ -9,15 +9,15 @@
 # did not receive this file, see http://www.gnu.org/licenses/agpl.txt.
 # --
 
-                    <li class="$QData{"Class"}">
-                        <form title="$Text{"QuickClose ticket"}" action="$Env{"CGIHandle"}" method="post">
+                    <li class="[% Data.Class | html %]">
+                        <form title="[% Translate("QuickClose ticket") | html %]" action="[% Env("CGIHandle") %]" method="post">
                             <input type="hidden" name="Action" value="AgentTicketCloseBulk"/>
-                            <input type="hidden" name="TicketID" value="$QData{"TicketID"}"/>
-                            <input type="hidden" name="FormID" value="$QData{"FormID"}" />
-                            <label for="QuickClose" class="InvisibleText">$Text{"QuickClose"}:</label>
-                            $Data{"QuickCloseSelect"}
+                            <input type="hidden" name="TicketID" value="[% Data.TicketID | html %]"/>
+                            <input type="hidden" name="FormID" value="[% Data.FormID | html %]" />
+                            <label for="QuickClose" class="InvisibleText">[% Translate("QuickClose") | html %]:</label>
+                            [% Data.QuickCloseSelect %]
                         </form>
-<!-- dtl:js_on_document_complete -->
+[% WRAPPER JSOnDocumentComplete %]
 <script type="text/javascript">//<![CDATA[
     $('#QuickClose').bind('change', function (Event) {
         // retrieve body for quickclose
@@ -31,5 +31,5 @@
         }
     });
 //]]></script>
-<!-- dtl:js_on_document_complete -->
+[% END %]
                     </li>

@@ -1,0 +1,42 @@
+# --
+# AdminQuickCloseUserSearch.tt - provides autocomplete feature for customer search
+# Copyright (C) 2012 Perl-Services.de, http://perl-services.de
+# --
+# $Id: AdminQuickCloseUserSearch.dtl,v 1.12 2010/12/20 17:56:44 dz Exp $
+# --
+# This software comes with ABSOLUTELY NO WARRANTY. For details, see
+# the enclosed file COPYING for license information (AGPL). If you
+# did not receive this file, see http://www.gnu.org/licenses/agpl.txt.
+# --
+
+[% RenderBlockStart("UserSearchAutoComplete") %]
+[% WRAPPER JSOnDocumentComplete %]
+<script type="text/javascript">//<![CDATA[
+    Core.Config.Set('UserAutocomplete.MinQueryLength', "[% Data.minQueryLength | html %]");
+    Core.Config.Set('UserAutocomplete.QueryDelay', "[% Data.queryDelay | html %]");
+    Core.Config.Set('UserAutocomplete.MaxResultsDisplayed', "[% Data.maxResultsDisplayed | html %]");
+    Core.Config.Set('UserAutocomplete.DynamicWidth', "[% Data.dynamicWidth | html %]");
+    Core.Config.Set('UserAutocomplete.SearchButtonText', [% Translate("Search Agent") | JSON %]);
+    Core.Config.Set('UserAutocomplete.Groups', "[% Data.groups | html %]");
+//]]></script>
+
+[% RenderBlockStart("UserSearchInit") %]
+<script type="text/javascript">//<![CDATA[
+/*global QuickClose: true */
+    QuickClose.Admin.UserSearch.Init($("#[% Data.ItemID | html %]"), [% Data.ActiveAutoComplete | html %]);
+//]]></script>
+[% RenderBlockEnd("UserSearchInit") %]
+
+[% END %]
+[% RenderBlockEnd("UserSearchAutoComplete") %]
+
+[% RenderBlockStart("UserSearchQuickCloseSearchAutocomplete") %]
+<script type="text/javascript">//<![CDATA[
+    Core.Config.Set('UserAutocomplete.Active', "[% Data.active | html %]");
+    Core.Config.Set('UserAutocomplete.QueryDelay', "[% Data.queryDelay | html %]");
+    Core.Config.Set('UserAutocomplete.MaxResultsDisplayed', "[% Data.maxResultsDisplayed | html %]");
+    Core.Config.Set('UserAutocomplete.MinQueryLength', "[% Data.minQueryLength | html %]");
+    Core.Config.Set('UserAutocomplete.DynamicWidth', "[% Data.dynamicWidth | html %]");
+    Core.Config.Set('UserAutocomplete.SearchButtonText', [% Translate("Search Agent") | JSON %]);
+//]]></script>
+[% RenderBlockEnd("UserSearchQuickCloseSearchAutocomplete") %]

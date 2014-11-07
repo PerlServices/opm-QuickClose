@@ -1,8 +1,6 @@
 # --
 # Kernel/Modules/AdminQuickClose.pm - provides admin notification translations
-# Copyright (C) 2011 Perl-Services.de, http://www.perl-services.de
-# --
-# $Id: AdminQuickClose.pm,v 1.1.1.1 2011/04/15 07:49:58 rb Exp $
+# Copyright (C) 2011 - 2014 Perl-Services.de, http://www.perl-services.de
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -14,14 +12,22 @@ package Kernel::Modules::AdminQuickClose;
 use strict;
 use warnings;
 
-use Kernel::System::QuickClose;
-use Kernel::System::HTMLUtils;
-use Kernel::System::Valid;
-use Kernel::System::State;
-use Kernel::System::Queue;
+our $VERSION = 0.02;
 
-use vars qw($VERSION);
-$VERSION = qw($Revision: 1.1.1.1 $) [1];
+our @ObjectDependencies = qw(
+    Kernel::Config
+    Kernel::System::Log
+    Kernel::System::Encode
+    Kernel::System::Main
+    Kernel::System::DB
+    Kernel::System::State
+    Kernel::System::Ticket
+    Kernel::System::Queue
+    Kernel::System::Valid
+    Kernel::System::QuickClose
+    Kernel::System::Web::Request
+    Kernel::Output::HTML::Layout
+);
 
 sub new {
     my ( $Type, %Param ) = @_;
@@ -30,25 +36,10 @@ sub new {
     my $Self = {%Param};
     bless( $Self, $Type );
 
-    # check all needed objects
-    my @Objects = qw(
-        ParamObject DBObject LayoutObject ConfigObject LogObject TicketObject 
-    );
-    for my $Needed (@Objects) {
-        if ( !$Self->{$Needed} ) {
-            $Self->{LayoutObject}->FatalError( Message => "Got no $Needed!" );
-        }
-    }
-
-    # create needed objects
-    $Self->{QuickCloseObject} = Kernel::System::QuickClose->new(%Param);
-    $Self->{ValidObject}      = Kernel::System::Valid->new(%Param);
-    $Self->{HTMLUtilsObject}  = Kernel::System::HTMLUtils->new(%Param);
-    $Self->{StateObject}      = Kernel::System::State->new(%Param);
-    $Self->{QueueObject}      = Kernel::System::Queue->new(%Param);
+    my $ConfigObject = $Kernel::OM->Get('Kernel::Config');
 
     # get config of frontend module
-    $Self->{Config} = $Self->{ConfigObject}->Get("Ticket::Frontend::AgentTicketClose");
+    $Self->{Config} = $ConfigObject->Get("Ticket::Frontend::AgentTicketClose");
 
     return $Self;
 }
@@ -56,10 +47,18 @@ sub new {
 sub Run {
     my ( $Self, %Param ) = @_;
 
-    my @Params = (qw(ID Name StateID Body ValidID UserID ArticleTypeID QueueID Subject Unlock OwnerSelected PendingDiff));
+    my $ParamObject      = $Kernel::OM->Get('Kernel::System::Web::Request');
+    my $LayoutObject     = $Kernel::OM->Get('Kernel::Output::HTML::Layout');
+    my $QuickCloseObject = $Kernel::OM->Get('Kernel::System::QuickClose');
+    my $ValidObject      = $Kernel::OM->Get('Kernel::System::Valid');
+
+    my @Params = (
+        qw(ID Name StateID Body ValidID UserID ArticleTypeID
+        QueueID Subject Unlock OwnerSelected PendingDiff)
+    );
     my %GetParam;
     for (@Params) {
-        $GetParam{$_} = $Self->{ParamObject}->GetParam( Param => $_ ) || '';
+        $GetParam{$_} = $ParamObject->GetParam( Param => $_ ) || '';
     }
 
     # ------------------------------------------------------------ #
@@ -71,14 +70,14 @@ sub Run {
             Add  => 'Save',
         );
 
-        my $Output       = $Self->{LayoutObject}->Header();
-        $Output .= $Self->{LayoutObject}->NavigationBar();
+        my $Output       = $LayoutObject->Header();
+        $Output .= $LayoutObject->NavigationBar();
         $Output .= $Self->_MaskQuickCloseForm(
             %GetParam,
             %Param,
             Subaction => $Subaction{ $Self->{Subaction} },
         );
-        $Output .= $Self->{LayoutObject}->Footer();
+        $Output .= $LayoutObject->Footer();
         return $Output;
     }
 
@@ -88,13 +87,13 @@ sub Run {
     elsif ( $Self->{Subaction} eq 'Update' ) {
 
         # challenge token check for write action
-        $Self->{LayoutObject}->ChallengeTokenCheck();
+        $LayoutObject->ChallengeTokenCheck();
  
         # server side validation
         my %Errors;
         if (
             !$GetParam{ValidID} ||
-            !$Self->{ValidObject}->ValidLookup( ValidID => $GetParam{ValidID} )
+            !$ValidObject->ValidLookup( ValidID => $GetParam{ValidID} )
             )
         {
             $Errors{ValidIDInvalid} = 'ServerError';
@@ -109,28 +108,28 @@ sub Run {
         if ( %Errors ) {
             $Self->{Subaction} = 'Edit';
 
-            my $Output = $Self->{LayoutObject}->Header();
-            $Output .= $Self->{LayoutObject}->NavigationBar();
+            my $Output = $LayoutObject->Header();
+            $Output .= $LayoutObject->NavigationBar();
             $Output .= $Self->_MaskQuickCloseForm(
                 %GetParam,
                 %Param,
                 %Errors,
                 Subaction => 'Update',
             );
-            $Output .= $Self->{LayoutObject}->Footer();
+            $Output .= $LayoutObject->Footer();
             return $Output;
         }
 
-        my $Update = $Self->{QuickCloseObject}->QuickCloseUpdate(
+        my $Update = $QuickCloseObject->QuickCloseUpdate(
             %GetParam,
             UserID  => $Self->{UserID},
             OwnerID => $GetParam{OwnerSelected},
         );
 
         if ( !$Update ) {
-            return $Self->{LayoutObject}->ErrorScreen();
+            return $LayoutObject->ErrorScreen();
         }
-        return $Self->{LayoutObject}->Redirect( OP => "Action=AdminQuickClose" );
+        return $LayoutObject->Redirect( OP => "Action=AdminQuickClose" );
     }
 
     # ------------------------------------------------------------ #
@@ -139,13 +138,13 @@ sub Run {
     elsif ( $Self->{Subaction} eq 'Save' ) {
 
         # challenge token check for write action
-        $Self->{LayoutObject}->ChallengeTokenCheck();
+        $LayoutObject->ChallengeTokenCheck();
 
         # server side validation
         my %Errors;
         if (
             !$GetParam{ValidID} ||
-            !$Self->{ValidObject}->ValidLookup( ValidID => $GetParam{ValidID} )
+            !$ValidObject->ValidLookup( ValidID => $GetParam{ValidID} )
             )
         {
             $Errors{ValidIDInvalid} = 'ServerError';
@@ -160,43 +159,43 @@ sub Run {
         if ( %Errors ) {
             $Self->{Subaction} = 'Add';
 
-            my $Output = $Self->{LayoutObject}->Header();
-            $Output .= $Self->{LayoutObject}->NavigationBar();
+            my $Output = $LayoutObject->Header();
+            $Output .= $LayoutObject->NavigationBar();
             $Output .= $Self->_MaskQuickCloseForm(
                 %GetParam,
                 %Param,
                 %Errors,
                 Subaction => 'Save',
             );
-            $Output .= $Self->{LayoutObject}->Footer();
+            $Output .= $LayoutObject->Footer();
             return $Output;
         }
 
-        my $Success = $Self->{QuickCloseObject}->QuickCloseAdd(
+        my $Success = $QuickCloseObject->QuickCloseAdd(
             %GetParam,
             UserID  => $Self->{UserID},
             OwnerID => $GetParam{OwnerSelected},
         );
 
         if ( !$Success ) {
-            return $Self->{LayoutObject}->ErrorScreen();
+            return $LayoutObject->ErrorScreen();
         }
-        return $Self->{LayoutObject}->Redirect( OP => "Action=AdminQuickClose" );
+        return $LayoutObject->Redirect( OP => "Action=AdminQuickClose" );
     }
 
     elsif ( $Self->{Subaction} eq 'Delete' ) {
-        $Self->{QuickCloseObject}->QuickCloseDelete( %GetParam );
-        return $Self->{LayoutObject}->Redirect( OP => "Action=AdminQuickClose" );
+        $QuickCloseObject->QuickCloseDelete( %GetParam );
+        return $LayoutObject->Redirect( OP => "Action=AdminQuickClose" );
     }
 
     # ------------------------------------------------------------ #
     # else ! print form
     # ------------------------------------------------------------ #
     else {
-        my $Output = $Self->{LayoutObject}->Header();
-        $Output .= $Self->{LayoutObject}->NavigationBar();
+        my $Output = $LayoutObject->Header();
+        $Output .= $LayoutObject->NavigationBar();
         $Output .= $Self->_MaskQuickCloseForm();
-        $Output .= $Self->{LayoutObject}->Footer();
+        $Output .= $LayoutObject->Footer();
         return $Output;
     }
 }
@@ -204,39 +203,48 @@ sub Run {
 sub _MaskQuickCloseForm {
     my ( $Self, %Param ) = @_;
 
+    my $ParamObject      = $Kernel::OM->Get('Kernel::System::Web::Request');
+    my $LayoutObject     = $Kernel::OM->Get('Kernel::Output::HTML::Layout');
+    my $QuickCloseObject = $Kernel::OM->Get('Kernel::System::QuickClose');
+    my $ValidObject      = $Kernel::OM->Get('Kernel::System::Valid');
+    my $ConfigObject     = $Kernel::OM->Get('Kernel::Config');
+    my $TicketObject     = $Kernel::OM->Get('Kernel::System::Ticket');
+    my $StateObject      = $Kernel::OM->Get('Kernel::System::State');
+    my $QueueObject      = $Kernel::OM->Get('Kernel::System::Queue');
+
     if ( $Self->{Subaction} eq 'Edit' ) {
-        my %QuickClose = $Self->{QuickCloseObject}->QuickCloseGet( ID => $Param{ID} );
+        my %QuickClose = $QuickCloseObject->QuickCloseGet( ID => $Param{ID} );
         for my $Key ( keys %QuickClose ) {
             $Param{$Key} = $QuickClose{$Key} if !$Param{$Key};
         }
     }
 
     # add rich text editor
-    if ( $Self->{ConfigObject}->Get( 'Frontend::RichText' ) ) {
-        $Self->{LayoutObject}->Block(
+    if ( $ConfigObject->Get( 'Frontend::RichText' ) ) {
+        $LayoutObject->Block(
             Name => 'RichText',
             Data => \%Param,
         );
     }
 
-    my $ValidID = $Self->{ValidObject}->ValidLookup( Valid => 'valid' );
+    my $ValidID = $ValidObject->ValidLookup( Valid => 'valid' );
 
-    $Param{ValidSelect} = $Self->{LayoutObject}->BuildSelection(
-        Data       => { $Self->{ValidObject}->ValidList() },
+    $Param{ValidSelect} = $LayoutObject->BuildSelection(
+        Data       => { $ValidObject->ValidList() },
         Name       => 'ValidID',
         Size       => 1,
         SelectedID => $Param{ValidID} || $ValidID,
         HTMLQuote  => 1,
     );
 
-    my $StateTypes = $Self->{ConfigObject}->Get( 'QuickClose::StateTypes' ) || [ 'closed' ];
+    my $StateTypes = $ConfigObject->Get( 'QuickClose::StateTypes' ) || [ 'closed' ];
 
-    my %States = $Self->{StateObject}->StateGetStatesByType(
+    my %States = $StateObject->StateGetStatesByType(
         StateType => $StateTypes,
         Result    => 'HASH',
     );
 
-    $Param{StateSelect} = $Self->{LayoutObject}->BuildSelection(
+    $Param{StateSelect} = $LayoutObject->BuildSelection(
         Data       => \%States,
         Name       => 'StateID',
         Size       => 1,
@@ -244,7 +252,7 @@ sub _MaskQuickCloseForm {
         HTMLQuote  => 1,
     );
 
-    $Param{UnlockSelect} = $Self->{LayoutObject}->BuildSelection(
+    $Param{UnlockSelect} = $LayoutObject->BuildSelection(
         Data        => { 0 => 'No', 1 => 'Yes' },
         Name        => 'Unlock',
         Size        => 1,
@@ -254,11 +262,11 @@ sub _MaskQuickCloseForm {
 
     my %Queues;
 
-    if ( $Self->{ConfigObject}->Get( 'QuickClose::QueueMove' ) ) {
-        %Queues = $Self->{QueueObject}->QueueList();
+    if ( $ConfigObject->Get( 'QuickClose::QueueMove' ) ) {
+        %Queues = $QueueObject->QueueList();
     }
 
-    $Param{QueueSelect} = $Self->{LayoutObject}->BuildSelection(
+    $Param{QueueSelect} = $LayoutObject->BuildSelection(
         Data         => \%Queues,
         Name         => 'QueueID',
         Size         => 1,
@@ -279,23 +287,23 @@ sub _MaskQuickCloseForm {
 
     # get possible notes
     my %DefaultNoteTypes = %{ $Self->{Config}->{ArticleTypes} };
-    my %NoteTypes = $Self->{TicketObject}->ArticleTypeList( Result => 'HASH' );
+    my %NoteTypes = $TicketObject->ArticleTypeList( Result => 'HASH' );
     for my $KeyNoteType ( keys %NoteTypes ) {
         if ( !$DefaultNoteTypes{ $NoteTypes{$KeyNoteType} } ) {
             delete $NoteTypes{$KeyNoteType};
         }
     }
-    $Param{ArticleTypeSelect} = $Self->{LayoutObject}->BuildSelection(
+    $Param{ArticleTypeSelect} = $LayoutObject->BuildSelection(
         Data => \%NoteTypes,
         Name => 'ArticleTypeID',
         %ArticleType,
     );
 
     my $UserAutoCompleteConfig
-        = $Self->{ConfigObject}->Get('QuickClose::Frontend::UserSearchAutoComplete');
+        = $ConfigObject->Get('QuickClose::Frontend::UserSearchAutoComplete');
 
 
-    $Self->{LayoutObject}->Block(
+    $LayoutObject->Block(
         Name => 'UserSearchAutoComplete',
         Data => {
             minQueryLength      => $UserAutoCompleteConfig->{MinQueryLength}      || 2,
@@ -310,7 +318,7 @@ sub _MaskQuickCloseForm {
         $ActiveAutoComplete = 'false';
     }
 
-    $Self->{LayoutObject}->Block(
+    $LayoutObject->Block(
         Name => 'UserSearchInit',
         Data => {
             ActiveAutoComplete => $ActiveAutoComplete,
@@ -320,20 +328,20 @@ sub _MaskQuickCloseForm {
 
     if ( $Self->{Subaction} ne 'Edit' && $Self->{Subaction} ne 'Add' ) {
 
-        my %QuickCloseList = $Self->{QuickCloseObject}->QuickCloseList();
+        my %QuickCloseList = $QuickCloseObject->QuickCloseList();
   
         if ( !%QuickCloseList ) {
-            $Self->{LayoutObject}->Block(
+            $LayoutObject->Block(
                 Name => 'NoQuickCloseFound',
             );
         }
 
         for my $QuickCloseID ( sort keys %QuickCloseList ) {
-            my %QuickClose = $Self->{QuickCloseObject}->QuickCloseGet(
+            my %QuickClose = $QuickCloseObject->QuickCloseGet(
                 ID => $QuickCloseID,
             );
 
-            $Self->{LayoutObject}->Block(
+            $LayoutObject->Block(
                 Name => 'QuickCloseRow',
                 Data => \%QuickClose,
             );
@@ -346,7 +354,7 @@ sub _MaskQuickCloseForm {
     my $TemplateFile = 'AdminQuickCloseList';
     $TemplateFile = 'AdminQuickCloseForm' if $Self->{Subaction};
 
-    return $Self->{LayoutObject}->Output(
+    return $LayoutObject->Output(
         TemplateFile => $TemplateFile,
         Data         => \%Param
     );

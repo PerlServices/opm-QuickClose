@@ -1,5 +1,5 @@
 # --
-# AdminQuickCloseList.dtl - provides HTML form for AdminQuickCloseList
+# AdminQuickCloseList.tt - provides HTML form for AdminQuickCloseList
 # Copyright (C) 2011 Perl-Services.de, http://www.perl-services.de
 # --
 # $Id: AdminQuickCloseList.dtl,v 1.1.1.1 2011/04/15 07:49:58 rb Exp $
@@ -10,16 +10,16 @@
 # --
 
 <div class="MainBox ARIARoleMain LayoutFixedSidebar SidebarFirst">
-    <h1>$Text{"QuickClose Management"}</h1>
+    <h1>[% Translate("QuickClose Management") | html %]</h1>
     <div class="SidebarColumn">
         <div class="WidgetSimple">
             <div class="Header">
-                <h2>$Text{"Actions"}</h2>
+                <h2>[% Translate("Actions") | html %]</h2>
             </div>
             <div class="Content">
                 <ul class="ActionList">
                     <li>
-                        <a href="$Env{"Baselink"}Action=$Env{"Action"};Subaction=Add" class="CallForAction"><span>$Text{"Add text"}</span></a>
+                        <a href="[% Env("Baselink") %]Action=[% Env("Action") %];Subaction=Add" class="CallForAction"><span>[% Translate("Add text") | html %]</span></a>
                     </li>
                 </ul>
             </div>
@@ -29,57 +29,57 @@
     <div class="ContentColumn">
         <div class="WidgetSimple">
             <div class="Header">
-                <h2>$Text{"List"}</h2>
+                <h2>[% Translate("List") | html %]</h2>
             </div>
             <div class="Content">
                 <table class="DataTable" id="QuickClose">
                     <thead>
                         <tr>
-                            <th>$Text{"ID"}</th>
-                            <th>$Text{"Name"}</th>
-                            <th>$Text{"State"}</th>
-                            <th>$Text{"Valid"}</th>
-                            <th>$Text{"Date"}</th>
-                            <th>$Text{"Author"}</th>
-                            <th>$Text{"Action"}</th>
+                            <th>[% Translate("ID") | html %]</th>
+                            <th>[% Translate("Name") | html %]</th>
+                            <th>[% Translate("State") | html %]</th>
+                            <th>[% Translate("Valid") | html %]</th>
+                            <th>[% Translate("Date") | html %]</th>
+                            <th>[% Translate("Author") | html %]</th>
+                            <th>[% Translate("Action") | html %]</th>
                         </tr>
                     </thead>
                     <tbody>
-<!-- dtl:block:NoQuickCloseFound -->
+[% RenderBlockStart("NoQuickCloseFound") %]
                         <tr>
-                            <td colspan="7">$Text{"No matches found."}</td>
+                            <td colspan="7">[% Translate("No matches found.") | html %]</td>
                         </tr>
-<!-- dtl:block:NoQuickCloseFound -->
-<!-- dtl:block:QuickCloseRow -->
+[% RenderBlockEnd("NoQuickCloseFound") %]
+[% RenderBlockStart("QuickCloseRow") %]
                         <tr>
                             <td>
-                                $QData{"ID"}
+                                [% Data.ID | html %]
                             </td>
                             <td>
-                                $QData{"Name"}
+                                [% Data.Name | html %]
                             </td>
                             <td>
-                                $QData{"State"}
+                                [% Data.State | html %]
                             </td>
                             <td>
-                                $Text{"$Data{"Valid"}"}
+                                [% Translate(Data.Valid) | html %]
                             </td>
                             <td>
-                                $QData{"CreateTime"}
+                                [% Data.CreateTime | html %]
                             </td>
                             <td>
-                                $QData{"Author"}
+                                [% Data.Author | html %]
                             </td>
                             <td>
-                                <a href="$Env{"Baselink"}Action=AdminQuickClose;Subaction=Edit;ID=$LQData{"ID"}">
-                                $Text{"edit"}
+                                <a href="[% Env("Baselink") %]Action=AdminQuickClose;Subaction=Edit;ID=[% Data.ID | uri %]">
+                                [% Translate("edit") | html %]
                                 </a> |
-                                <a href="$Env{"Baselink"}Action=AdminQuickClose;Subaction=Delete;ID=$LQData{"ID"}">
-                                $Text{"delete"}
+                                <a href="[% Env("Baselink") %]Action=AdminQuickClose;Subaction=Delete;ID=[% Data.ID | uri %]">
+                                [% Translate("delete") | html %]
                                 </a>
                             </td>
                         </tr>
-<!-- dtl:block:QuickCloseRow -->
+[% RenderBlockEnd("QuickCloseRow") %]
                     </tbody>
                 </table>
             </div>
