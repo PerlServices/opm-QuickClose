@@ -19,6 +19,7 @@
                         </form>
 [% WRAPPER JSOnDocumentComplete %]
 <script type="text/javascript">//<![CDATA[
+    $('#QuickClose').unbind('change');
     $('#QuickClose').bind('change', function (Event) {
         // retrieve body for quickclose
         var URL = Core.Config.Get('Baselink');
