@@ -56,7 +56,10 @@ sub new {
 sub Run {
     my ( $Self, %Param ) = @_;
 
-    my @Params = (qw(ID Name StateID Body ValidID UserID ArticleTypeID QueueID Subject Unlock OwnerSelected PendingDiff));
+    my @Params = (
+        qw(ID Name StateID Body ValidID UserID ArticleTypeID
+        QueueID Subject Unlock OwnerSelected PendingDiff ForceCurrentUserAsOwner)
+    );
     my %GetParam;
     for (@Params) {
         $GetParam{$_} = $Self->{ParamObject}->GetParam( Param => $_ ) || '';
@@ -235,6 +238,8 @@ sub _MaskQuickCloseForm {
         StateType => $StateTypes,
         Result    => 'HASH',
     );
+
+    $Param{ForceSelected} = $Param{ForceCurrentUserAsOwner} ? 'checked="checked"' : '';
 
     $Param{StateSelect} = $Self->{LayoutObject}->BuildSelection(
         Data       => \%States,
