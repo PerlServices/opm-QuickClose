@@ -181,7 +181,7 @@ sub QuickCloseUpdate {
         SQL => 'UPDATE ps_quick_close SET close_name = ?, state_id = ?, body = ?, '
             . 'valid_id = ?, change_time = current_timestamp, change_by = ?, article_type_id = ?, '
             . 'queue_id = ?, subject = ?, ticket_unlock = ?, owner_id = ?, pending_diff = ?, '
-            . 'force_owner_change ? '
+            . 'force_owner_change = ? '
             . 'WHERE id = ?',
         Bind => [
             \$Param{Name},
