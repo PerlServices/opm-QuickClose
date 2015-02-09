@@ -2,7 +2,7 @@
 <otrs_package version="1.0">
     <CVS>$Id: QuickClose.sopm,v 1.1.1.1 2011/04/15 07:49:58 rb Exp $</CVS>
     <Name>QuickClose</Name>
-    <Version>3.3.5</Version>
+    <Version>3.3.6</Version>
     <Framework>3.3.x</Framework>
     <Vendor>Perl-Services.de</Vendor>
     <URL>http://www.perl-services.de/</URL>
@@ -78,7 +78,7 @@
         <TableAlter Name="ps_quick_close" Version="1.0.3">
             <ColumnAdd Name="pending_diff" Required="false" Type="SMALLINT"/>
         </TableAlter>
-        <TableAlter Name="ps_quick_close" Version="4.0.3">
+        <TableAlter Name="ps_quick_close" Version="3.3.6">
             <ColumnAdd Name="force_owner_change" Required="false" Type="SMALLINT"/>
         </TableAlter>
     </DatabaseUpgrade>
