@@ -115,10 +115,10 @@
                         </div>
 
                         <label for="ForceCurrentUserAsOwner">
-                            $Text{"Acting user should become ticket owner"}:
+                            [% Translate("Acting user should become ticket owner") | html %]:
                         </label>
                         <div class="Field">
-                            <input type="checkbox" value="1" name="ForceCurrentUserAsOwner" id="ForceCurrentUserAsOwner" $Data{"ForceSelected"} />
+                            <input type="checkbox" value="1" name="ForceCurrentUserAsOwner" id="ForceCurrentUserAsOwner" [% Data.ForceSelected %] />
                         </div>
                         <div class="Clear"></div>
 
