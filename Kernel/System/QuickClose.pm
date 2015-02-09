@@ -95,8 +95,8 @@ sub QuickCloseAdd {
         SQL => 'INSERT INTO ps_quick_close '
             . '(close_name, state_id, body, create_time, create_by, valid_id, '
             . ' article_type_id, change_time, change_by, comments, queue_id, '
-            . ' subject, ticket_unlock, owner_id, pending_diff) '
-            . 'VALUES (?, ?, ?, current_timestamp, ?, ?, ?, current_timestamp, ?, ?, ?, ?, ?, ?, ?)',
+            . ' subject, ticket_unlock, owner_id, pending_diff, force_owner_change) '
+            . 'VALUES (?, ?, ?, current_timestamp, ?, ?, ?, current_timestamp, ?, ?, ?, ?, ?, ?, ?, ?)',
         Bind => [
             \$Param{Name},
             \$Param{StateID},
@@ -111,6 +111,7 @@ sub QuickCloseAdd {
             \$Param{Unlock},
             \$Param{OwnerID},
             \$Param{PendingDiff},
+            \$Param{ForceCurrentUserAsOwner},
         ],
     );
 
@@ -179,7 +180,8 @@ sub QuickCloseUpdate {
     return if !$DBObject->Do(
         SQL => 'UPDATE ps_quick_close SET close_name = ?, state_id = ?, body = ?, '
             . 'valid_id = ?, change_time = current_timestamp, change_by = ?, article_type_id = ?, '
-            . 'queue_id = ?, subject = ?, ticket_unlock = ?, owner_id = ?, pending_diff = ? '
+            . 'queue_id = ?, subject = ?, ticket_unlock = ?, owner_id = ?, pending_diff = ?, '
+            . 'force_owner_change ? '
             . 'WHERE id = ?',
         Bind => [
             \$Param{Name},
@@ -193,6 +195,7 @@ sub QuickCloseUpdate {
             \$Param{Unlock},
             \$Param{OwnerID},
             \$Param{PendingDiff},
+            \$Param{ForceCurrentUserAsOwner},
             \$Param{ID},
         ],
     );
@@ -245,7 +248,8 @@ sub QuickCloseGet {
     # sql
     return if !$DBObject->Prepare(
         SQL => 'SELECT id, close_name, state_id, body, create_time, create_by, valid_id, '
-            . 'article_type_id, queue_id, subject, ticket_unlock, owner_id, pending_diff '
+            . 'article_type_id, queue_id, subject, ticket_unlock, owner_id, pending_diff, '
+            . 'force_owner_change '
             . 'FROM ps_quick_close WHERE id = ?',
         Bind  => [ \$Param{ID} ],
         Limit => 1,
@@ -267,6 +271,8 @@ sub QuickCloseGet {
             Unlock        => $Data[10],
             OwnerID       => $Data[11],
             PendingDiff   => $Data[12],
+
+            ForceCurrentUserAsOwner => $Data[13],
         );
     }
 
