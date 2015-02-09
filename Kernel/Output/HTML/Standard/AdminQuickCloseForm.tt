@@ -114,6 +114,14 @@
                             <p>[% Translate("Invalid User") | html %]</p>
                         </div>
 
+                        <label for="ForceCurrentUserAsOwner">
+                            $Text{"Acting user should become ticket owner"}:
+                        </label>
+                        <div class="Field">
+                            <input type="checkbox" value="1" name="ForceCurrentUserAsOwner" id="ForceCurrentUserAsOwner" $Data{"ForceSelected"} />
+                        </div>
+                        <div class="Clear"></div>
+
                         <label for="Unlock">
                             [% Translate("Unlock Ticket") | html %] <br />
                             [% Translate("Tickets are unlocked automatically on 'closed' states") | html %]:
