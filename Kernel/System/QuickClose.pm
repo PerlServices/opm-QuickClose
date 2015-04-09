@@ -174,9 +174,11 @@ sub QuickCloseUpdate {
         }
     }
 
-    $Param{QueueID}     ||= 0;
-    $Param{OwnerID}     ||= 0;
-    $Param{PendingDiff} ||= 0;
+    $Param{QueueID}                 ||= 0;
+    $Param{OwnerID}                 ||= 0;
+    $Param{PendingDiff}             ||= 0;
+    $Param{ForceCurrentUserAsOwner} ||= 0;
+    $Param{Unlock}                  ||= 0;
 
     # insert new news
     return if !$DBObject->Do(
