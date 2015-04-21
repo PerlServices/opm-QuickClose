@@ -54,7 +54,8 @@ sub Run {
 
     my @Params = (
         qw(ID Name StateID Body ValidID UserID ArticleTypeID
-        QueueID Subject Unlock OwnerSelected PendingDiff ForceCurrentUserAsOwner)
+        QueueID Subject Unlock OwnerSelected PendingDiff ForceCurrentUserAsOwner
+        AssignToResponsible)
     );
     my %GetParam;
     for (@Params) {
@@ -99,7 +100,7 @@ sub Run {
             $Errors{ValidIDInvalid} = 'ServerError';
         }
 
-        for my $Param (qw(Name StateID Body)) {
+        for my $Param (qw(Name Body)) {
             if ( !$GetParam{$Param} ) {
                 $Errors{ $Param . 'Invalid' } = 'ServerError';
             }
@@ -150,7 +151,7 @@ sub Run {
             $Errors{ValidIDInvalid} = 'ServerError';
         }
 
-        for my $Param (qw(Name StateID Body)) {
+        for my $Param (qw(Name Body)) {
             if ( !$GetParam{$Param} ) {
                 $Errors{ $Param . 'Invalid' } = 'ServerError';
             }
@@ -244,14 +245,16 @@ sub _MaskQuickCloseForm {
         Result    => 'HASH',
     );
 
-    $Param{ForceSelected} = $Param{ForceCurrentUserAsOwner} ? 'checked="checked"' : '';
+    $Param{ForceSelected}       = $Param{ForceCurrentUserAsOwner} ? 'checked="checked"' : '';
+    $Param{ResponsibleSelected} = $Param{AssignToResponsible}     ? 'checked="checked"' : '';
 
     $Param{StateSelect} = $LayoutObject->BuildSelection(
-        Data       => \%States,
-        Name       => 'StateID',
-        Size       => 1,
-        SelectedID => $Param{StateID},
-        HTMLQuote  => 1,
+        Data         => \%States,
+        Name         => 'StateID',
+        Size         => 1,
+        SelectedID   => $Param{StateID},
+        HTMLQuote    => 1,
+        PossibleNone => 1,
     );
 
     $Param{UnlockSelect} = $LayoutObject->BuildSelection(

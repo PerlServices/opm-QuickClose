@@ -37,6 +37,9 @@ sub Data {
     $Lang->{"Tickets are unlocked automatically on 'closed' states"} = "Tickets werden bei 'geschlossen' Status automatisch freigegeben";
     $Lang->{"Create and manage QuickClose texts."} = "Erstellen und verwalten von QuickClose-Einstellungen.";
 
+    $Lang->{'Acting user should become ticket owner'} = 'Ausführender Benutzer wird Besitzer';
+    $Lang->{'Responsible should become ticket owner'} = 'Verantwortlicher wird Besitzer';
+
     return 1;
 }
 

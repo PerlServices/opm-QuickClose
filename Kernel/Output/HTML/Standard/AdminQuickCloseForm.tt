@@ -84,8 +84,7 @@
                         </div>
                         <div class="Clear"></div>
 
-                        <label for="StateID" class="Mandatory">
-                            <span class="Marker">*</span>
+                        <label for="StateID">
                             [% Translate("State after close") | html %]:
                         </label>
                         <div class="Field">
@@ -119,6 +118,14 @@
                         </label>
                         <div class="Field">
                             <input type="checkbox" value="1" name="ForceCurrentUserAsOwner" id="ForceCurrentUserAsOwner" [% Data.ForceSelected %] />
+                        </div>
+                        <div class="Clear"></div>
+
+                        <label for="AssignToResponsible">
+                            [% Translate("Responsible should become ticket owner") | html %]:
+                        </label>
+                        <div class="Field">
+                            <input type="checkbox" value="1" name="AssignToResponsible" id="AssignToResponsible" [% Data.ResponsibleSelected %] />
                         </div>
                         <div class="Clear"></div>
 

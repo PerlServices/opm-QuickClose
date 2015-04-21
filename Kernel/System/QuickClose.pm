@@ -76,7 +76,7 @@ sub QuickCloseAdd {
     my $DBObject  = $Kernel::OM->Get('Kernel::System::DB');
 
     # check needed stuff
-    for my $Needed (qw(Name StateID Body ValidID UserID ArticleTypeID)) {
+    for my $Needed (qw(Name Body ValidID UserID ArticleTypeID)) {
         if ( !$Param{$Needed} ) {
             $LogObject->Log(
                 Priority => 'error',
@@ -90,15 +90,18 @@ sub QuickCloseAdd {
     $Param{OwnerID}                 ||= 0;
     $Param{PendingDiff}             ||= 0;
     $Param{ForceCurrentUserAsOwner} ||= 0;
+    $Param{AssignToResponsible}     ||= 0;
     $Param{Unlock}                  ||= 0;
+    $Param{StateID}                 ||= 0;
 
     # insert new news
     return if !$DBObject->Do(
         SQL => 'INSERT INTO ps_quick_close '
             . '(close_name, state_id, body, create_time, create_by, valid_id, '
             . ' article_type_id, change_time, change_by, comments, queue_id, '
-            . ' subject, ticket_unlock, owner_id, pending_diff, force_owner_change) '
-            . 'VALUES (?, ?, ?, current_timestamp, ?, ?, ?, current_timestamp, ?, ?, ?, ?, ?, ?, ?, ?)',
+            . ' subject, ticket_unlock, owner_id, pending_diff, force_owner_change, '
+            . ' assign_to_responsible) '
+            . 'VALUES (?, ?, ?, current_timestamp, ?, ?, ?, current_timestamp, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
         Bind => [
             \$Param{Name},
             \$Param{StateID},
@@ -114,6 +117,7 @@ sub QuickCloseAdd {
             \$Param{OwnerID},
             \$Param{PendingDiff},
             \$Param{ForceCurrentUserAsOwner},
+            \$Param{AssignToResponsible},
         ],
     );
 
@@ -164,7 +168,7 @@ sub QuickCloseUpdate {
     my $DBObject  = $Kernel::OM->Get('Kernel::System::DB');
 
     # check needed stuff
-    for my $Needed (qw(ID Name StateID Body ValidID UserID ArticleTypeID)) {
+    for my $Needed (qw(ID Name Body ValidID UserID ArticleTypeID)) {
         if ( !$Param{$Needed} ) {
             $LogObject->Log(
                 Priority => 'error',
@@ -178,7 +182,9 @@ sub QuickCloseUpdate {
     $Param{OwnerID}                 ||= 0;
     $Param{PendingDiff}             ||= 0;
     $Param{ForceCurrentUserAsOwner} ||= 0;
+    $Param{AssignToResponsible}     ||= 0;
     $Param{Unlock}                  ||= 0;
+    $Param{StateID}                 ||= 0;
 
     # insert new news
     return if !$DBObject->Do(
@@ -200,6 +206,7 @@ sub QuickCloseUpdate {
             \$Param{OwnerID},
             \$Param{PendingDiff},
             \$Param{ForceCurrentUserAsOwner},
+            \$Param{AssignToResponsible},
             \$Param{ID},
         ],
     );
@@ -253,7 +260,7 @@ sub QuickCloseGet {
     return if !$DBObject->Prepare(
         SQL => 'SELECT id, close_name, state_id, body, create_time, create_by, valid_id, '
             . 'article_type_id, queue_id, subject, ticket_unlock, owner_id, pending_diff, '
-            . 'force_owner_change '
+            . 'force_owner_change, assign_to_responsible '
             . 'FROM ps_quick_close WHERE id = ?',
         Bind  => [ \$Param{ID} ],
         Limit => 1,
@@ -277,12 +284,16 @@ sub QuickCloseGet {
             PendingDiff   => $Data[12],
 
             ForceCurrentUserAsOwner => $Data[13],
+            AssignToResponsible     => $Data[14],
         );
     }
 
     $QuickClose{Valid}  = $ValidObject->ValidLookup( ValidID => $QuickClose{ValidID} );
     $QuickClose{Author} = $UserObject->UserLookup( UserID => $QuickClose{CreateBy} );
-    $QuickClose{State}  = $StateObject->StateLookup( StateID => $QuickClose{StateID} );
+
+    if ( $QuickClose{StateID} ) {
+        $QuickClose{State}  = $StateObject->StateLookup( StateID => $QuickClose{StateID} );
+    }
 
     if ( $QuickClose{QueueID} ) {
         $QuickClose{Queue}  = $QueueObject->QueueLookup( QueueID => $QuickClose{QueueID} );

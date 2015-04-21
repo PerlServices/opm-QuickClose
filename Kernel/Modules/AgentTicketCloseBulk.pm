@@ -165,13 +165,28 @@ sub Run {
             );
         }
 
-        if ( $CloseData{ForceCurrentUserAsOwner} ) {
+        if ( $ConfigObject->Get('Ticket::Responsible') && $CloseData{AssignToResponsible} ) {
+            my %Ticket = $TicketObject->TicketGet(
+                TicketID => $TicketID,
+                UserID   => $Self->{UserID},
+            );
+
+            if ( $Ticket{ResponsibleID} ) {
+                $TicketObject->TicketOwnerSet(
+                    TicketID  => $TicketID,
+                    NewUserID => $Ticket{ResponsibleID},
+                    UserID    => $Self->{UserID},
+                );
+            }
+        }
+        elsif ( $CloseData{ForceCurrentUserAsOwner} ) {
             $TicketObject->TicketOwnerSet(
                 TicketID  => $TicketID,
                 NewUserID => $Self->{UserID},
                 UserID    => $Self->{UserID},
             );
         }
+
         if ( $CloseData{OwnerID} ) {
             $TicketObject->TicketOwnerSet(
                 TicketID  => $TicketID,
@@ -180,44 +195,47 @@ sub Run {
             );
         }
 
-        # set state
-        $TicketObject->TicketStateSet(
-            TicketID => $TicketID,
-            StateID  => $CloseData{StateID},
-            UserID   => $Self->{UserID},
-        );
+        if ( $CloseData{StateID} ) {
 
-        my $Type = $QuickCloseObject->TicketStateTypeByStateGet(
-            StateID => $CloseData{StateID},
-        );
-
-        if ( $Type =~ m{^pending}xms ) {
-            my $Diff = $CloseData{PendingDiff} ||
-                $ConfigObject->Get( 'QuickClose::PendingDiffDefault' ) ||
-                ( 1 * 24 * 60 );
-
-            my ($Sec, $Min, $Hour, $Day, $Month, $Year) = $TimeObject->SystemTime2Date(
-                SystemTime => $Self->{TimeObject}->SystemTime() + ( $Diff * 60 ),
-            );
-
-            $TicketObject->TicketPendingTimeSet(
-                Year     => $Year,
-                Month    => $Month,
-                Day      => $Day,
-                Hour     => $Hour,
-                Minute   => $Min,
+            # set state
+            $TicketObject->TicketStateSet(
                 TicketID => $TicketID,
+                StateID  => $CloseData{StateID},
                 UserID   => $Self->{UserID},
             );
-        }
-
-        # set unlock on close state
-        if ( $Type =~ /^close/i ) {
-            $TicketObject->TicketLockSet(
-                TicketID => $TicketID,
-                Lock     => 'unlock',
-                UserID   => $Self->{UserID},
+    
+            my $Type = $QuickCloseObject->TicketStateTypeByStateGet(
+                StateID => $CloseData{StateID},
             );
+    
+            if ( $Type =~ m{^pending}xms ) {
+                my $Diff = $CloseData{PendingDiff} ||
+                    $ConfigObject->Get( 'QuickClose::PendingDiffDefault' ) ||
+                    ( 1 * 24 * 60 );
+    
+                my ($Sec, $Min, $Hour, $Day, $Month, $Year) = $TimeObject->SystemTime2Date(
+                    SystemTime => $Self->{TimeObject}->SystemTime() + ( $Diff * 60 ),
+                );
+    
+                $TicketObject->TicketPendingTimeSet(
+                    Year     => $Year,
+                    Month    => $Month,
+                    Day      => $Day,
+                    Hour     => $Hour,
+                    Minute   => $Min,
+                    TicketID => $TicketID,
+                    UserID   => $Self->{UserID},
+                );
+            }
+    
+            # set unlock on close state
+            if ( $Type =~ /^close/i ) {
+                $TicketObject->TicketLockSet(
+                    TicketID => $TicketID,
+                    Lock     => 'unlock',
+                    UserID   => $Self->{UserID},
+                );
+            }
         }
     }
 

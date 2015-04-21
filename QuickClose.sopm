@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <otrs_package version="1.0">
     <Name>QuickClose</Name>
-    <Version>4.0.5</Version>
+    <Version>4.0.6</Version>
     <Framework>4.0.x</Framework>
     <Vendor>Perl-Services.de</Vendor>
     <URL>http://www.perl-services.de/</URL>
@@ -39,6 +39,7 @@
             <Column Name="pending_diff" Required="false" Type="SMALLINT"/>
             <Column Name="ticket_unlock" Required="false" Type="SMALLINT" />
             <Column Name="force_owner_change" Required="false" Type="SMALLINT" />
+            <Column Name="assign_to_responsible" Required="false" Type="SMALLINT"/>
             <Column Name="owner_id" Required="false" Type="SMALLINT" />
             <Column Name="article_type_id" Required="true" Type="SMALLINT"/>
             <Column Name="create_time" Required="true" Type="DATE"/>
@@ -51,9 +52,6 @@
             </ForeignKey>
             <ForeignKey ForeignTable="valid">
                 <Reference Local="valid_id" Foreign="id" />
-            </ForeignKey>
-            <ForeignKey ForeignTable="ticket_state">
-                <Reference Local="state_id" Foreign="id" />
             </ForeignKey>
             <ForeignKey ForeignTable="article_type">
                 <Reference Local="article_type_id" Foreign="id" />
@@ -79,6 +77,12 @@
         </TableAlter>
         <TableAlter Name="ps_quick_close" Version="4.0.3">
             <ColumnAdd Name="force_owner_change" Required="false" Type="SMALLINT"/>
+        </TableAlter>
+        <TableAlter Name="ps_quick_close" Version="4.0.6">
+            <ColumnAdd Name="assign_to_responsible" Required="false" Type="SMALLINT"/>
+            <ForeignKeyDrop ForeignTable="ticket_state">
+                <Reference Local="state_id" Foreign="id" />
+            </ForeignKeyDrop>
         </TableAlter>
     </DatabaseUpgrade>
     <DatabaseUninstall>
