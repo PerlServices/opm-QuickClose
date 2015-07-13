@@ -1,6 +1,6 @@
 # --
 # Kernel/Modules/AdminQuickClose.pm - provides admin notification translations
-# Copyright (C) 2011 - 2014 Perl-Services.de, http://www.perl-services.de
+# Copyright (C) 2011 - 2015 Perl-Services.de, http://www.perl-services.de
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -11,8 +11,6 @@ package Kernel::Modules::AdminQuickClose;
 
 use strict;
 use warnings;
-
-our $VERSION = 0.02;
 
 our @ObjectDependencies = qw(
     Kernel::Config
@@ -55,7 +53,7 @@ sub Run {
     my @Params = (
         qw(ID Name StateID Body ValidID UserID ArticleTypeID
         QueueID Subject Unlock OwnerSelected PendingDiff ForceCurrentUserAsOwner
-        AssignToResponsible)
+        AssignToResponsible ShowTicketZoom)
     );
     my %GetParam;
     for (@Params) {
@@ -247,6 +245,7 @@ sub _MaskQuickCloseForm {
 
     $Param{ForceSelected}       = $Param{ForceCurrentUserAsOwner} ? 'checked="checked"' : '';
     $Param{ResponsibleSelected} = $Param{AssignToResponsible}     ? 'checked="checked"' : '';
+    $Param{ZoomSelected}        = $Param{ShowTicketZoom}          ? 'checked="checked"' : '';
 
     $Param{StateSelect} = $LayoutObject->BuildSelection(
         Data         => \%States,

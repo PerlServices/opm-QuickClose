@@ -40,6 +40,8 @@ sub Data {
     $Lang->{'Acting user should become ticket owner'} = 'Ausführender Benutzer wird Besitzer';
     $Lang->{'Responsible should become ticket owner'} = 'Verantwortlicher wird Besitzer';
 
+    $Lang->{"Show ticket Zoom after QuickClose"} = 'Zeige die Ticketansicht nach einem QuickClose';
+
     return 1;
 }
 

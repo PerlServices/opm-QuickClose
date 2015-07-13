@@ -164,6 +164,14 @@
                         </div>
                         <div class="Clear"></div>
 
+                        <label for="ShowTicketZoom">
+                            [% Translate("Show ticket Zoom after QuickClose") | html %]:
+                        </label>
+                        <div class="Field">
+                            <input type="checkbox" value="1" name="ShowTicketZoom" id="ShowTicketZoom" [% Data.ZoomSelected %] />
+                        </div>
+                        <div class="Clear"></div>
+
                         <div class="Field">
                             <button class="Primary" type="submit" value="[% Translate("Save") | html %]">[% Translate("Save") | html %]</button>
                             [% Translate("or") | html %]

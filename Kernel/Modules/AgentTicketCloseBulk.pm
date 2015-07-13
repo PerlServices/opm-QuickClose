@@ -1,6 +1,6 @@
 # --
 # Kernel/Modules/AgentTicketCloseBulk.pm - bulk closing of tickets
-# Copyright (C) 2012-2014 Perl-Services.de, http://perl-services.de
+# Copyright (C) 2012-2015 Perl-Services.de, http://perl-services.de
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -11,8 +11,6 @@ package Kernel::Modules::AgentTicketCloseBulk;
 
 use strict;
 use warnings;
-
-our $VERSION = 0.02;
 
 our @ObjectDependencies = qw(
     Kernel::Config
@@ -242,6 +240,10 @@ sub Run {
     # redirect parent window to last screen overview on closed tickets
     if ( !@NoAccess ) {
         my $LastView = $Self->{LastScreenOverview} || $Self->{LastScreenView} || 'Action=AgentDashboard';
+
+        if ( scalar( @TicketIDs ) == 1 && $CloseData{ShowTicketZoom} ) {
+            $LastView = 'Action=AgentTicketZoom&TicketID=' . $TicketIDs[0];
+        }
 
         return $LayoutObject->Redirect(
             OP => $LastView,

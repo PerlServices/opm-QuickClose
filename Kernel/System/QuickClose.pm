@@ -1,6 +1,6 @@
 # --
 # Kernel/System/QuickClose.pm - All QuickClose related functions should be here eventually
-# Copyright (C) 2011-2014 Perl-Services.de, http://www.perl-services.de
+# Copyright (C) 2011-2015 Perl-Services.de, http://www.perl-services.de
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -11,8 +11,6 @@ package Kernel::System::QuickClose;
 
 use strict;
 use warnings;
-
-our $VERSION = 0.02;
 
 our @ObjectDependencies = qw(
     Kernel::Config
@@ -93,6 +91,7 @@ sub QuickCloseAdd {
     $Param{AssignToResponsible}     ||= 0;
     $Param{Unlock}                  ||= 0;
     $Param{StateID}                 ||= 0;
+    $Param{ShowTicketZoom}          ||= 0;
 
     # insert new news
     return if !$DBObject->Do(
@@ -100,8 +99,9 @@ sub QuickCloseAdd {
             . '(close_name, state_id, body, create_time, create_by, valid_id, '
             . ' article_type_id, change_time, change_by, comments, queue_id, '
             . ' subject, ticket_unlock, owner_id, pending_diff, force_owner_change, '
-            . ' assign_to_responsible) '
-            . 'VALUES (?, ?, ?, current_timestamp, ?, ?, ?, current_timestamp, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            . ' assign_to_responsible, show_ticket_zoom) '
+            . 'VALUES (?, ?, ?, current_timestamp, ?, ?, ?, current_timestamp, '
+            . ' ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
         Bind => [
             \$Param{Name},
             \$Param{StateID},
@@ -118,6 +118,7 @@ sub QuickCloseAdd {
             \$Param{PendingDiff},
             \$Param{ForceCurrentUserAsOwner},
             \$Param{AssignToResponsible},
+            \$Param{ShowTicketZoom},
         ],
     );
 
@@ -185,13 +186,14 @@ sub QuickCloseUpdate {
     $Param{AssignToResponsible}     ||= 0;
     $Param{Unlock}                  ||= 0;
     $Param{StateID}                 ||= 0;
+    $Param{ShowTicketZoom}          ||= 0;
 
     # insert new news
     return if !$DBObject->Do(
         SQL => 'UPDATE ps_quick_close SET close_name = ?, state_id = ?, body = ?, '
             . 'valid_id = ?, change_time = current_timestamp, change_by = ?, article_type_id = ?, '
             . 'queue_id = ?, subject = ?, ticket_unlock = ?, owner_id = ?, pending_diff = ?, '
-            . 'force_owner_change = ?, assign_to_responsible = ? '
+            . 'force_owner_change = ?, assign_to_responsible = ?, show_ticket_zoom = ? '
             . 'WHERE id = ?',
         Bind => [
             \$Param{Name},
@@ -207,6 +209,7 @@ sub QuickCloseUpdate {
             \$Param{PendingDiff},
             \$Param{ForceCurrentUserAsOwner},
             \$Param{AssignToResponsible},
+            \$Param{ShowTicketZoom},
             \$Param{ID},
         ],
     );
@@ -260,7 +263,7 @@ sub QuickCloseGet {
     return if !$DBObject->Prepare(
         SQL => 'SELECT id, close_name, state_id, body, create_time, create_by, valid_id, '
             . 'article_type_id, queue_id, subject, ticket_unlock, owner_id, pending_diff, '
-            . 'force_owner_change, assign_to_responsible '
+            . 'force_owner_change, assign_to_responsible, show_ticket_zoom '
             . 'FROM ps_quick_close WHERE id = ?',
         Bind  => [ \$Param{ID} ],
         Limit => 1,
@@ -285,6 +288,7 @@ sub QuickCloseGet {
 
             ForceCurrentUserAsOwner => $Data[13],
             AssignToResponsible     => $Data[14],
+            ShowTicketZoom          => $Data[15],
         );
     }
 
