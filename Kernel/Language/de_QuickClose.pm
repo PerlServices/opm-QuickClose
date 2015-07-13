@@ -41,6 +41,7 @@ sub Data {
     $Lang->{'Responsible should become ticket owner'} = 'Verantwortlicher wird Besitzer';
 
     $Lang->{"Show ticket Zoom after QuickClose"} = 'Zeige die Ticketansicht nach einem QuickClose';
+    $Lang->{"Fix Hour:Minute for pending time"}  = 'Feste Stunde:Minute bei Warten-Status';
 
     return 1;
 }

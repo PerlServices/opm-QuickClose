@@ -99,9 +99,9 @@ sub QuickCloseAdd {
             . '(close_name, state_id, body, create_time, create_by, valid_id, '
             . ' article_type_id, change_time, change_by, comments, queue_id, '
             . ' subject, ticket_unlock, owner_id, pending_diff, force_owner_change, '
-            . ' assign_to_responsible, show_ticket_zoom) '
+            . ' assign_to_responsible, show_ticket_zoom, fix_hour) '
             . 'VALUES (?, ?, ?, current_timestamp, ?, ?, ?, current_timestamp, '
-            . ' ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            . ' ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
         Bind => [
             \$Param{Name},
             \$Param{StateID},
@@ -119,6 +119,7 @@ sub QuickCloseAdd {
             \$Param{ForceCurrentUserAsOwner},
             \$Param{AssignToResponsible},
             \$Param{ShowTicketZoom},
+            \$Param{FixHour},
         ],
     );
 
@@ -193,7 +194,7 @@ sub QuickCloseUpdate {
         SQL => 'UPDATE ps_quick_close SET close_name = ?, state_id = ?, body = ?, '
             . 'valid_id = ?, change_time = current_timestamp, change_by = ?, article_type_id = ?, '
             . 'queue_id = ?, subject = ?, ticket_unlock = ?, owner_id = ?, pending_diff = ?, '
-            . 'force_owner_change = ?, assign_to_responsible = ?, show_ticket_zoom = ? '
+            . 'force_owner_change = ?, assign_to_responsible = ?, show_ticket_zoom = ?, fix_hour = ? '
             . 'WHERE id = ?',
         Bind => [
             \$Param{Name},
@@ -209,7 +210,8 @@ sub QuickCloseUpdate {
             \$Param{PendingDiff},
             \$Param{ForceCurrentUserAsOwner},
             \$Param{AssignToResponsible},
-            \$Param{ShowTicketZoom},
+	    \$Param{ShowTicketZoom},
+            \$Param{FixHour},
             \$Param{ID},
         ],
     );
@@ -263,7 +265,7 @@ sub QuickCloseGet {
     return if !$DBObject->Prepare(
         SQL => 'SELECT id, close_name, state_id, body, create_time, create_by, valid_id, '
             . 'article_type_id, queue_id, subject, ticket_unlock, owner_id, pending_diff, '
-            . 'force_owner_change, assign_to_responsible, show_ticket_zoom '
+            . 'force_owner_change, assign_to_responsible, show_ticket_zoom, fix_hour '
             . 'FROM ps_quick_close WHERE id = ?',
         Bind  => [ \$Param{ID} ],
         Limit => 1,
@@ -289,6 +291,7 @@ sub QuickCloseGet {
             ForceCurrentUserAsOwner => $Data[13],
             AssignToResponsible     => $Data[14],
             ShowTicketZoom          => $Data[15],
+            FixHour                 => $Data[16],
         );
     }
 

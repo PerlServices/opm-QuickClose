@@ -214,6 +214,12 @@ sub Run {
                 my ($Sec, $Min, $Hour, $Day, $Month, $Year) = $TimeObject->SystemTime2Date(
                     SystemTime => $Self->{TimeObject}->SystemTime() + ( $Diff * 60 ),
                 );
+
+                if ( $CloseData{FixHour} ) {
+                    my ($TmpHour, $TmpMin) = split /:/, $CloseData{FixHour};
+                    $Hour = $TmpHour // 0;
+                    $Min  = $TmpMin  // 0;
+                }
     
                 $TicketObject->TicketPendingTimeSet(
                     Year     => $Year,

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <otrs_package version="1.0">
     <Name>QuickClose</Name>
-    <Version>4.0.8</Version>
+    <Version>4.0.9</Version>
     <Framework>4.0.x</Framework>
     <Vendor>Perl-Services.de</Vendor>
     <URL>http://www.perl-services.de/</URL>
@@ -41,6 +41,7 @@
             <Column Name="force_owner_change" Required="false" Type="SMALLINT" />
             <Column Name="assign_to_responsible" Required="false" Type="SMALLINT"/>
             <Column Name="show_ticket_zoom" Required="false" Type="SMALLINT"/>
+            <Column Name="fix_hour" Required="false" Type="VARCHAR" Size="5"/>
             <Column Name="owner_id" Required="false" Type="SMALLINT" />
             <Column Name="article_type_id" Required="true" Type="SMALLINT"/>
             <Column Name="create_time" Required="true" Type="DATE"/>
@@ -87,6 +88,9 @@
         </TableAlter>
         <TableAlter Name="ps_quick_close" Version="4.0.8">
             <ColumnAdd Name="show_ticket_zoom" Required="false" Type="SMALLINT"/>
+        </TableAlter>
+        <TableAlter Name="ps_quick_close" Version="4.0.9">
+            <ColumnAdd Name="fix_hour" Required="false" Type="VARCHAR" Size="5"/>
         </TableAlter>
     </DatabaseUpgrade>
     <DatabaseUninstall>

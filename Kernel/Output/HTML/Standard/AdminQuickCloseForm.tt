@@ -100,6 +100,14 @@
                         </div>
                         <div class="Clear"></div>
 
+                        <label for="FixHour">
+                            [% Translate("Fix Hour:Minute for pending time") | html %]:
+                        </label>
+                        <div class="Field">
+                            <input type="text" name="FixHour" id="FixHour" value="[% Data.FixHour | html %]" />
+                        </div>
+                        <div class="Clear"></div>
+
                         <label for="Owner"> [% Translate("Owner") | html %]: </label>
                         <div class="Field">
                             <input id="Owner" name="Owner" type="text"   value="[% Data.Owner | html %]" class="W75pc [% Data.OwnerError %]" />
