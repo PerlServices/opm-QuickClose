@@ -42,6 +42,7 @@
             <Column Name="assign_to_responsible" Required="false" Type="SMALLINT"/>
             <Column Name="show_ticket_zoom" Required="false" Type="SMALLINT"/>
             <Column Name="fix_hour" Required="false" Type="VARCHAR" Size="5"/>
+            <Column Name="group_name" Required="false" Type="VARCHAR" Size="250"/>
             <Column Name="owner_id" Required="false" Type="SMALLINT" />
             <Column Name="article_type_id" Required="true" Type="SMALLINT"/>
             <Column Name="create_time" Required="true" Type="DATE"/>
@@ -91,6 +92,9 @@
         </TableAlter>
         <TableAlter Name="ps_quick_close" Version="4.0.9">
             <ColumnAdd Name="fix_hour" Required="false" Type="VARCHAR" Size="5"/>
+        </TableAlter>
+        <TableAlter Name="ps_quick_close" Version="4.0.10">
+            <ColumnAdd Name="group_name" Required="false" Type="VARCHAR" Size="250"/>
         </TableAlter>
     </DatabaseUpgrade>
     <DatabaseUninstall>

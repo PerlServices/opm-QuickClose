@@ -55,35 +55,54 @@ sub Run {
 
     if ( $Templatename  =~ m{AgentTicketOverview(?:Small|Medium|Preview)\z} ) {
         my $FormID = $UploadCacheObject->FormIDCreate();
-        my %List   = $QuickCloseObject->QuickCloseList( Valid => 1 );
-        
-        my @Indexes = sort{ $List{$a} cmp $List{$b} }keys %List;
-        my @Data    = map{ { Key => $_, Value => $List{$_} } }@Indexes;
-
-        my $Config = $ConfigObject->Get('QuickClose') || {};
-        
-        unshift @Data, {
-            Key   => '', 
-            Value => ' - ' . ($Config->{NoneLabel} || 'QuickClose')  . ' - ',
-        };
-        
-        my $Select = $LayoutObject->BuildSelection(
-            Data      => \@Data,
-            Name      => 'QuickClose',
-            Size      => 1,
-            HTMLQuote => 1,
+        my %List   = $QuickCloseObject->QuickCloseList(
+            Valid   => 1,
+            GroupBy => 1,
         );
 
-        my $Snippet = $LayoutObject->Output(
-            TemplateFile => 'QuickCloseSnippetTicketView',
-            Data         => {
-                QuickCloseSelect => $Select,
-                FormID           => $FormID,
-            },
-        ); 
+        my $Config    = $ConfigObject->Get('QuickClose') || {};
+        my $Labels    = $ConfigObject->Get( 'QuickClose::Labels' ) || {};
+        my $Dropdowns = '';
+        my $UseGroups = $ConfigObject->Get('QuickClose::UseGroups');
+
+        if ( !$UseGroups ) {
+            my %Tmp = %List;
+
+            %List = ( '' => \%Tmp );
+        }
+
+        for my $Group ( sort keys %List ) {
+            my %Entries = %{ $List{$Group} };
+            my @Indexes = sort{ $Entries{$a} <=> $Entries{$b} }keys %Entries;
+            my @Data    = map{ { Key => $_, Value => $Entries{$_} } }@Indexes;
+
+            my $Label   = $Labels->{$Group} || $Config->{NoneLabel} || 'QuickClose';
+
+            unshift @Data, {
+                Key   => '',
+                Value => "- $Label -",
+            };
+
+            my $Select = $LayoutObject->BuildSelection(
+                Data         => \@Data,
+                Name         => 'QuickClose',
+                ID           => 'QuickClose' . $Group,
+                Size         => 1,
+                HTMLQuote    => 1,
+                Class        => 'QuickCloseSelect',
+            );
+
+            $Dropdowns .= $LayoutObject->Output(
+                TemplateFile => 'QuickCloseSnippetTicketView',
+                Data         => {
+                    QuickCloseSelect => $Select,
+                    FormID           => $FormID,
+                },
+            ); 
+        }
 
         #scan html output and generate new html input
-        ${ $Param{Data} } =~ s{(<ul \s+ class="Actions"> \s* <li .*? /li>)}{$1 $Snippet}xmgs;
+        ${ $Param{Data} } =~ s{(<ul \s+ class="Actions"> \s* <li .*? /li>)}{$1 $Dropdowns}xmgs;
     }
 
     return ${ $Param{Data} };

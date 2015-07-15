@@ -56,6 +56,14 @@
                         </div>
                         <div class="Clear"></div>
 
+                        <label for="Group">
+                            [% Translate("Group") | html %]:
+                        </label>
+                        <div class="Field">
+                            <input type="text" id="Group" name="Group" value="[% Data.Group | html %]" class="W75pc" />
+                        </div>
+                        <div class="Clear"></div>
+
                         <label for="Subject">
                             [% Translate("Subject") | html %]:
                         </label>

@@ -53,7 +53,7 @@ sub Run {
     my @Params = (
         qw(ID Name StateID Body ValidID UserID ArticleTypeID
         QueueID Subject Unlock OwnerSelected PendingDiff ForceCurrentUserAsOwner
-        AssignToResponsible ShowTicketZoom FixHour)
+        AssignToResponsible ShowTicketZoom FixHour Group)
     );
     my %GetParam;
     for (@Params) {

@@ -19,41 +19,43 @@
                         </form>
 [% WRAPPER JSOnDocumentComplete %]
 <script type="text/javascript">//<![CDATA[
-    $('#QuickClose').unbind('change');
-    $('#QuickClose').bind('change', function (Event) {
-        // retrieve body for quickclose
-        var URL = Core.Config.Get('Baselink');
-        var TID = $(this).val();
-        var $SelectedTickets;
-        var CloseForm = $('#quickclose');
-        var TicketElementSelectors = {
-            'Small': 'div.Overview table td input:checkbox[name=TicketID]',
-            'Medium': 'ul.Overview input:checkbox[name=TicketID]',
-            'Large': 'ul.Overview input:checkbox[name=TicketID]'
-        };
-        var TicketView;
-
-        var thisObject = $(this);
-
-        if ($('#TicketOverviewMedium').length) {
-            TicketView = 'Medium';
-        }
-        else if ($('#TicketOverviewLarge').length) {
-            TicketView = 'Large';
-        }
-        else {
-            TicketView = 'Small';
-        }
-
-        if ( TID ) {
-            $SelectedTickets = $(TicketElementSelectors[TicketView] + ':checked');
-            $SelectedTickets.each(function () {
-                var HiddenField = $('<input type="hidden" name="TicketID">');
-                HiddenField.val( $(this).val() );
-                CloseForm.append( HiddenField );
-            });
-            CloseForm.submit();
-        }
+    $('.QuickCloseSelect').each( function() {
+        $(this).unbind('change');
+        $(this).bind('change', function (Event) {
+            // retrieve body for quickclose
+            var URL = Core.Config.Get('Baselink');
+            var TID = $(this).val();
+            var $SelectedTickets;
+            var CloseForm = $(this).closest('form');
+            var TicketElementSelectors = {
+                'Small': 'div.Overview table td input:checkbox[name=TicketID]',
+                'Medium': 'ul.Overview input:checkbox[name=TicketID]',
+                'Large': 'ul.Overview input:checkbox[name=TicketID]'
+            };
+            var TicketView;
+    
+            var thisObject = $(this);
+    
+            if ($('#TicketOverviewMedium').length) {
+                TicketView = 'Medium';
+            }
+            else if ($('#TicketOverviewLarge').length) {
+                TicketView = 'Large';
+            }
+            else {
+                TicketView = 'Small';
+            }
+    
+            if ( TID ) {
+                $SelectedTickets = $(TicketElementSelectors[TicketView] + ':checked');
+                $SelectedTickets.each(function () {
+                    var HiddenField = $('<input type="hidden" name="TicketID">');
+                    HiddenField.val( $(this).val() );
+                    CloseForm.append( HiddenField );
+                });
+                CloseForm.submit();
+            }
+        });
     });
 //]]></script>
 [% END %]

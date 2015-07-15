@@ -99,7 +99,7 @@ sub QuickCloseAdd {
             . '(close_name, state_id, body, create_time, create_by, valid_id, '
             . ' article_type_id, change_time, change_by, comments, queue_id, '
             . ' subject, ticket_unlock, owner_id, pending_diff, force_owner_change, '
-            . ' assign_to_responsible, show_ticket_zoom, fix_hour) '
+            . ' assign_to_responsible, show_ticket_zoom, fix_hour, group_name) '
             . 'VALUES (?, ?, ?, current_timestamp, ?, ?, ?, current_timestamp, '
             . ' ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
         Bind => [
@@ -120,6 +120,7 @@ sub QuickCloseAdd {
             \$Param{AssignToResponsible},
             \$Param{ShowTicketZoom},
             \$Param{FixHour},
+            \$Param{Group},
         ],
     );
 
@@ -194,7 +195,8 @@ sub QuickCloseUpdate {
         SQL => 'UPDATE ps_quick_close SET close_name = ?, state_id = ?, body = ?, '
             . 'valid_id = ?, change_time = current_timestamp, change_by = ?, article_type_id = ?, '
             . 'queue_id = ?, subject = ?, ticket_unlock = ?, owner_id = ?, pending_diff = ?, '
-            . 'force_owner_change = ?, assign_to_responsible = ?, show_ticket_zoom = ?, fix_hour = ? '
+            . 'force_owner_change = ?, assign_to_responsible = ?, show_ticket_zoom = ?, '
+            . 'fix_hour = ?, group_name = ? '
             . 'WHERE id = ?',
         Bind => [
             \$Param{Name},
@@ -212,6 +214,7 @@ sub QuickCloseUpdate {
             \$Param{AssignToResponsible},
 	    \$Param{ShowTicketZoom},
             \$Param{FixHour},
+            \$Param{Group},
             \$Param{ID},
         ],
     );
@@ -265,7 +268,7 @@ sub QuickCloseGet {
     return if !$DBObject->Prepare(
         SQL => 'SELECT id, close_name, state_id, body, create_time, create_by, valid_id, '
             . 'article_type_id, queue_id, subject, ticket_unlock, owner_id, pending_diff, '
-            . 'force_owner_change, assign_to_responsible, show_ticket_zoom, fix_hour '
+            . 'force_owner_change, assign_to_responsible, show_ticket_zoom, fix_hour, group_name '
             . 'FROM ps_quick_close WHERE id = ?',
         Bind  => [ \$Param{ID} ],
         Limit => 1,
@@ -292,6 +295,7 @@ sub QuickCloseGet {
             AssignToResponsible     => $Data[14],
             ShowTicketZoom          => $Data[15],
             FixHour                 => $Data[16],
+            Group                   => $Data[17],
         );
     }
 
@@ -363,8 +367,9 @@ the result looks like
 sub QuickCloseList {
     my ( $Self, %Param ) = @_;
 
-    my $ValidObject = $Kernel::OM->Get('Kernel::System::Valid');
-    my $DBObject    = $Kernel::OM->Get('Kernel::System::DB');
+    my $ValidObject  = $Kernel::OM->Get('Kernel::System::Valid');
+    my $DBObject     = $Kernel::OM->Get('Kernel::System::DB');
+    my $ConfigObject = $Kernel::OM->Get('Kernel::Config');
 
     my $Where = '';
     my @Bind;
@@ -377,13 +382,20 @@ sub QuickCloseList {
 
     # sql
     return if !$DBObject->Prepare(
-        SQL  => "SELECT id, close_name FROM ps_quick_close $Where",
+        SQL  => "SELECT id, close_name, group_name FROM ps_quick_close $Where",
         Bind => \@Bind,
     );
 
+    my $GroupElements = $ConfigObject->Get('QuickClose::UseGroups');
+
     my %QuickClose;
     while ( my @Data = $DBObject->FetchrowArray() ) {
-        $QuickClose{ $Data[0] } = $Data[1];
+        if ( $GroupElements && $Param{GroupBy} ) { 
+            $QuickClose{ $Data[2] // '' }->{ $Data[0] } = $Data[1];
+        }
+        else {
+            $QuickClose{ $Data[0] } = $Data[1];
+        }
     }
 
     return %QuickClose;
