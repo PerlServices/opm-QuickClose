@@ -101,7 +101,7 @@ sub QuickCloseAdd {
             . ' subject, ticket_unlock, owner_id, pending_diff, force_owner_change, '
             . ' assign_to_responsible, show_ticket_zoom, fix_hour, group_name) '
             . 'VALUES (?, ?, ?, current_timestamp, ?, ?, ?, current_timestamp, '
-            . ' ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            . ' ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
         Bind => [
             \$Param{Name},
             \$Param{StateID},
