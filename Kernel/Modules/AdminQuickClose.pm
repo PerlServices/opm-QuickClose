@@ -340,7 +340,7 @@ sub _MaskQuickCloseForm {
             );
         }
 
-        for my $QuickCloseID ( sort keys %QuickCloseList ) {
+        for my $QuickCloseID ( sort { $QuickCloseList{$a} cmp $QuickCloseList{$b} } keys %QuickCloseList ) {
             my %QuickClose = $QuickCloseObject->QuickCloseGet(
                 ID => $QuickCloseID,
             );

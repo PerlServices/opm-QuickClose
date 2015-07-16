@@ -35,7 +35,6 @@
                 <table class="DataTable" id="QuickClose">
                     <thead>
                         <tr>
-                            <th>[% Translate("ID") | html %]</th>
                             <th>[% Translate("Name") | html %]</th>
                             <th>[% Translate("State") | html %]</th>
                             <th>[% Translate("Valid") | html %]</th>
@@ -52,9 +51,6 @@
 [% RenderBlockEnd("NoQuickCloseFound") %]
 [% RenderBlockStart("QuickCloseRow") %]
                         <tr>
-                            <td>
-                                [% Data.ID | html %]
-                            </td>
                             <td>
                                 [% Data.Name | html %]
                             </td>
