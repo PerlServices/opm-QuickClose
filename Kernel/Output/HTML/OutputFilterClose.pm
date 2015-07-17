@@ -71,9 +71,9 @@ sub Run {
             %List = ( '' => \%Tmp );
         }
    
-        for my $Group ( sort keys %List ) { 
+        for my $Group ( sort { $a cmp $b }keys %List ) { 
             my %Entries = %{ $List{$Group} };
-            my @Indexes = sort{ $Entries{$a} <=> $Entries{$b} }keys %Entries;
+            my @Indexes = sort{ $Entries{$a} cmp $Entries{$b} }keys %Entries;
             my @Data    = map{ { Key => $_, Value => $Entries{$_} } }@Indexes;
 
             my $Label   = $Labels->{$Group} || $Config->{NoneLabel} || 'QuickClose';
