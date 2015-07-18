@@ -22,6 +22,7 @@ our @ObjectDependencies = qw(
     Kernel::System::Ticket
     Kernel::System::Queue
     Kernel::System::Time
+    Kernel::System::User
     Kernel::System::QuickClose
     Kernel::System::Web::UploadCache
     Kernel::System::Web::Request
@@ -65,6 +66,7 @@ sub Run {
     my $QuickCloseObject  = $Kernel::OM->Get('Kernel::System::QuickClose');
     my $TicketObject      = $Kernel::OM->Get('Kernel::System::Ticket');
     my $TimeObject        = $Kernel::OM->Get('Kernel::System::Time');
+    my $UserObject        = $Kernel::OM->Get('Kernel::System::User');
 
     my @TicketIDs = $ParamObject->GetArray( Param => 'TicketID' );
     my $ID        = $ParamObject->GetParam( Param => 'QuickClose' );
@@ -125,44 +127,6 @@ sub Run {
         # challenge token check for write action
         $LayoutObject->ChallengeTokenCheck();
 
-        # add note
-        my $ArticleID = '';
-        my $MimeType = 'text/plain';
-        if ( $Self->{LayoutObject}->{BrowserRichText} ) {
-            $MimeType = 'text/html';
-
-            # verify html document
-            $CloseData{Body} = $LayoutObject->RichTextDocumentComplete(
-                String => $CloseData{Body},
-            );
-        }
-
-        my $From = "$Self->{UserFirstname} $Self->{UserLastname} <$Self->{UserEmail}>"; 
-        $ArticleID = $TicketObject->ArticleCreate(
-            TicketID       => $TicketID,
-            SenderType     => 'agent',
-            From           => $From,
-            MimeType       => $MimeType,
-            Charset        => $LayoutObject->{UserCharset},
-            UserID         => $Self->{UserID},
-            HistoryType    => $Self->{Config}->{HistoryType}, 
-            HistoryComment => $Self->{Config}->{HistoryComment}, 
-            ArticleTypeID  => $CloseData{ArticleTypeID},
-            %GetParam,
-            %CloseData,
-        );
-        if ( !$ArticleID ) {
-            return $LayoutObject->ErrorScreen();
-        }
-
-        if ( $ConfigObject->Get( 'QuickClose::QueueMove' ) && $CloseData{QueueID} ) {
-            $TicketObject->TicketQueueSet(
-                TicketID => $TicketID,
-                QueueID  => $CloseData{QueueID},
-                UserID   => $Self->{UserID},
-            );
-        }
-
         if ( $ConfigObject->Get('Ticket::Responsible') && $CloseData{AssignToResponsible} ) {
             my %Ticket = $TicketObject->TicketGet(
                 TicketID => $TicketID,
@@ -190,6 +154,60 @@ sub Run {
                 TicketID  => $TicketID,
                 NewUserID => $CloseData{OwnerID},
                 UserID    => $Self->{UserID},
+            );
+        }
+
+        my %Ticket = $TicketObject->TicketGet(
+            TicketID => $TicketID,
+            UserID   => $Self->{UserID},
+        );
+
+        my $To = '';
+
+        if ( $Ticket{OwnerID} != $Self->{UserID} ) {
+            my %User = $UserObject->GetUserData(
+                UserID => $Ticket{OwnerID},
+            );
+
+            $To = qq~"$User{UserFullname}" <$User{UserEmail}>~;
+        }
+
+        # add note
+        my $ArticleID = '';
+        my $MimeType = 'text/plain';
+        if ( $Self->{LayoutObject}->{BrowserRichText} ) {
+            $MimeType = 'text/html';
+
+            # verify html document
+            $CloseData{Body} = $LayoutObject->RichTextDocumentComplete(
+                String => $CloseData{Body},
+            );
+        }
+
+        my $From = "$Self->{UserFirstname} $Self->{UserLastname} <$Self->{UserEmail}>"; 
+        $ArticleID = $TicketObject->ArticleCreate(
+            TicketID       => $TicketID,
+            SenderType     => 'agent',
+            From           => $From,
+            To             => $To,
+            MimeType       => $MimeType,
+            Charset        => $LayoutObject->{UserCharset},
+            UserID         => $Self->{UserID},
+            HistoryType    => $Self->{Config}->{HistoryType}, 
+            HistoryComment => $Self->{Config}->{HistoryComment}, 
+            ArticleTypeID  => $CloseData{ArticleTypeID},
+            %GetParam,
+            %CloseData,
+        );
+        if ( !$ArticleID ) {
+            return $LayoutObject->ErrorScreen();
+        }
+
+        if ( $ConfigObject->Get( 'QuickClose::QueueMove' ) && $CloseData{QueueID} ) {
+            $TicketObject->TicketQueueSet(
+                TicketID => $TicketID,
+                QueueID  => $CloseData{QueueID},
+                UserID   => $Self->{UserID},
             );
         }
 
