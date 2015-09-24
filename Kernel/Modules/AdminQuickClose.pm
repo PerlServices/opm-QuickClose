@@ -53,7 +53,8 @@ sub Run {
     my @Params = (
         qw(ID Name StateID Body ValidID UserID ArticleTypeID
         QueueID Subject Unlock OwnerSelected PendingDiff ForceCurrentUserAsOwner
-        AssignToResponsible ShowTicketZoom FixHour Group)
+        AssignToResponsible ShowTicketZoom FixHour Group
+        ResponsibleSelected)
     );
     my %GetParam;
     for (@Params) {
@@ -121,8 +122,9 @@ sub Run {
 
         my $Update = $QuickCloseObject->QuickCloseUpdate(
             %GetParam,
-            UserID  => $Self->{UserID},
-            OwnerID => $GetParam{OwnerSelected},
+            UserID        => $Self->{UserID},
+            OwnerID       => $GetParam{OwnerSelected},
+            ResponsibleID => $GetParam{ResponsibleSelected},
         );
 
         if ( !$Update ) {
@@ -172,8 +174,9 @@ sub Run {
 
         my $Success = $QuickCloseObject->QuickCloseAdd(
             %GetParam,
-            UserID  => $Self->{UserID},
-            OwnerID => $GetParam{OwnerSelected},
+            UserID        => $Self->{UserID},
+            OwnerID       => $GetParam{OwnerSelected},
+            ResponsibleID => $GetParam{ResponsibleSelected},
         );
 
         if ( !$Success ) {
@@ -327,6 +330,14 @@ sub _MaskQuickCloseForm {
         Data => {
             ActiveAutoComplete => $ActiveAutoComplete,
             ItemID             => 'Owner',
+        },
+    );
+
+    $LayoutObject->Block(
+        Name => 'UserSearchInit',
+        Data => {
+            ActiveAutoComplete => $ActiveAutoComplete,
+            ItemID             => 'Responsible',
         },
     );
 

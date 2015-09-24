@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <otrs_package version="1.0">
     <Name>QuickClose</Name>
-    <Version>4.0.14</Version>
+    <Version>4.0.15</Version>
     <Framework>4.0.x</Framework>
     <Vendor>Perl-Services.de</Vendor>
     <URL>http://www.perl-services.de/</URL>
@@ -44,6 +44,7 @@
             <Column Name="fix_hour" Required="false" Type="VARCHAR" Size="5"/>
             <Column Name="group_name" Required="false" Type="VARCHAR" Size="250"/>
             <Column Name="owner_id" Required="false" Type="SMALLINT" />
+            <Column Name="responsible_id" Required="false" Type="SMALLINT" />
             <Column Name="article_type_id" Required="true" Type="SMALLINT"/>
             <Column Name="create_time" Required="true" Type="DATE"/>
             <Column Name="create_by" Required="true" Type="INTEGER"/>
@@ -95,6 +96,9 @@
         </TableAlter>
         <TableAlter Name="ps_quick_close" Version="4.0.10">
             <ColumnAdd Name="group_name" Required="false" Type="VARCHAR" Size="250"/>
+        </TableAlter>
+        <TableAlter Name="ps_quick_close" Version="4.0.15">
+            <ColumnAdd Name="responsible_id" Required="false" Type="SMALLINT" />
         </TableAlter>
     </DatabaseUpgrade>
     <DatabaseUninstall>

@@ -129,6 +129,19 @@
                             <p>[% Translate("Invalid User") | html %]</p>
                         </div>
 
+                        <label for="Responsible"> [% Translate("Responsible") | html %]: </label>
+                        <div class="Field">
+                            <input id="Responsible" name="Responsible" type="text"   value="[% Data.Responsible | html %]" class="W75pc [% Data.ResponsibleError %]" />
+                            <input id="ResponsibleSelected" name="ResponsibleSelected" type="hidden" value="[% Data.ResponsibleID | html %]" />
+                            <input id="ResponsibleType" name="ResponsibleType" type="hidden" value="[% Data.ResponsibleType | html %]" />
+
+                            <div id="ResponsibleIDServerError" class="TooltipErrorMessage"><p>[% Translate("User invalid.") | html %]</p></div>
+                        </div>
+
+                        <div id="ResponsibleServerError" class="TooltipErrorMessage">
+                            <p>[% Translate("Invalid User") | html %]</p>
+                        </div>
+
                         <label for="ForceCurrentUserAsOwner">
                             [% Translate("Acting user should become ticket owner") | html %]:
                         </label>

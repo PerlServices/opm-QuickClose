@@ -127,7 +127,9 @@ sub Run {
         # challenge token check for write action
         $LayoutObject->ChallengeTokenCheck();
 
-        if ( $ConfigObject->Get('Ticket::Responsible') && $CloseData{AssignToResponsible} ) {
+        my $ResponsibleEnabled = $ConfigObject->Get('Ticket::Responsible');
+
+        if ( $ResponsibleEnabled && $CloseData{AssignToResponsible} ) {
             my %Ticket = $TicketObject->TicketGet(
                 TicketID => $TicketID,
                 UserID   => $Self->{UserID},
@@ -153,6 +155,14 @@ sub Run {
             $TicketObject->TicketOwnerSet(
                 TicketID  => $TicketID,
                 NewUserID => $CloseData{OwnerID},
+                UserID    => $Self->{UserID},
+            );
+        }
+
+        if ( $ResponsibleEnabled && $CloseData{ResponsibleID} ) {
+            $TicketObject->TicketResponsibleSet(
+                TicketID  => $TicketID,
+                NewUserID => $CloseData{ResponsibleID},
                 UserID    => $Self->{UserID},
             );
         }
