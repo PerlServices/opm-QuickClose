@@ -22,6 +22,7 @@ our @ObjectDependencies = qw(
     Kernel::System::Valid
     Kernel::System::State
     Kernel::System::Queue
+    Kernel::System::Priority
 );
 
 =head1 NAME
@@ -87,6 +88,7 @@ sub QuickCloseAdd {
     $Param{QueueID}                 ||= 0;
     $Param{OwnerID}                 ||= 0;
     $Param{ResponsibleID}           ||= 0;
+    $Param{PriorityID}              ||= 0;
     $Param{PendingDiff}             ||= 0;
     $Param{ForceCurrentUserAsOwner} ||= 0;
     $Param{AssignToResponsible}     ||= 0;
@@ -101,9 +103,9 @@ sub QuickCloseAdd {
             . ' article_type_id, change_time, change_by, comments, queue_id, '
             . ' subject, ticket_unlock, owner_id, pending_diff, force_owner_change, '
             . ' assign_to_responsible, show_ticket_zoom, fix_hour, group_name,'
-            . ' responsible_id) '
+            . ' responsible_id, priority_id) '
             . 'VALUES (?, ?, ?, current_timestamp, ?, ?, ?, current_timestamp, '
-            . ' ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            . ' ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
         Bind => [
             \$Param{Name},
             \$Param{StateID},
@@ -124,6 +126,7 @@ sub QuickCloseAdd {
             \$Param{FixHour},
             \$Param{Group},
             \$Param{ResponsibleID},
+            \$Param{PriorityID},
         ],
     );
 
@@ -187,6 +190,7 @@ sub QuickCloseUpdate {
     $Param{QueueID}                 ||= 0;
     $Param{OwnerID}                 ||= 0;
     $Param{ResponsibleID}           ||= 0;
+    $Param{PriorityID}              ||= 0;
     $Param{PendingDiff}             ||= 0;
     $Param{ForceCurrentUserAsOwner} ||= 0;
     $Param{AssignToResponsible}     ||= 0;
@@ -200,7 +204,7 @@ sub QuickCloseUpdate {
             . 'valid_id = ?, change_time = current_timestamp, change_by = ?, article_type_id = ?, '
             . 'queue_id = ?, subject = ?, ticket_unlock = ?, owner_id = ?, pending_diff = ?, '
             . 'force_owner_change = ?, assign_to_responsible = ?, show_ticket_zoom = ?, '
-            . 'fix_hour = ?, group_name = ?, responsible_id = ? '
+            . 'fix_hour = ?, group_name = ?, responsible_id = ?, priority_id = ? '
             . 'WHERE id = ?',
         Bind => [
             \$Param{Name},
@@ -220,6 +224,7 @@ sub QuickCloseUpdate {
             \$Param{FixHour},
             \$Param{Group},
             \$Param{ResponsibleID},
+            \$Param{PriorityID},
             \$Param{ID},
         ],
     );
@@ -253,12 +258,13 @@ This returns something like:
 sub QuickCloseGet {
     my ( $Self, %Param ) = @_;
 
-    my $LogObject   = $Kernel::OM->Get('Kernel::System::Log');
-    my $DBObject    = $Kernel::OM->Get('Kernel::System::DB');
-    my $ValidObject = $Kernel::OM->Get('Kernel::System::Valid');
-    my $UserObject  = $Kernel::OM->Get('Kernel::System::User');
-    my $StateObject = $Kernel::OM->Get('Kernel::System::State');
-    my $QueueObject = $Kernel::OM->Get('Kernel::System::Queue');
+    my $LogObject      = $Kernel::OM->Get('Kernel::System::Log');
+    my $DBObject       = $Kernel::OM->Get('Kernel::System::DB');
+    my $ValidObject    = $Kernel::OM->Get('Kernel::System::Valid');
+    my $UserObject     = $Kernel::OM->Get('Kernel::System::User');
+    my $StateObject    = $Kernel::OM->Get('Kernel::System::State');
+    my $QueueObject    = $Kernel::OM->Get('Kernel::System::Queue');
+    my $PriorityObject = $Kernel::OM->Get('Kernel::System::Priority');
 
     # check needed stuff
     if ( !$Param{ID} ) {
@@ -274,7 +280,7 @@ sub QuickCloseGet {
         SQL => 'SELECT id, close_name, state_id, body, create_time, create_by, valid_id, '
             . 'article_type_id, queue_id, subject, ticket_unlock, owner_id, pending_diff, '
             . 'force_owner_change, assign_to_responsible, show_ticket_zoom, fix_hour, group_name, '
-            . 'responsible_id '
+            . 'responsible_id, priority_id '
             . 'FROM ps_quick_close WHERE id = ?',
         Bind  => [ \$Param{ID} ],
         Limit => 1,
@@ -303,6 +309,7 @@ sub QuickCloseGet {
             FixHour                 => $Data[16],
             Group                   => $Data[17],
             ResponsibleID           => $Data[18],
+            PriorityID              => $Data[19],
         );
     }
 
@@ -323,6 +330,10 @@ sub QuickCloseGet {
 
     if ( $QuickClose{ResponsibleID} ) {
         $QuickClose{Responsible} = $UserObject->UserLookup( UserID => $QuickClose{ResponsibleID} );
+    }
+
+    if ( $QuickClose{PriorityID} ) {
+        $QuickClose{Priority} = $PriorityObject->PriorityLookup( PriorityID => $QuickClose{PriorityID} );
     }
 
     return %QuickClose;

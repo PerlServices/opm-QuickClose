@@ -44,6 +44,7 @@
             <Column Name="fix_hour" Required="false" Type="VARCHAR" Size="5"/>
             <Column Name="group_name" Required="false" Type="VARCHAR" Size="250"/>
             <Column Name="owner_id" Required="false" Type="SMALLINT" />
+            <Column Name="priority_id" Required="false" Type="SMALLINT" />
             <Column Name="responsible_id" Required="false" Type="SMALLINT" />
             <Column Name="article_type_id" Required="true" Type="SMALLINT"/>
             <Column Name="create_time" Required="true" Type="DATE"/>
@@ -99,6 +100,9 @@
         </TableAlter>
         <TableAlter Name="ps_quick_close" Version="4.0.15">
             <ColumnAdd Name="responsible_id" Required="false" Type="SMALLINT" />
+        </TableAlter>
+        <TableAlter Name="ps_quick_close" Version="4.0.16">
+            <ColumnAdd Name="priority_id" Required="false" Type="SMALLINT" />
         </TableAlter>
     </DatabaseUpgrade>
     <DatabaseUninstall>

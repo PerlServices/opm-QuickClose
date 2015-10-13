@@ -116,6 +116,14 @@
                         </div>
                         <div class="Clear"></div>
 
+                        <label for="PriorityID">
+                            [% Translate("Priority") | html %]:
+                        </label>
+                        <div class="Field">
+                            [% Data.PrioritySelect %]
+                        </div>
+                        <div class="Clear"></div>
+
                         <label for="Owner"> [% Translate("Owner") | html %]: </label>
                         <div class="Field">
                             <input id="Owner" name="Owner" type="text"   value="[% Data.Owner | html %]" class="W75pc [% Data.OwnerError %]" />

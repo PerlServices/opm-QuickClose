@@ -209,8 +209,17 @@ sub Run {
             %GetParam,
             %CloseData,
         );
+
         if ( !$ArticleID ) {
             return $LayoutObject->ErrorScreen();
+        }
+
+        if ( $CloseData{PriorityID} ) {
+            $TicketObject->TicketPrioritySet(
+                TicketID   => $TicketID,
+                PriorityID => $CloseData{PriorityID},
+                UserID     => $Self->{UserID},
+            );
         }
 
         if ( $ConfigObject->Get( 'QuickClose::QueueMove' ) && $CloseData{QueueID} ) {

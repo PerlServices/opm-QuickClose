@@ -22,6 +22,7 @@ our @ObjectDependencies = qw(
     Kernel::System::Ticket
     Kernel::System::Queue
     Kernel::System::Valid
+    Kernel::System::Priority
     Kernel::System::QuickClose
     Kernel::System::Web::Request
     Kernel::Output::HTML::Layout
@@ -53,7 +54,7 @@ sub Run {
     my @Params = (
         qw(ID Name StateID Body ValidID UserID ArticleTypeID
         QueueID Subject Unlock OwnerSelected PendingDiff ForceCurrentUserAsOwner
-        AssignToResponsible ShowTicketZoom FixHour Group
+        AssignToResponsible ShowTicketZoom FixHour Group PriorityID
         ResponsibleSelected)
     );
     my %GetParam;
@@ -213,6 +214,7 @@ sub _MaskQuickCloseForm {
     my $TicketObject     = $Kernel::OM->Get('Kernel::System::Ticket');
     my $StateObject      = $Kernel::OM->Get('Kernel::System::State');
     my $QueueObject      = $Kernel::OM->Get('Kernel::System::Queue');
+    my $PriorityObject   = $Kernel::OM->Get('Kernel::System::Priority');
 
     if ( $Self->{Subaction} eq 'Edit' ) {
         my %QuickClose = $QuickCloseObject->QuickCloseGet( ID => $Param{ID} );
@@ -237,6 +239,15 @@ sub _MaskQuickCloseForm {
         Size       => 1,
         SelectedID => $Param{ValidID} || $ValidID,
         HTMLQuote  => 1,
+    );
+
+    $Param{PrioritySelect} = $LayoutObject->BuildSelection(
+        Data         => { $PriorityObject->PriorityList( Valid => 1 ) },
+        Name         => 'PriorityID',
+        Size         => 1,
+        SelectedID   => $Param{PriorityID},
+        HTMLQuote    => 1,
+        PossibleNone => 1,
     );
 
     my $StateTypes = $ConfigObject->Get( 'QuickClose::StateTypes' ) || [ 'closed' ];
