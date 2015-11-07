@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <otrs_package version="1.0">
     <Name>QuickClose</Name>
-    <Version>4.0.16</Version>
-    <Framework>4.0.x</Framework>
+    <Version>5.0.1</Version>
+    <Framework>5.0.x</Framework>
     <Vendor>Perl-Services.de</Vendor>
     <URL>http://www.perl-services.de/</URL>
     <License>GNU AFFERO GENERAL PUBLIC LICENSE Version 3, November 2007</License>
@@ -15,13 +15,13 @@
         <File Permission="644" Location="Kernel/Modules/AgentQuickClose.pm"/>
         <File Permission="644" Location="Kernel/Modules/AgentTicketCloseBulk.pm"/>
         <File Permission="644" Location="Kernel/Modules/AgentQuickCloseUserSearch.pm"/>
-        <File Permission="644" Location="Kernel/Output/HTML/OutputFilterClose.pm"/>
-        <File Permission="644" Location="Kernel/Output/HTML/OutputFilterCloseTicketView.pm"/>
-        <File Permission="644" Location="Kernel/Output/HTML/Standard/AdminQuickCloseList.tt"/>
-        <File Permission="644" Location="Kernel/Output/HTML/Standard/AdminQuickCloseForm.tt"/>
-        <File Permission="644" Location="Kernel/Output/HTML/Standard/QuickCloseSnippet.tt"/>
-        <File Permission="644" Location="Kernel/Output/HTML/Standard/QuickCloseSnippetTicketView.tt"/>
-        <File Permission="644" Location="Kernel/Output/HTML/Standard/AdminQuickCloseUserSearch.tt"/>
+        <File Permission="644" Location="Kernel/Output/HTML/FilterElementPost/Close.pm"/>
+        <File Permission="644" Location="Kernel/Output/HTML/FilterElementPost/CloseTicketView.pm"/>
+        <File Permission="644" Location="Kernel/Output/HTML/Templates/Standard/AdminQuickCloseList.tt"/>
+        <File Permission="644" Location="Kernel/Output/HTML/Templates/Standard/AdminQuickCloseForm.tt"/>
+        <File Permission="644" Location="Kernel/Output/HTML/Templates/Standard/QuickCloseSnippet.tt"/>
+        <File Permission="644" Location="Kernel/Output/HTML/Templates/Standard/QuickCloseSnippetTicketView.tt"/>
+        <File Permission="644" Location="Kernel/Output/HTML/Templates/Standard/AdminQuickCloseUserSearch.tt"/>
         <File Permission="644" Location="Kernel/System/QuickClose.pm"/>
         <File Permission="644" Location="doc/en/QuickClose.pod"/>
         <File Permission="644" Location="var/httpd/htdocs/js/QuickClose.Admin.UserSearch.js"/>

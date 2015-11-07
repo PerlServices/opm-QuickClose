@@ -25,7 +25,7 @@
                 <Title>QuickClose</Title>
                 <NavBarName>Admin</NavBarName>
                 <NavBarModule>
-                    <Module>Kernel::Output::HTML::NavBarModuleAdmin</Module>
+                    <Module>Kernel::Output::HTML::NavBar::ModuleAdmin</Module>
                     <Name Translatable="1">QuickClose</Name>
                     <Description Translatable="1">Create and manage QuickClose texts.</Description>
                     <Block>System</Block>
@@ -69,7 +69,7 @@
         <SubGroup>OutputFilterClose</SubGroup>
         <Setting>
             <Hash>
-                <Item Key="Module">Kernel::Output::HTML::OutputFilterClose</Item>
+                <Item Key="Module">Kernel::Output::HTML::FilterElementPost::Close</Item>
                 <Item Key="Debug">0</Item>
                 <Item Key="Templates">
                     <Hash>
@@ -86,7 +86,7 @@
         <SubGroup>OutputFilterClose</SubGroup>
         <Setting>
             <Hash>
-                <Item Key="Module">Kernel::Output::HTML::OutputFilterCloseTicketView</Item>
+                <Item Key="Module">Kernel::Output::HTML::FilterElementPost::CloseTicketView</Item>
                 <Item Key="Debug">0</Item>
                 <Item Key="Templates">
                     <Hash>
