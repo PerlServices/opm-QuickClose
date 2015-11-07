@@ -3,7 +3,7 @@
     <CVS>$Id: QuickClose.xml,v 1.1.1.1 2011/04/15 07:49:58 rb Exp $</CVS>
     <ConfigItem Name="Frontend::Module###AgentQuickClose" Required="0" Valid="1">
         <Description Lang="en">Frontend module registration for the QuickClose agent interface.</Description>
-        <Description Lang="de">Frontendmodul-Registration für das QuickClose Agenten Interface.</Description>
+        <Description Lang="de">Frontendmodul-Registration fÃ¼r das QuickClose Agenten Interface.</Description>
         <Group>QuickClose</Group>
         <SubGroup>Frontend::Agent::ModuleRegistration</SubGroup>
         <Setting>
@@ -51,7 +51,7 @@
     </ConfigItem>
     <ConfigItem Name="Frontend::Module###AgentTicketCloseBulk" Required="0" Valid="1">
         <Description Lang="en">Frontend module registration for the bulk QuickClose agent interface.</Description>
-        <Description Lang="de">Frontendmodul-Registration für das MassenQuickClose Agenten Interface.</Description>
+        <Description Lang="de">Frontendmodul-Registration fÃ¼r das MassenQuickClose Agenten Interface.</Description>
         <Group>QuickClose</Group>
         <SubGroup>Frontend::Agent::ModuleRegistration</SubGroup>
         <Setting>
@@ -81,7 +81,7 @@
     </ConfigItem>
     <ConfigItem Name="Frontend::Output::FilterElementPost###OutputFilterCloseTicketView" Required="0" Valid="1">
         <Description Lang="en">Modul to show OuputfilterClose in ticket overviews.</Description>
-        <Description Lang="de">Modul zum Anzeigen von OuputfilterClose in Ticketübersichten.</Description>
+        <Description Lang="de">Modul zum Anzeigen von OuputfilterClose in TicketÃ¼bersichten.</Description>
         <Group>QuickClose</Group>
         <SubGroup>OutputFilterClose</SubGroup>
         <Setting>
@@ -100,7 +100,7 @@
     </ConfigItem>
     <ConfigItem Name="QuickClose###NoneLabel" Required="0" Valid="1">
         <Description Lang="en">Label for the NULL option in dropdown.</Description>
-        <Description Lang="de">Text für die Leer-Option im Dropdown.</Description>
+        <Description Lang="de">Text fÃ¼r die Leer-Option im Dropdown.</Description>
         <Group>QuickClose</Group>
         <SubGroup>Core</SubGroup>
         <Setting>
@@ -109,7 +109,7 @@
     </ConfigItem>
     <ConfigItem Name="QuickClose::DefaultSubject" Required="0" Valid="1">
         <Description Lang="en">Default subject for "close" notes.</Description>
-        <Description Lang="de">Standardbetreff für "Schließen"-Notizen.</Description>
+        <Description Lang="de">Standardbetreff fÃ¼r "SchlieÃŸen"-Notizen.</Description>
         <Group>QuickClose</Group>
         <SubGroup>Core</SubGroup>
         <Setting>
@@ -118,7 +118,7 @@
     </ConfigItem>
     <ConfigItem Name="QuickClose::DefaultID" Required="0" Valid="1">
         <Description Lang="en">Default "close". This is used when no "CloseID" is passed.</Description>
-        <Description Lang="de">Standardgrund für das Schließen. Wird verwendet wenn keine "CloseID" übergeben wird.</Description>
+        <Description Lang="de">Standardgrund fÃ¼r das SchlieÃŸen. Wird verwendet wenn keine "CloseID" Ã¼bergeben wird.</Description>
         <Group>QuickClose</Group>
         <SubGroup>Core</SubGroup>
         <Setting>
@@ -197,7 +197,7 @@
         <Group>QuickClose</Group>
         <SubGroup>Frontend::Agent::UserSearch</SubGroup>
         <Setting>
-            <String Regex="^(0\.[1-9]+)|([1-9](\.[0-9]+)?)$">100</String>
+            <String Regex="^[0-9]+$">100</String>
         </Setting>
     </ConfigItem>
     <ConfigItem Name="QuickClose::Frontend::UserSearchAutoComplete###TypeAhead" Required="1" Valid="1">
