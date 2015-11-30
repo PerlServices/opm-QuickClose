@@ -1,0 +1,190 @@
+{
+    "name": "QuickClose",
+    "version": "4.0.16",
+    "framework": [
+        "4.0.x"
+    ],
+    "vendor": {
+        "name":  "Perl-Services.de",
+        "url": "http://www.perl-services.de"
+    },
+    "license": "GNU AFFERO GENERAL PUBLIC LICENSE Version 3, November 2007",
+    "description" : {
+        "en": "A module to close tickets more quickly.",
+        "de": "Ein Modul, mit dem Tickets schneller/einfacher geschlossen werden können."
+    },
+    "database" : [
+       {
+            "type": "TableCreate",
+            "version": 0,
+            "name": "ps_quick_close",
+            "columns": [
+                { "name": "id", "required": "true", "auto_increment": "true", "type": "INTEGER", "primary_key": "true" },
+                { "name": "close_name", "required": "true", "type": "VARCHAR", "size": 250 },
+                { "name": "comments", "required": "false", "type": "VARCHAR", "size": 250 },
+                { "name": "subject", "required": "false", "type": "VARCHAR", "size": 250 },
+                { "name": "body", "required": "true", "type": "VARCHAR", "size": 3000 },
+                { "name": "state_id", "required": "true", "type": "SMALLINT" },
+                { "name": "valid_id", "required": "true", "type": "SMALLINT" },
+                { "name": "queue_id", "required": "false", "type": "SMALLINT" },
+                { "name": "pending_diff", "required": "false", "type": "SMALLINT" },
+                { "name": "ticket_unlock", "required": "false", "type": "SMALLINT" },
+                { "name": "force_owner_change", "required": "false", "type": "SMALLINT" },
+                { "name": "assign_to_responsible", "required": "false", "type": "SMALLINT" },
+                { "name": "show_ticket_zoom", "required": "false", "type": "SMALLINT" },
+                { "name": "fix_hour", "required": "false", "type": "VARCHAR", "size": 5 },
+                { "name": "group_name", "required": "false", "type": "VARCHAR", "size": 250 },
+                { "name": "owner_id", "required": "false", "type": "SMALLINT" },
+                { "name": "priority_id", "required": "false", "type": "SMALLINT" },
+                { "name": "responsible_id", "required": "false", "type": "SMALLINT" },
+                { "name": "article_type_id", "required": "true", "type": "SMALLINT" },
+                { "name": "create_time", "required": "true", "type": "DATE" },
+                { "name": "create_by", "required": "true", "type": "INTEGER" },
+                { "name": "change_time", "required": "true", "type": "DATE" },
+                { "name": "change_by", "required": "true", "type": "INTEGER" }
+            ],
+            "keys" : [
+                {
+                    "name": "users",
+                    "references": [
+                        { "local": "create_by", "foreign": "id" },
+                        { "local": "change_by", "foreign": "id" }
+                    ]
+                },
+                {
+                    "name": "valid",
+                    "references": [
+                        { "local": "valid_id", "foreign": "id" }
+                    ]
+                },
+                {
+                    "name": "article_type",
+                    "references": [
+                        { "local": "article_type_id", "foreign": "id" }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "ColumnAdd",
+            "name": "ps_quick_close",
+            "version" : "0.0.10",
+            "columns":[
+                { "name": "queue_id", "required": "false", "type": "SMALLINT" }
+            ]
+        },
+        {
+            "type": "ColumnAdd",
+            "name": "ps_quick_close",
+            "version" : "0.0.13",
+            "columns":[
+                { "name": "subject", "required": "false", "type": "VARCHAR", "size" : 250 }
+            ]
+        },
+        {
+            "type": "ColumnAdd",
+            "name": "ps_quick_close",
+            "version" : "1.0.1",
+            "columns":[
+                { "name": "ticket_unlock", "required": "false", "type": "SMALLINT" },
+                { "name": "owner_id", "required": "false", "type": "SMALLINT" }
+            ]
+        },
+        {
+            "type": "ColumnChange",
+            "name": "ps_quick_close",
+            "version" : "1.0.2",
+            "columns":[
+                { "old_name": "unlock", "new_name": "ticket_unlock", "required": "false", "type": "SMALLINT" }
+            ]
+        },
+        {
+            "type": "ColumnAdd",
+            "name": "ps_quick_close",
+            "version" : "1.0.3",
+            "columns":[
+                { "name": "pending_diff", "required": "false", "type": "SMALLINT" }
+            ]
+        },
+        {
+            "type": "ColumnAdd",
+            "name": "ps_quick_close",
+            "version" : "4.0.3",
+            "columns":[
+                { "name": "force_owner_change", "required": "false", "type": "SMALLINT" }
+            ]
+        },
+        {
+            "type": "ColumnAdd",
+            "name": "ps_quick_close",
+            "version" : "4.0.6",
+            "columns":[
+                { "name": "assign_to_responsible", "required": "false", "type": "SMALLINT" }
+            ]
+        },
+        {
+            "type": "ForeignKeyDrop",
+            "name": "ps_quick_close",
+            "version" : "4.0.6",
+            "references":[
+                { "name": "ticket_state", "foreign" : "id", "local" : "state_id" }
+            ]
+        },
+        {
+            "type": "ColumnAdd",
+            "name": "ps_quick_close",
+            "version" : "4.0.8",
+            "columns":[
+                { "name": "show_ticket_zoom", "required": "false", "type": "SMALLINT" }
+            ]
+        },
+        {
+            "type": "ColumnAdd",
+            "name": "ps_quick_close",
+            "version" : "4.0.9",
+            "columns":[
+                { "name": "fix_hour", "required": "false", "type": "SMALLINT" }
+            ]
+        },
+        {
+            "type": "ColumnAdd",
+            "name": "ps_quick_close",
+            "version" : "4.0.10",
+            "columns":[
+                { "name": "group_name", "required": "false", "type": "SMALLINT" }
+            ]
+        },
+        {
+            "type": "ColumnAdd",
+            "name": "ps_quick_close",
+            "version" : "4.0.15",
+            "columns":[
+                { "name": "responsible_id", "required": "false", "type": "SMALLINT" }
+            ]
+        },
+        {
+            "type": "ColumnAdd",
+            "name": "ps_quick_close",
+            "version" : "4.0.16",
+            "columns":[
+                { "name": "priority_id", "required": "false", "type": "SMALLINT" }
+            ]
+        }
+    ],
+    "intro": [
+        {
+            "type": "Install",
+            "version": 0,
+            "lang": "en",
+            "title": "Thank you!",
+            "text": "Thank you for choosing the QuickClose module."
+        },
+        {
+            "type": "Install",
+            "version": 0,
+            "lang": "de",
+            "title": "Vielen Dank!",
+            "text": "Vielen Dank für die Wahl des QuickClose Moduls."
+        }
+    ]
+}

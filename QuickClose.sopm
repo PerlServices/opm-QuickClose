@@ -1,56 +1,58 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <otrs_package version="1.0">
+    <!-- GENERATED WITH OTRS::OPM::Maker::Command::sopm (1.3) -->
     <Name>QuickClose</Name>
     <Version>4.0.16</Version>
     <Framework>4.0.x</Framework>
     <Vendor>Perl-Services.de</Vendor>
-    <URL>http://www.perl-services.de/</URL>
-    <License>GNU AFFERO GENERAL PUBLIC LICENSE Version 3, November 2007</License>
-    <Description Lang="en">A module to close tickets more quickly.</Description>
+    <URL>http://www.perl-services.de</URL>
     <Description Lang="de">Ein Modul, mit dem Tickets schneller/einfacher geschlossen werden können.</Description>
+    <Description Lang="en">A module to close tickets more quickly.</Description>
+    <License>GNU AFFERO GENERAL PUBLIC LICENSE Version 3, November 2007</License>
     <Filelist>
-        <File Permission="644" Location="Kernel/Config/Files/QuickClose.xml"/>
-        <File Permission="644" Location="Kernel/Language/de_QuickClose.pm"/>
-        <File Permission="644" Location="Kernel/Modules/AdminQuickClose.pm"/>
-        <File Permission="644" Location="Kernel/Modules/AgentQuickClose.pm"/>
-        <File Permission="644" Location="Kernel/Modules/AgentTicketCloseBulk.pm"/>
-        <File Permission="644" Location="Kernel/Modules/AgentQuickCloseUserSearch.pm"/>
-        <File Permission="644" Location="Kernel/Output/HTML/OutputFilterClose.pm"/>
-        <File Permission="644" Location="Kernel/Output/HTML/OutputFilterCloseTicketView.pm"/>
-        <File Permission="644" Location="Kernel/Output/HTML/Standard/AdminQuickCloseList.tt"/>
-        <File Permission="644" Location="Kernel/Output/HTML/Standard/AdminQuickCloseForm.tt"/>
-        <File Permission="644" Location="Kernel/Output/HTML/Standard/QuickCloseSnippet.tt"/>
-        <File Permission="644" Location="Kernel/Output/HTML/Standard/QuickCloseSnippetTicketView.tt"/>
-        <File Permission="644" Location="Kernel/Output/HTML/Standard/AdminQuickCloseUserSearch.tt"/>
-        <File Permission="644" Location="Kernel/System/QuickClose.pm"/>
-        <File Permission="644" Location="doc/en/QuickClose.pod"/>
-        <File Permission="644" Location="var/httpd/htdocs/js/QuickClose.Admin.UserSearch.js"/>
+        <File Permission="644" Location="Kernel/Config/Files/QuickClose.xml" />
+        <File Permission="644" Location="Kernel/Language/de_QuickClose.pm" />
+        <File Permission="644" Location="Kernel/Modules/AdminQuickClose.pm" />
+        <File Permission="644" Location="Kernel/Modules/AgentQuickClose.pm" />
+        <File Permission="644" Location="Kernel/Modules/AgentQuickCloseUserSearch.pm" />
+        <File Permission="644" Location="Kernel/Modules/AgentTicketCloseBulk.pm" />
+        <File Permission="644" Location="Kernel/Output/HTML/OutputFilterClose.pm" />
+        <File Permission="644" Location="Kernel/Output/HTML/OutputFilterCloseTicketView.pm" />
+        <File Permission="644" Location="Kernel/Output/HTML/Standard/AdminQuickCloseForm.tt" />
+        <File Permission="644" Location="Kernel/Output/HTML/Standard/AdminQuickCloseList.tt" />
+        <File Permission="644" Location="Kernel/Output/HTML/Standard/AdminQuickCloseUserSearch.tt" />
+        <File Permission="644" Location="Kernel/Output/HTML/Standard/QuickCloseSnippet.tt" />
+        <File Permission="644" Location="Kernel/Output/HTML/Standard/QuickCloseSnippetTicketView.tt" />
+        <File Permission="644" Location="Kernel/System/QuickClose.pm" />
+        <File Permission="644" Location="doc/QuickClose.json" />
+        <File Permission="644" Location="doc/en/QuickClose.pod" />
+        <File Permission="644" Location="var/httpd/htdocs/js/QuickClose.Admin.UserSearch.js" />
     </Filelist>
     <DatabaseInstall Type="post">
         <TableCreate Name="ps_quick_close">
-            <Column Name="id" Required="true" AutoIncrement="true" Type="INTEGER" PrimaryKey="true"/>
-            <Column Name="close_name" Required="true" Type="VARCHAR" Size="250"/>
-            <Column Name="comments" Required="true" Type="VARCHAR" Size="250"/>
-            <Column Name="subject" Required="false" Type="VARCHAR" Size="250"/>
-            <Column Name="body" Required="true" Type="VARCHAR" Size="3000"/>
-            <Column Name="state_id" Required="true" Type="SMALLINT"/>
-            <Column Name="valid_id" Required="true" Type="SMALLINT"/>
-            <Column Name="queue_id" Required="false" Type="SMALLINT"/>
-            <Column Name="pending_diff" Required="false" Type="SMALLINT"/>
+            <Column Name="id" Required="true" Type="INTEGER" AutoIncrement="true" PrimaryKey="true" />
+            <Column Name="close_name" Required="true" Type="VARCHAR" Size="250" />
+            <Column Name="comments" Required="false" Type="VARCHAR" Size="250" />
+            <Column Name="subject" Required="false" Type="VARCHAR" Size="250" />
+            <Column Name="body" Required="true" Type="VARCHAR" Size="3000" />
+            <Column Name="state_id" Required="true" Type="SMALLINT" />
+            <Column Name="valid_id" Required="true" Type="SMALLINT" />
+            <Column Name="queue_id" Required="false" Type="SMALLINT" />
+            <Column Name="pending_diff" Required="false" Type="SMALLINT" />
             <Column Name="ticket_unlock" Required="false" Type="SMALLINT" />
             <Column Name="force_owner_change" Required="false" Type="SMALLINT" />
-            <Column Name="assign_to_responsible" Required="false" Type="SMALLINT"/>
-            <Column Name="show_ticket_zoom" Required="false" Type="SMALLINT"/>
-            <Column Name="fix_hour" Required="false" Type="VARCHAR" Size="5"/>
-            <Column Name="group_name" Required="false" Type="VARCHAR" Size="250"/>
+            <Column Name="assign_to_responsible" Required="false" Type="SMALLINT" />
+            <Column Name="show_ticket_zoom" Required="false" Type="SMALLINT" />
+            <Column Name="fix_hour" Required="false" Type="VARCHAR" Size="5" />
+            <Column Name="group_name" Required="false" Type="VARCHAR" Size="250" />
             <Column Name="owner_id" Required="false" Type="SMALLINT" />
             <Column Name="priority_id" Required="false" Type="SMALLINT" />
             <Column Name="responsible_id" Required="false" Type="SMALLINT" />
-            <Column Name="article_type_id" Required="true" Type="SMALLINT"/>
-            <Column Name="create_time" Required="true" Type="DATE"/>
-            <Column Name="create_by" Required="true" Type="INTEGER"/>
-            <Column Name="change_time" Required="true" Type="DATE"/>
-            <Column Name="change_by" Required="true" Type="INTEGER"/>
+            <Column Name="article_type_id" Required="true" Type="SMALLINT" />
+            <Column Name="create_time" Required="true" Type="DATE" />
+            <Column Name="create_by" Required="true" Type="INTEGER" />
+            <Column Name="change_time" Required="true" Type="DATE" />
+            <Column Name="change_by" Required="true" Type="INTEGER" />
             <ForeignKey ForeignTable="users">
                 <Reference Local="create_by" Foreign="id" />
                 <Reference Local="change_by" Foreign="id" />
@@ -63,40 +65,42 @@
             </ForeignKey>
         </TableCreate>
     </DatabaseInstall>
-    <DatabaseUpgrade>
+    <DatabaseUpgrade Type="post">
         <TableAlter Name="ps_quick_close" Version="0.0.10">
-            <ColumnAdd Name="queue_id" Required="false" Type="SMALLINT"/>
+            <ColumnAdd Name="queue_id" Required="false" Type="SMALLINT" />
         </TableAlter>
         <TableAlter Name="ps_quick_close" Version="0.0.13">
-            <ColumnAdd Name="subject" Required="false" Type="VARCHAR" Size="250"/>
+            <ColumnAdd Name="subject" Required="false" Type="VARCHAR" Size="250" />
         </TableAlter>
         <TableAlter Name="ps_quick_close" Version="1.0.1">
             <ColumnAdd Name="ticket_unlock" Required="false" Type="SMALLINT" />
             <ColumnAdd Name="owner_id" Required="false" Type="SMALLINT" />
         </TableAlter>
         <TableAlter Name="ps_quick_close" Version="1.0.2">
-            <ColumnChange NameOld="unlock" NameNew="ticket_unlock" Required="false" Type="SMALLINT" />
+            <ColumnChange NameNew="ticket_unlock" NameOld="unlock" Required="false" Type="SMALLINT" />
         </TableAlter>
         <TableAlter Name="ps_quick_close" Version="1.0.3">
-            <ColumnAdd Name="pending_diff" Required="false" Type="SMALLINT"/>
+            <ColumnAdd Name="pending_diff" Required="false" Type="SMALLINT" />
         </TableAlter>
         <TableAlter Name="ps_quick_close" Version="4.0.3">
-            <ColumnAdd Name="force_owner_change" Required="false" Type="SMALLINT"/>
+            <ColumnAdd Name="force_owner_change" Required="false" Type="SMALLINT" />
         </TableAlter>
         <TableAlter Name="ps_quick_close" Version="4.0.6">
-            <ColumnAdd Name="assign_to_responsible" Required="false" Type="SMALLINT"/>
+            <ColumnAdd Name="assign_to_responsible" Required="false" Type="SMALLINT" />
+        </TableAlter>
+        <TableAlter Name="ps_quick_close" Version="4.0.6">
             <ForeignKeyDrop ForeignTable="ticket_state">
                 <Reference Local="state_id" Foreign="id" />
             </ForeignKeyDrop>
         </TableAlter>
         <TableAlter Name="ps_quick_close" Version="4.0.8">
-            <ColumnAdd Name="show_ticket_zoom" Required="false" Type="SMALLINT"/>
+            <ColumnAdd Name="show_ticket_zoom" Required="false" Type="SMALLINT" />
         </TableAlter>
         <TableAlter Name="ps_quick_close" Version="4.0.9">
-            <ColumnAdd Name="fix_hour" Required="false" Type="VARCHAR" Size="5"/>
+            <ColumnAdd Name="fix_hour" Required="false" Type="SMALLINT" />
         </TableAlter>
         <TableAlter Name="ps_quick_close" Version="4.0.10">
-            <ColumnAdd Name="group_name" Required="false" Type="VARCHAR" Size="250"/>
+            <ColumnAdd Name="group_name" Required="false" Type="SMALLINT" />
         </TableAlter>
         <TableAlter Name="ps_quick_close" Version="4.0.15">
             <ColumnAdd Name="responsible_id" Required="false" Type="SMALLINT" />
@@ -105,7 +109,13 @@
             <ColumnAdd Name="priority_id" Required="false" Type="SMALLINT" />
         </TableAlter>
     </DatabaseUpgrade>
-    <DatabaseUninstall>
-        <TableDrop Name="ps_quick_close"/>
+    <DatabaseUninstall Type="pre">
+        <TableDrop Name="ps_quick_close" />
     </DatabaseUninstall>
+    <IntroInstall Type="post" Lang="en" Title="Thank you!"><![CDATA[
+            Thank you for choosing the QuickClose module.
+    ]]></IntroInstall>
+    <IntroInstall Type="post" Lang="de" Title="Vielen Dank!"><![CDATA[
+            Vielen Dank für die Wahl des QuickClose Moduls.
+    ]]></IntroInstall>
 </otrs_package>
