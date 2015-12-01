@@ -1,6 +1,6 @@
 # --
 # Kernel/Output/HTML/OutputFilterCloseTicketView.pm
-# Copyright (C) 2011 - 2014 Perl-Services.de, http://www.perl-services.de/
+# Copyright (C) 2011 - 2015 Perl-Services.de, http://www.perl-services.de/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -17,14 +17,13 @@ use Kernel::System::Time;
 use Kernel::System::QuickClose;
 use Kernel::System::Web::UploadCache;
 
-our $VERSION = 0.02;
-
 our @ObjectDependencies = qw(
     Kernel::Config
     Kernel::System::Encode
     Kernel::System::Log
     Kernel::System::Main
     Kernel::System::Time
+    Kernel::System::Group
     Kernel::Output::HTML::Layout
     Kernel::System::QuickClose
     Kernel::System::Web::Request
@@ -48,16 +47,25 @@ sub Run {
     my $QuickCloseObject  = $Kernel::OM->Get('Kernel::System::QuickClose');
     my $ConfigObject      = $Kernel::OM->Get('Kernel::Config');
     my $LayoutObject      = $Kernel::OM->Get('Kernel::Output::HTML::Layout');
+    my $GroupObject       = $Kernel::OM->Get('Kernel::System::Group');
 
     # get template name
     my $Templatename = $Param{TemplateFile} || '';
     return 1 if !$Templatename;
 
     if ( $Templatename  =~ m{AgentTicketOverview(?:Small|Medium|Preview)\z} ) {
+        my @UserRoles = $GroupObject->GroupUserRoleMemberList(
+            UserID => $LayoutObject->{UserID},
+            Result => 'ID',
+        );
+
         my $FormID = $UploadCacheObject->FormIDCreate();
         my %List   = $QuickCloseObject->QuickCloseList(
             Valid   => 1,
             GroupBy => 1,
+            Permission => {
+                RoleID => \@UserRoles,
+            },
         );
 
         my $Config    = $ConfigObject->Get('QuickClose') || {};

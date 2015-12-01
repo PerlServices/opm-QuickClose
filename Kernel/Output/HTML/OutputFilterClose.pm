@@ -23,6 +23,7 @@ our @ObjectDependencies = qw(
     Kernel::System::Log
     Kernel::System::Main
     Kernel::System::Time
+    Kernel::System::Group
     Kernel::Output::HTML::Layout
     Kernel::System::QuickClose
     Kernel::System::Web::Request
@@ -47,17 +48,26 @@ sub Run {
     my $ParamObject       = $Kernel::OM->Get('Kernel::System::Web::Request');
     my $ConfigObject      = $Kernel::OM->Get('Kernel::Config');
     my $LayoutObject      = $Kernel::OM->Get('Kernel::Output::HTML::Layout');
+    my $GroupObject       = $Kernel::OM->Get('Kernel::System::Group');
 
     # get template name
     my $Templatename = $Param{TemplateFile} || '';
     return 1 if !$Templatename;
 
     if ( $Templatename  =~ m{AgentTicketZoom\z} ) {
+        my @UserRoles = $GroupObject->GroupUserRoleMemberList(
+            UserID => $LayoutObject->{UserID},
+            Result => 'ID',
+        );
+
         my ($TicketID) = $ParamObject->GetParam( Param => 'TicketID' );
         my $FormID     = $UploadCacheObject->FormIDCreate();
         my %List       = $QuickCloseObject->QuickCloseList(
-            Valid   => 1,
-            GroupBy => 1,
+            Valid      => 1,
+            GroupBy    => 1,
+            Permission => {
+                RoleID => \@UserRoles,
+            },
         );
         
         my $Config    = $ConfigObject->Get('QuickClose') || {};

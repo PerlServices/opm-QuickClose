@@ -14,7 +14,7 @@
         "de": "Ein Modul, mit dem Tickets schneller/einfacher geschlossen werden können."
     },
     "database" : [
-       {
+        {
             "type": "TableCreate",
             "version": 0,
             "name": "ps_quick_close",
@@ -63,6 +63,24 @@
                         { "local": "article_type_id", "foreign": "id" }
                     ]
                 }
+            ]
+        },
+        {
+            "type": "TableCreate",
+            "version": [ 0, "4.0.17" ],
+            "name": "ps_quick_close_perm",
+            "columns": [
+                { "name": "quick_close_id", "required": "true", "type": "INTEGER" },
+                { "name": "perm_type", "required": "true", "type": "VARCHAR", "size": 250 },
+                { "name": "type_id", "required": "true", "type": "INTEGER" }
+            ],
+            "keys" : [
+                {
+                    "name": "ps_quick_cose",
+                    "references": [
+                        { "local": "quick_close_id", "foreign": "id" }
+                    ]
+                },
             ]
         },
         {

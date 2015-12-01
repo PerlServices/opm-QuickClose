@@ -56,6 +56,14 @@
                         </div>
                         <div class="Clear"></div>
 
+                        <label for="RoleID">
+                            [% Translate("Role") | html %]:
+                        </label>
+                        <div class="Field">
+                            [% Data.RoleSelect %]
+                        </div>
+                        <div class="Clear"></div>
+
                         <label for="Group">
                             [% Translate("Group") | html %]:
                         </label>

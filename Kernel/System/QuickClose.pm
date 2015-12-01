@@ -23,11 +23,12 @@ our @ObjectDependencies = qw(
     Kernel::System::State
     Kernel::System::Queue
     Kernel::System::Priority
+    Kernel::System::QuickClose::Permission
 );
 
 =head1 NAME
 
-Kernel::System::QuickClose - backend for product news
+Kernel::System::QuickClose
 
 =head1 PUBLIC INTERFACE
 
@@ -64,6 +65,9 @@ to add a news
         ValidID       => 1,
         UserID        => 123,
         QueueID       => 123,
+        Permission    => {
+            RoleID => [ 1,2,3 ],
+        },
     );
 
 =cut
@@ -71,8 +75,9 @@ to add a news
 sub QuickCloseAdd {
     my ( $Self, %Param ) = @_;
 
-    my $LogObject = $Kernel::OM->Get('Kernel::System::Log');
-    my $DBObject  = $Kernel::OM->Get('Kernel::System::DB');
+    my $LogObject        = $Kernel::OM->Get('Kernel::System::Log');
+    my $DBObject         = $Kernel::OM->Get('Kernel::System::DB');
+    my $PermissionObject = $Kernel::OM->Get('Kernel::System::QuickClose::Permission');
 
     # check needed stuff
     for my $Needed (qw(Name Body ValidID UserID ArticleTypeID)) {
@@ -148,6 +153,11 @@ sub QuickCloseAdd {
         Message  => "QuickClose '$ID' created successfully ($Param{UserID})!",
     );
 
+    $PermissionObject->PermissionSet(
+        QuickCloseID => $ID,
+        RoleID       => $Param{Permission}->{RoleID},
+    );
+
     return $ID;
 }
 
@@ -166,6 +176,9 @@ to update news
         ValidID       => 1,
         UserID        => 123,
         QueueID       => 123,
+        Permission    => {
+            RoleID => [ 1,2,3 ],
+        },
     );
 
 =cut
@@ -173,8 +186,9 @@ to update news
 sub QuickCloseUpdate {
     my ( $Self, %Param ) = @_;
 
-    my $LogObject = $Kernel::OM->Get('Kernel::System::Log');
-    my $DBObject  = $Kernel::OM->Get('Kernel::System::DB');
+    my $LogObject        = $Kernel::OM->Get('Kernel::System::Log');
+    my $DBObject         = $Kernel::OM->Get('Kernel::System::DB');
+    my $PermissionObject = $Kernel::OM->Get('Kernel::System::QuickClose::Permission');
 
     # check needed stuff
     for my $Needed (qw(ID Name Body ValidID UserID ArticleTypeID)) {
@@ -229,6 +243,11 @@ sub QuickCloseUpdate {
         ],
     );
 
+    $PermissionObject->PermissionSet(
+        QuickCloseID => $Param{ID},
+        RoleID       => $Param{Permission}->{RoleID},
+    );
+
     return 1;
 }
 
@@ -251,6 +270,9 @@ This returns something like:
         'CreateBy'      => 123,
         'QueueID'       => 123,
         'Unlock'        => 1,
+        Permission      => {
+            RoleID => [ 1,2,3 ],
+        },
     );
 
 =cut
@@ -258,13 +280,14 @@ This returns something like:
 sub QuickCloseGet {
     my ( $Self, %Param ) = @_;
 
-    my $LogObject      = $Kernel::OM->Get('Kernel::System::Log');
-    my $DBObject       = $Kernel::OM->Get('Kernel::System::DB');
-    my $ValidObject    = $Kernel::OM->Get('Kernel::System::Valid');
-    my $UserObject     = $Kernel::OM->Get('Kernel::System::User');
-    my $StateObject    = $Kernel::OM->Get('Kernel::System::State');
-    my $QueueObject    = $Kernel::OM->Get('Kernel::System::Queue');
-    my $PriorityObject = $Kernel::OM->Get('Kernel::System::Priority');
+    my $LogObject        = $Kernel::OM->Get('Kernel::System::Log');
+    my $DBObject         = $Kernel::OM->Get('Kernel::System::DB');
+    my $ValidObject      = $Kernel::OM->Get('Kernel::System::Valid');
+    my $UserObject       = $Kernel::OM->Get('Kernel::System::User');
+    my $StateObject      = $Kernel::OM->Get('Kernel::System::State');
+    my $QueueObject      = $Kernel::OM->Get('Kernel::System::Queue');
+    my $PriorityObject   = $Kernel::OM->Get('Kernel::System::Priority');
+    my $PermissionObject = $Kernel::OM->Get('Kernel::System::QuickClose::Permission');
 
     # check needed stuff
     if ( !$Param{ID} ) {
@@ -336,6 +359,10 @@ sub QuickCloseGet {
         $QuickClose{Priority} = $PriorityObject->PriorityLookup( PriorityID => $QuickClose{PriorityID} );
     }
 
+    $QuickClose{Permission} = $PermissionObject->PermissionGet(
+        QuickCloseID => $Param{ID},
+    );
+
     return %QuickClose;
 }
 
@@ -352,8 +379,9 @@ deletes a news entry. Returns 1 if it was successful, undef otherwise.
 sub QuickCloseDelete {
     my ( $Self, %Param ) = @_;
 
-    my $LogObject = $Kernel::OM->Get('Kernel::System::Log');
-    my $DBObject  = $Kernel::OM->Get('Kernel::System::DB');
+    my $LogObject        = $Kernel::OM->Get('Kernel::System::Log');
+    my $DBObject         = $Kernel::OM->Get('Kernel::System::DB');
+    my $PermissionObject = $Kernel::OM->Get('Kernel::System::QuickClose::Permission');
 
     # check needed stuff
     if ( !$Param{ID} ) {
@@ -363,6 +391,10 @@ sub QuickCloseDelete {
         );
         return;
     }
+
+    $PermissionObject->PermissionDelete(
+        QuickCloseID => $Param{ID},
+    );
 
     return $DBObject->Do(
         SQL  => 'DELETE FROM ps_quick_close WHERE id = ?',
@@ -375,13 +407,24 @@ sub QuickCloseDelete {
 
 returns a hash of all news
 
-    my %QuickCloses = $QuickCloseObject->QuickCloseList();
+    my %QuickCloses = $QuickCloseObject->QuickCloseList(
+        Valid => 1,
+    );
 
 the result looks like
 
     %QuickCloses = (
         '1' => 'QuickClose 1',
         '2' => 'Test QuickClose',
+    );
+
+to restrict by role_ids:
+
+    my %QuickCloses = $QuickCloseObject->QuickCloseList(
+        Valid => 1,
+        Permission => {
+            RoleID => [1,2,3],
+        },
     );
 
 =cut
@@ -393,18 +436,37 @@ sub QuickCloseList {
     my $DBObject     = $Kernel::OM->Get('Kernel::System::DB');
     my $ConfigObject = $Kernel::OM->Get('Kernel::Config');
 
-    my $Where = '';
+    my $Join  = '';
+    my @Where;
     my @Bind;
 
     if ( $Param{Valid} ) {
         my $ValidID = $ValidObject->ValidLookup( Valid => 'valid' );
-        $Where = 'WHERE valid_id = ?';
+        push @Where, 'valid_id = ?';
         @Bind  = ( \$ValidID );
     }
 
+    if ( $Param{Permission} ) { #&& @{ $Param{Permission}->{RoleID} // [] } ) {
+        $Join = q~
+            LEFT OUTER JOIN ps_quick_close_perm pqcp
+                ON pqc.id = pqcp.quick_close_id
+                    AND pqcp.perm_type = 'Role'~;
+
+        my $TypeIDIn = '';
+        if ( @{ $Param{Permission}->{RoleID} // [] } ) {
+            my $Placeholder = join ', ', ('?') x @{ $Param{Permission}->{RoleID} };
+            $TypeIDIn = " OR pqcp.type_id IN ($Placeholder)";
+            push @Bind, map{ \$_ }@{ $Param{Permission}->{RoleID} };
+        }
+
+        push @Where, "( pqcp.type_id IS NULL $TypeIDIn )";
+    }
+
+    my $Where = @Where ? ' WHERE ' . join ' AND ', @Where : '';
+
     # sql
     return if !$DBObject->Prepare(
-        SQL  => "SELECT id, close_name, group_name FROM ps_quick_close $Where",
+        SQL  => "SELECT id, close_name, group_name FROM ps_quick_close pqc $Join $Where",
         Bind => \@Bind,
     );
 
