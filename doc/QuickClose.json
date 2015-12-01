@@ -1,6 +1,6 @@
 {
     "name": "QuickClose",
-    "version": "5.0.1",
+    "version": "5.0.2",
     "framework": [
         "5.0.x"
     ],
@@ -67,7 +67,7 @@
         },
         {
             "type": "TableCreate",
-            "version": [ 0, "4.0.17" ],
+            "version": [ 0, "5.0.2" ],
             "name": "ps_quick_close_perm",
             "columns": [
                 { "name": "quick_close_id", "required": "true", "type": "INTEGER" },
