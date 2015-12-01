@@ -24,6 +24,7 @@
         <File Permission="644" Location="Kernel/Output/HTML/Templates/Standard/QuickCloseSnippet.tt" />
         <File Permission="644" Location="Kernel/Output/HTML/Templates/Standard/QuickCloseSnippetTicketView.tt" />
         <File Permission="644" Location="Kernel/System/QuickClose.pm" />
+        <File Permission="644" Location="Kernel/System/QuickClose/Permission.pm" />
         <File Permission="644" Location="doc/QuickClose.json" />
         <File Permission="644" Location="doc/en/QuickClose.pod" />
         <File Permission="644" Location="var/httpd/htdocs/js/QuickClose.Admin.UserSearch.js" />
@@ -64,8 +65,24 @@
                 <Reference Local="article_type_id" Foreign="id" />
             </ForeignKey>
         </TableCreate>
+        <TableCreate Name="ps_quick_close_perm">
+            <Column Name="quick_close_id" Required="true" Type="INTEGER" />
+            <Column Name="perm_type" Required="true" Type="VARCHAR" Size="250" />
+            <Column Name="type_id" Required="true" Type="INTEGER" />
+            <ForeignKey ForeignTable="ps_quick_cose">
+                <Reference Local="quick_close_id" Foreign="id" />
+            </ForeignKey>
+        </TableCreate>
     </DatabaseInstall>
     <DatabaseUpgrade Type="post">
+        <TableCreate Name="ps_quick_close_perm" Version="4.0.17">
+            <Column Name="quick_close_id" Required="true" Type="INTEGER" />
+            <Column Name="perm_type" Required="true" Type="VARCHAR" Size="250" />
+            <Column Name="type_id" Required="true" Type="INTEGER" />
+            <ForeignKey ForeignTable="ps_quick_cose">
+                <Reference Local="quick_close_id" Foreign="id" />
+            </ForeignKey>
+        </TableCreate>
         <TableAlter Name="ps_quick_close" Version="0.0.10">
             <ColumnAdd Name="queue_id" Required="false" Type="SMALLINT" />
         </TableAlter>
@@ -110,6 +127,7 @@
         </TableAlter>
     </DatabaseUpgrade>
     <DatabaseUninstall Type="pre">
+        <TableDrop Name="ps_quick_close_perm" />
         <TableDrop Name="ps_quick_close" />
     </DatabaseUninstall>
     <IntroInstall Type="post" Lang="en" Title="Thank you!"><![CDATA[

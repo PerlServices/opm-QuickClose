@@ -21,6 +21,7 @@ our @ObjectDependencies = qw(
     Kernel::System::State
     Kernel::System::Ticket
     Kernel::System::Queue
+    Kernel::System::Group
     Kernel::System::Valid
     Kernel::System::Priority
     Kernel::System::QuickClose
@@ -51,15 +52,21 @@ sub Run {
     my $QuickCloseObject = $Kernel::OM->Get('Kernel::System::QuickClose');
     my $ValidObject      = $Kernel::OM->Get('Kernel::System::Valid');
 
-    my @Params = (
-        qw(ID Name StateID Body ValidID UserID ArticleTypeID
+    my @Params = qw(
+        ID Name StateID Body ValidID UserID ArticleTypeID
         QueueID Subject Unlock OwnerSelected PendingDiff ForceCurrentUserAsOwner
         AssignToResponsible ShowTicketZoom FixHour Group PriorityID
-        ResponsibleSelected)
+        ResponsibleSelected
     );
+
     my %GetParam;
-    for (@Params) {
-        $GetParam{$_} = $ParamObject->GetParam( Param => $_ ) || '';
+    for my $ParamName (@Params) {
+        $GetParam{$ParamName} = $ParamObject->GetParam( Param => $ParamName ) || '';
+    }
+
+    my @ArrayParams = qw(RoleID);
+    for my $ArrayName (@ArrayParams) {
+        $GetParam{$ArrayName} = [ $ParamObject->GetArray( Param => $ArrayName ) ];
     }
 
     # ------------------------------------------------------------ #
@@ -123,6 +130,9 @@ sub Run {
 
         my $Update = $QuickCloseObject->QuickCloseUpdate(
             %GetParam,
+            Permission    => {
+                RoleID => $GetParam{RoleID},
+            },
             UserID        => $Self->{UserID},
             OwnerID       => $GetParam{OwnerSelected},
             ResponsibleID => $GetParam{ResponsibleSelected},
@@ -175,6 +185,9 @@ sub Run {
 
         my $Success = $QuickCloseObject->QuickCloseAdd(
             %GetParam,
+            Permission    => {
+                RoleID => $GetParam{RoleID},
+            },
             UserID        => $Self->{UserID},
             OwnerID       => $GetParam{OwnerSelected},
             ResponsibleID => $GetParam{ResponsibleSelected},
@@ -214,6 +227,7 @@ sub _MaskQuickCloseForm {
     my $TicketObject     = $Kernel::OM->Get('Kernel::System::Ticket');
     my $StateObject      = $Kernel::OM->Get('Kernel::System::State');
     my $QueueObject      = $Kernel::OM->Get('Kernel::System::Queue');
+    my $GroupObject      = $Kernel::OM->Get('Kernel::System::Group');
     my $PriorityObject   = $Kernel::OM->Get('Kernel::System::Priority');
 
     if ( $Self->{Subaction} eq 'Edit' ) {
@@ -221,7 +235,18 @@ sub _MaskQuickCloseForm {
         for my $Key ( keys %QuickClose ) {
             $Param{$Key} = $QuickClose{$Key} if !$Param{$Key};
         }
+
+        $Param{RoleID} = $QuickClose{Permission}->{Role} if !@{ $Param{RoleID} || [] };
     }
+
+    $Param{RoleSelect} = $LayoutObject->BuildSelection(
+        Data       => { $GroupObject->RoleList( Valid => 1 ) },
+        Name       => 'RoleID',
+        Size       => 5,
+        SelectedID => $Param{RoleID},
+        HTMLQuote  => 1,
+        Multiple   => 1,
+    );
 
     # add rich text editor
     if ( $ConfigObject->Get( 'Frontend::RichText' ) ) {
