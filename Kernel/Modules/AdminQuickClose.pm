@@ -107,7 +107,7 @@ sub Run {
             $Errors{ValidIDInvalid} = 'ServerError';
         }
 
-        for my $Param (qw(Name Body)) {
+        for my $Param (qw(Name Subject Body)) {
             if ( !$GetParam{$Param} ) {
                 $Errors{ $Param . 'Invalid' } = 'ServerError';
             }
