@@ -100,6 +100,14 @@
                         </div>
                         <div class="Clear"></div>
 
+                        <label for="TimeUnits">
+                            [% Translate("Time units") | html %]:
+                        </label>
+                        <div class="Field">
+                            <input type="text" name="TimeUnits" id="TimeUnits" value="[% Data.TimeUnits | html %]" />
+                        </div>
+                        <div class="Clear"></div>
+
                         <label for="StateID">
                             [% Translate("State after close") | html %]:
                         </label>

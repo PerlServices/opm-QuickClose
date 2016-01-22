@@ -36,6 +36,7 @@
                 { "name": "group_name", "required": "false", "type": "VARCHAR", "size": 250 },
                 { "name": "owner_id", "required": "false", "type": "SMALLINT" },
                 { "name": "priority_id", "required": "false", "type": "SMALLINT" },
+                { "name": "time_units", "required": "false", "type": "SMALLINT" },
                 { "name": "responsible_id", "required": "false", "type": "SMALLINT" },
                 { "name": "article_type_id", "required": "true", "type": "SMALLINT" },
                 { "name": "create_time", "required": "true", "type": "DATE" },
@@ -186,6 +187,14 @@
             "version" : "4.0.16",
             "columns":[
                 { "name": "priority_id", "required": "false", "type": "SMALLINT" }
+            ]
+        },
+        {
+            "type": "ColumnAdd",
+            "name": "ps_quick_close",
+            "version" : "4.0.18",
+            "columns":[
+                { "name": "time_units", "required": "false", "type": "SMALLINT" }
             ]
         }
     ],

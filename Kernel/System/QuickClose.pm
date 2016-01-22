@@ -100,6 +100,7 @@ sub QuickCloseAdd {
     $Param{Unlock}                  ||= 0;
     $Param{StateID}                 ||= 0;
     $Param{ShowTicketZoom}          ||= 0;
+    $Param{TimeUnits}               ||= 0;
 
     # insert new news
     return if !$DBObject->Do(
@@ -108,9 +109,9 @@ sub QuickCloseAdd {
             . ' article_type_id, change_time, change_by, comments, queue_id, '
             . ' subject, ticket_unlock, owner_id, pending_diff, force_owner_change, '
             . ' assign_to_responsible, show_ticket_zoom, fix_hour, group_name,'
-            . ' responsible_id, priority_id) '
+            . ' responsible_id, priority_id, time_units) '
             . 'VALUES (?, ?, ?, current_timestamp, ?, ?, ?, current_timestamp, '
-            . ' ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            . ' ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
         Bind => [
             \$Param{Name},
             \$Param{StateID},
@@ -132,6 +133,7 @@ sub QuickCloseAdd {
             \$Param{Group},
             \$Param{ResponsibleID},
             \$Param{PriorityID},
+            \$Param{TimeUnits},
         ],
     );
 
@@ -211,6 +213,7 @@ sub QuickCloseUpdate {
     $Param{Unlock}                  ||= 0;
     $Param{StateID}                 ||= 0;
     $Param{ShowTicketZoom}          ||= 0;
+    $Param{TimeUnits}               ||= 0;
 
     # insert new news
     return if !$DBObject->Do(
@@ -218,7 +221,7 @@ sub QuickCloseUpdate {
             . 'valid_id = ?, change_time = current_timestamp, change_by = ?, article_type_id = ?, '
             . 'queue_id = ?, subject = ?, ticket_unlock = ?, owner_id = ?, pending_diff = ?, '
             . 'force_owner_change = ?, assign_to_responsible = ?, show_ticket_zoom = ?, '
-            . 'fix_hour = ?, group_name = ?, responsible_id = ?, priority_id = ? '
+            . 'fix_hour = ?, group_name = ?, responsible_id = ?, priority_id = ?, time_units = ? '
             . 'WHERE id = ?',
         Bind => [
             \$Param{Name},
@@ -239,6 +242,7 @@ sub QuickCloseUpdate {
             \$Param{Group},
             \$Param{ResponsibleID},
             \$Param{PriorityID},
+            \$Param{TimeUnits},
             \$Param{ID},
         ],
     );
@@ -303,7 +307,7 @@ sub QuickCloseGet {
         SQL => 'SELECT id, close_name, state_id, body, create_time, create_by, valid_id, '
             . 'article_type_id, queue_id, subject, ticket_unlock, owner_id, pending_diff, '
             . 'force_owner_change, assign_to_responsible, show_ticket_zoom, fix_hour, group_name, '
-            . 'responsible_id, priority_id '
+            . 'responsible_id, priority_id, time_units '
             . 'FROM ps_quick_close WHERE id = ?',
         Bind  => [ \$Param{ID} ],
         Limit => 1,
@@ -333,6 +337,7 @@ sub QuickCloseGet {
             Group                   => $Data[17],
             ResponsibleID           => $Data[18],
             PriorityID              => $Data[19],
+            TimeUnits               => $Data[20],
         );
     }
 
