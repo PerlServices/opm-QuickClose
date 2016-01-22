@@ -1,6 +1,6 @@
 {
     "name": "QuickClose",
-    "version": "5.0.2",
+    "version": "5.0.3",
     "framework": [
         "5.0.x"
     ],
@@ -81,7 +81,7 @@
                     "references": [
                         { "local": "quick_close_id", "foreign": "id" }
                     ]
-                },
+                }
             ]
         },
         {
@@ -192,7 +192,7 @@
         {
             "type": "ColumnAdd",
             "name": "ps_quick_close",
-            "version" : "4.0.18",
+            "version" : "5.0.3",
             "columns":[
                 { "name": "time_units", "required": "false", "type": "SMALLINT" }
             ]
