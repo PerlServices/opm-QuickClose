@@ -214,6 +214,15 @@ sub Run {
             return $LayoutObject->ErrorScreen();
         }
 
+        if ( $ArticleID && $CloseData{TimeUnits} ) {
+            $TicketObject->TicketAccountTime(
+                TicketID  => $TicketID,
+                ArticleID => $ArticleID,
+                TimeUnit  => $CloseData{TimeUnits},
+                UserID    => $Self->{UserID},
+            );
+        }
+
         if ( $CloseData{PriorityID} ) {
             $TicketObject->TicketPrioritySet(
                 TicketID   => $TicketID,

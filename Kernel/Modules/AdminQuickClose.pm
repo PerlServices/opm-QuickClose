@@ -56,7 +56,7 @@ sub Run {
         ID Name StateID Body ValidID UserID ArticleTypeID
         QueueID Subject Unlock OwnerSelected PendingDiff ForceCurrentUserAsOwner
         AssignToResponsible ShowTicketZoom FixHour Group PriorityID
-        ResponsibleSelected
+        ResponsibleSelected TimeUnits
     );
 
     my %GetParam;
