@@ -48,7 +48,7 @@
             <Column Name="group_name" Required="false" Type="VARCHAR" Size="250" />
             <Column Name="owner_id" Required="false" Type="SMALLINT" />
             <Column Name="priority_id" Required="false" Type="SMALLINT" />
-            <Column Name="time_units" Required="false" Type="SMALLINT" />
+            <Column Name="time_units" Required="false" Type="VARCHAR" Size="10" />
             <Column Name="responsible_id" Required="false" Type="SMALLINT" />
             <Column Name="article_type_id" Required="true" Type="SMALLINT" />
             <Column Name="create_time" Required="true" Type="DATE" />
@@ -128,6 +128,9 @@
         </TableAlter>
         <TableAlter Name="ps_quick_close" Version="4.0.18">
             <ColumnAdd Name="time_units" Required="false" Type="SMALLINT" />
+        </TableAlter>
+        <TableAlter Name="ps_quick_close" Version="4.0.19">
+            <ColumnChange NameNew="time_units" NameOld="time_units" Required="false" Type="VARCHAR" Size="10" />
         </TableAlter>
     </DatabaseUpgrade>
     <DatabaseUninstall Type="pre">
