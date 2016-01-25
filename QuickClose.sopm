@@ -2,7 +2,7 @@
 <otrs_package version="1.0">
     <!-- GENERATED WITH OTRS::OPM::Maker::Command::sopm (1.33) -->
     <Name>QuickClose</Name>
-    <Version>5.0.3</Version>
+    <Version>5.0.4</Version>
     <Framework>5.0.x</Framework>
     <Vendor>Perl-Services.de</Vendor>
     <URL>http://www.perl-services.de</URL>
@@ -129,7 +129,7 @@
         <TableAlter Name="ps_quick_close" Version="5.0.3">
             <ColumnAdd Name="time_units" Required="false" Type="SMALLINT" />
         </TableAlter>
-        <TableAlter Name="ps_quick_close" Version="4.0.19">
+        <TableAlter Name="ps_quick_close" Version="5.0.4">
             <ColumnChange NameNew="time_units" NameOld="time_units" Required="false" Type="VARCHAR" Size="10" />
         </TableAlter>
     </DatabaseUpgrade>
