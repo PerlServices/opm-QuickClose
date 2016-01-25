@@ -36,7 +36,7 @@
                 { "name": "group_name", "required": "false", "type": "VARCHAR", "size": 250 },
                 { "name": "owner_id", "required": "false", "type": "SMALLINT" },
                 { "name": "priority_id", "required": "false", "type": "SMALLINT" },
-                { "name": "time_units", "required": "false", "type": "SMALLINT" },
+                { "name": "time_units", "required": "false", "type": "VARCHAR", "size" : 10 },
                 { "name": "responsible_id", "required": "false", "type": "SMALLINT" },
                 { "name": "article_type_id", "required": "true", "type": "SMALLINT" },
                 { "name": "create_time", "required": "true", "type": "DATE" },
@@ -195,6 +195,14 @@
             "version" : "5.0.3",
             "columns":[
                 { "name": "time_units", "required": "false", "type": "SMALLINT" }
+            ]
+        },
+        {
+            "type": "ColumnChange",
+            "name": "ps_quick_close",
+            "version" : "4.0.19",
+            "columns":[
+                { "old_name": "time_units", "new_name": "time_units", "required": "false", "type": "VARCHAR", "size": 10 }
             ]
         }
     ],
