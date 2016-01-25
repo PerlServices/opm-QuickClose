@@ -200,7 +200,7 @@
         {
             "type": "ColumnChange",
             "name": "ps_quick_close",
-            "version" : "4.0.19",
+            "version" : "5.0.4",
             "columns":[
                 { "old_name": "time_units", "new_name": "time_units", "required": "false", "type": "VARCHAR", "size": 10 }
             ]
