@@ -2,7 +2,7 @@
 <otrs_package version="1.0">
     <!-- GENERATED WITH OTRS::OPM::Maker::Command::sopm (1.33) -->
     <Name>QuickClose</Name>
-    <Version>5.0.4</Version>
+    <Version>5.0.5</Version>
     <Framework>5.0.x</Framework>
     <Vendor>Perl-Services.de</Vendor>
     <URL>http://www.perl-services.de</URL>
@@ -70,7 +70,7 @@
             <Column Name="quick_close_id" Required="true" Type="INTEGER" />
             <Column Name="perm_type" Required="true" Type="VARCHAR" Size="250" />
             <Column Name="type_id" Required="true" Type="INTEGER" />
-            <ForeignKey ForeignTable="ps_quick_cose">
+            <ForeignKey ForeignTable="ps_quick_close">
                 <Reference Local="quick_close_id" Foreign="id" />
             </ForeignKey>
         </TableCreate>
@@ -80,7 +80,7 @@
             <Column Name="quick_close_id" Required="true" Type="INTEGER" />
             <Column Name="perm_type" Required="true" Type="VARCHAR" Size="250" />
             <Column Name="type_id" Required="true" Type="INTEGER" />
-            <ForeignKey ForeignTable="ps_quick_cose">
+            <ForeignKey ForeignTable="ps_quick_close">
                 <Reference Local="quick_close_id" Foreign="id" />
             </ForeignKey>
         </TableCreate>
