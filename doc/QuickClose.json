@@ -77,7 +77,7 @@
             ],
             "keys" : [
                 {
-                    "name": "ps_quick_cose",
+                    "name": "ps_quick_close",
                     "references": [
                         { "local": "quick_close_id", "foreign": "id" }
                     ]
