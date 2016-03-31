@@ -26,55 +26,23 @@ This package was written by Renee Baecker E<lt>otrs@perl-services.deE<gt>.
 The package is licensed unter AGPL. If you
 did not receive this file, see L<http://www.gnu.org/licenses/agpl.txt>.
 
-=head1 CHANGES
+=head1 ACKNOWLEDGMENTS
 
-=over 4
+=head2 Patrick Rauscher
 
-=item * 3.3.5
+Fix error when using QuickClose with pending state
 
-- fix encoding of German translation file (#3, thanks to Finkregh)
+=head2 Finkregh
 
-=item * 3.3.4
+fix encoding of German translation file
 
-- Fix #1: OwnerID and PendingDiff should be set to 0 if no value is passed (thanks to Torsten Thau, c.a.p.e IT)
+=head2 Torsten Thau (c.a.p.e IT)
 
-- Do not capture ticket ID from source, but get it with param object
+OwnerID and PendingDiff should be set to 0 if no value is passed
 
-=item * 1.0.1
+=head2 Sebastian
 
-Added new option: Unlock ticket. If enabled the ticket is unlocked no matter what
-state is selected. By default tickets are unlocked on closed states.
-
-Added new option: Owner. You can set an owner for the ticket.
-
-=item * 0.0.14
-
-Added a new config option: DefaultID. This is used when no CloseID was passed
-to frontend modules.
-
-=item * 0.0.12
-
-  + redirect to last screen after close
-
-=item * 0.0.10 - 0.0.11
-
-  + allow non-closed states for quick closes
-  + enable queue moves with quick closes
-
-=item * 0.0.8/0.0.9
-
-  + fix bug when tickets were closed from overview
-
-=item * 0.0.7
-
-  + Under some circumstances the ticket id wasn't detected correctly (happened with parent-child-tickets).
-    This is fixed now. Thanks to Sebastian for filing the bug.
-
-=item * 0.0.6
-
-  + activate QuickClose for ticket overviews (status view, queue view, ...)
-
-=back
+Under some circumstances the ticket id wasn't detected correctly (happened with parent-child-tickets).
 
 =cut
 
