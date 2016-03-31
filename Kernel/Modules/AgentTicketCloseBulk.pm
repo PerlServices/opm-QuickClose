@@ -249,7 +249,7 @@ sub Run {
                     ( 1 * 24 * 60 );
     
                 my ($Sec, $Min, $Hour, $Day, $Month, $Year) = $TimeObject->SystemTime2Date(
-                    SystemTime => $Self->{TimeObject}->SystemTime() + ( $Diff * 60 ),
+                    SystemTime => $TimeObject->SystemTime() + ( $Diff * 60 ),
                 );
 
                 if ( $CloseData{FixHour} ) {
