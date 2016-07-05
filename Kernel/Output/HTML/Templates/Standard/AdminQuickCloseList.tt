@@ -55,13 +55,13 @@
                                 [% Data.Name | html %]
                             </td>
                             <td>
-                                [% Data.State | html %]
+                                [% Translate(Data.State) | html %]
                             </td>
                             <td>
                                 [% Translate(Data.Valid) | html %]
                             </td>
                             <td>
-                                [% Data.CreateTime | html %]
+                                [% Data.CreateTime | Localize("TimeShort") %]
                             </td>
                             <td>
                                 [% Data.Author | html %]
