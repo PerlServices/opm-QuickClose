@@ -30,6 +30,8 @@ sub Data {
     $Lang->{'QuickClose Management'} = 'QuickClose verwalten';
     $Lang->{'edit'}                  = 'bearbeiten';
     $Lang->{'Unlock Ticket'}         = 'Ticket freigeben';
+    $Lang->{'delete'}                = 'löschen';
+    $Lang->{'closed successful'}     = 'erfolgreich geschlossen';
 
     $Lang->{'State after close'}     = 'Neuer Status';
     $Lang->{'Pending Diff (in minutes)'} = 'Wartezeit (in Minuten)';
