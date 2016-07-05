@@ -28,6 +28,10 @@ did not receive this file, see L<http://www.gnu.org/licenses/agpl.txt>.
 
 =head1 ACKNOWLEDGMENTS
 
+=head2 thomtux
+
+Added translation and fixed TT-tags in template
+
 =head2 Patrick Rauscher
 
 Fix error when using QuickClose with pending state
