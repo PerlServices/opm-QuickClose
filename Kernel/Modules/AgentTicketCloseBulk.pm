@@ -72,7 +72,7 @@ sub Run {
     my $ID        = $ParamObject->GetParam( Param => 'QuickClose' );
 
     my %GetParam;
-    for my $WebParam ( qw(Subject) ) {
+    for my $WebParam ( qw(Subject OrigTicketID GoToZoom) ) {
         $GetParam{$WebParam} = $ParamObject->GetParam( Param => $WebParam ) || '';
     }
 
@@ -295,6 +295,9 @@ sub Run {
 
         if ( scalar( @TicketIDs ) == 1 && $CloseData{ShowTicketZoom} ) {
             $LastView = 'Action=AgentTicketZoom&TicketID=' . $TicketIDs[0];
+        }
+        elsif ( $GetParam{GoToZoom} && $GetParam{OrigTicketID} ) {
+            $LastView = 'Action=AgentTicketZoom&TicketID=' . $GetParam{OrigTicketID};
         }
 
         return $LayoutObject->Redirect(
