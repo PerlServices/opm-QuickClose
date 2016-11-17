@@ -1,0 +1,66 @@
+=encoding utf-8
+
+=head1 NÉV
+
+QuickClose - jegyek lezárása egyetlen kattintással.
+
+=head1 LEÍRÁS
+
+Ha újra és újra hasonló jegyei vannak, és minden alkalommal ugyanazzal a szöveggel zárja le azokat,
+akkor ez a modul érdekes lehet az Ön számára. Ezekben az esetekben bosszantó lehet a „lezárás”
+gombra kattintani a jegynagyításban, megvárni a „lezárás” ablakot, beírni a szöveget, és elküldeni.
+Nem volna nagyszerű egyetlen kattintással lezárni a jegyet a jegynagyításban?
+
+Ez a modul egy új elemet ad hozzá az adminisztrációs területhez, ahol „gyors lezárás” szövegeket
+határozhat meg, és a telepítés után egy új legördülő doboz kerül hozzáadásra a jegynagyításhoz. Ha
+kiválasztja a gyors lezárás szövegek egyikét ebben a legördülőben, akkor a jegy lezárásra kerül,
+és egy bejegyzés lesz hozzáadva a jegyhez.
+
+Az adminisztrációs területen meghatározhatja a bejegyzés szövegét, a bejegyzés típusát és a jegy
+állapotát. A jegytípusokhoz ez a modul lekérdezi az AgentTicketClose képernyőn engedélyezett
+bejegyzéstípusokat.
+
+Ez a modul az OTRS szabványos mechanizmusait használja a jegy lezárásához olyan AJAX hívásként,
+amelyet az AgentTicketClose képernyő indít.
+
+=head1 SZERZŐ ÉS LICENC
+
+Ezt a csomagot Renée Bäcker E<lt>otrs@perl-services.deE<gt> készítette.
+
+Ez a csomag AGPL szerint licencelt. Ha nem kapta meg ezt a fájlt, akkor nézze meg a
+L<http://www.gnu.org/licenses/agpl.txt> oldalon.
+
+=head1 KÖSZÖNETNYILVÁNÍTÁS
+
+=head2 thomtux
+
+Fordítás hozzáadása és TT-címkék javítása a sablonban
+
+=head2 Patrick Rauscher
+
+Hiba javítása a gyors lezárás várakozó állapottal való használatakor
+
+=head2 Finkregh
+
+A német nyelvi fájl kódolásának javítása
+
+=head2 Torsten Thau (c.a.p.e IT)
+
+A tulajdonosazonosítót és a várakozási különbséget 0-ra kell állítani, ha nem kerül érték átadásra
+
+=head2 Sebastian
+
+Bizonyos körülmények között a jegyazonosítót nem ismerte fel helyesen (szülő-gyermek jegyeknél
+fordult elő)
+
+=head2 Úr Balázs, L<http://www.otrs-megoldasok.hu>
+
+Magyar fordítás és kisebb javítások
+
+=cut
+
+=head1 MAGYAR FORDÍTÁS
+
+A magyar fordítást az OTRS-megoldások csapata készítette.
+Copyright (C) 2016 Úr Balázs, L<http://otrs-megoldasok.hu>
+

@@ -2,15 +2,14 @@
 <otrs_config version="1.0" init="Application">
     <CVS>$Id: QuickClose.xml,v 1.1.1.1 2011/04/15 07:49:58 rb Exp $</CVS>
     <ConfigItem Name="Frontend::Module###AgentQuickClose" Required="0" Valid="1">
-        <Description Lang="en">Frontend module registration for the QuickClose agent interface.</Description>
-        <Description Lang="de">Frontendmodul-Registration für das QuickClose Agenten Interface.</Description>
+        <Description Translatable="1">Frontend module registration for the QuickClose agent interface.</Description>
         <Group>QuickClose</Group>
         <SubGroup>Frontend::Agent::ModuleRegistration</SubGroup>
         <Setting>
             <FrontendModuleReg>
                 <Description>QuickClose</Description>
                 <NavBarName></NavBarName>
-                <Title>QuickClose</Title>
+                <Title Translatable="1">QuickClose</Title>
             </FrontendModuleReg>
         </Setting>
     </ConfigItem>
@@ -21,8 +20,8 @@
         <Setting>
             <FrontendModuleReg>
                 <Group>admin</Group>
-                <Description>Create and manage QuickClose texts.</Description>
-                <Title>QuickClose</Title>
+                <Description Translatable="1">Create and manage QuickClose texts.</Description>
+                <Title Translatable="1">QuickClose</Title>
                 <NavBarName>Admin</NavBarName>
                 <NavBarModule>
                     <Module>Kernel::Output::HTML::NavBar::ModuleAdmin</Module>
@@ -43,28 +42,26 @@
         <SubGroup>Frontend::Admin::ModuleRegistration</SubGroup>
         <Setting>
             <FrontendModuleReg>
-                <Description>Search for owners.</Description>
+                <Description Translatable="1">Search for owners.</Description>
                 <NavBarName></NavBarName>
-                <Title>QuickClose</Title>
+                <Title Translatable="1">QuickClose</Title>
             </FrontendModuleReg>
         </Setting>
     </ConfigItem>
     <ConfigItem Name="Frontend::Module###AgentTicketCloseBulk" Required="0" Valid="1">
-        <Description Lang="en">Frontend module registration for the bulk QuickClose agent interface.</Description>
-        <Description Lang="de">Frontendmodul-Registration für das MassenQuickClose Agenten Interface.</Description>
+        <Description Translatable="1">Frontend module registration for the bulk QuickClose agent interface.</Description>
         <Group>QuickClose</Group>
         <SubGroup>Frontend::Agent::ModuleRegistration</SubGroup>
         <Setting>
             <FrontendModuleReg>
-                <Description>Bulk QuickClose</Description>
+                <Description Translatable="1">Bulk QuickClose.</Description>
                 <NavBarName></NavBarName>
-                <Title>Bulk QuickClose</Title>
+                <Title Translatable="1">Bulk QuickClose</Title>
             </FrontendModuleReg>
         </Setting>
     </ConfigItem>
     <ConfigItem Name="Frontend::Output::FilterElementPost###OutputFilterClose" Required="0" Valid="1">
-        <Description Lang="en">Modul to show OuputfilterClose.</Description>
-        <Description Lang="de">Modul zum Anzeigen von OuputfilterClose.</Description>
+        <Description Translatable="1">Modul to show OuputfilterClose.</Description>
         <Group>QuickClose</Group>
         <SubGroup>OutputFilterClose</SubGroup>
         <Setting>
@@ -80,8 +77,7 @@
         </Setting>
     </ConfigItem>
     <ConfigItem Name="Frontend::Output::FilterElementPost###OutputFilterCloseTicketView" Required="0" Valid="1">
-        <Description Lang="en">Modul to show OuputfilterClose in ticket overviews.</Description>
-        <Description Lang="de">Modul zum Anzeigen von OuputfilterClose in Ticketübersichten.</Description>
+        <Description Translatable="1">Modul to show OuputfilterClose in ticket overviews.</Description>
         <Group>QuickClose</Group>
         <SubGroup>OutputFilterClose</SubGroup>
         <Setting>
@@ -99,8 +95,7 @@
         </Setting>
     </ConfigItem>
     <ConfigItem Name="QuickClose###NoneLabel" Required="0" Valid="1">
-        <Description Lang="en">Label for the NULL option in dropdown.</Description>
-        <Description Lang="de">Text für die Leer-Option im Dropdown.</Description>
+        <Description Translatable="1">Label for the NULL option in dropdown.</Description>
         <Group>QuickClose</Group>
         <SubGroup>Core</SubGroup>
         <Setting>
@@ -108,8 +103,7 @@
         </Setting>
     </ConfigItem>
     <ConfigItem Name="QuickClose::DefaultSubject" Required="0" Valid="1">
-        <Description Lang="en">Default subject for "close" notes.</Description>
-        <Description Lang="de">Standardbetreff für "Schließen"-Notizen.</Description>
+        <Description Translatable="1">Default subject for "close" notes.</Description>
         <Group>QuickClose</Group>
         <SubGroup>Core</SubGroup>
         <Setting>
@@ -117,8 +111,7 @@
         </Setting>
     </ConfigItem>
     <ConfigItem Name="QuickClose::DefaultID" Required="0" Valid="1">
-        <Description Lang="en">Default "close". This is used when no "CloseID" is passed.</Description>
-        <Description Lang="de">Standardgrund für das Schließen. Wird verwendet wenn keine "CloseID" übergeben wird.</Description>
+        <Description Translatable="1">Default "close". This is used when no "CloseID" is passed.</Description>
         <Group>QuickClose</Group>
         <SubGroup>Core</SubGroup>
         <Setting>
@@ -131,8 +124,8 @@
         <SubGroup>Core</SubGroup>
         <Setting>
             <Option SelectedID="0">
-                <Item Key="0">No</Item>
-                <Item Key="1">Yes</Item>
+                <Item Key="0" Translatable="1">No</Item>
+                <Item Key="1" Translatable="1">Yes</Item>
             </Option>
         </Setting>
     </ConfigItem>
@@ -160,8 +153,8 @@
         <SubGroup>Frontend::Agent::UserSearch</SubGroup>
         <Setting>
             <Option SelectedID="1">
-                <Item Key="0">No</Item>
-                <Item Key="1">Yes</Item>
+                <Item Key="0" Translatable="1">No</Item>
+                <Item Key="1" Translatable="1">Yes</Item>
             </Option>
         </Setting>
     </ConfigItem>
@@ -171,8 +164,8 @@
         <SubGroup>Frontend::Agent::UserSearch</SubGroup>
         <Setting>
             <Option SelectedID="1">
-                <Item Key="0">No</Item>
-                <Item Key="1">Yes</Item>
+                <Item Key="0" Translatable="1">No</Item>
+                <Item Key="1" Translatable="1">Yes</Item>
             </Option>
         </Setting>
     </ConfigItem>
@@ -185,7 +178,7 @@
         </Setting>
     </ConfigItem>
     <ConfigItem Name="QuickClose::Frontend::UserSearchAutoComplete###MaxResultsDisplayed" Required="1" Valid="1">
-        <Description Translatable="1">Sets the maximal number of search results for the autocomplete feature.</Description>
+        <Description Translatable="1">Sets the maximum number of search results for the autocomplete feature.</Description>
         <Group>QuickClose</Group>
         <SubGroup>Frontend::Agent::UserSearch</SubGroup>
         <Setting>
@@ -206,8 +199,8 @@
         <SubGroup>Frontend::Agent::UserSearch</SubGroup>
         <Setting>
             <Option SelectedID="false">
-                <Item Key="false">No</Item>
-                <Item Key="true">Yes</Item>
+                <Item Key="false" Translatable="1">No</Item>
+                <Item Key="true" Translatable="1">Yes</Item>
             </Option>
         </Setting>
     </ConfigItem>
@@ -217,8 +210,8 @@
         <SubGroup>Core</SubGroup>
         <Setting>
             <Option SelectedID="0">
-                <Item Key="0">No</Item>
-                <Item Key="1">Yes</Item>
+                <Item Key="0" Translatable="1">No</Item>
+                <Item Key="1" Translatable="1">Yes</Item>
             </Option>
         </Setting>
     </ConfigItem>

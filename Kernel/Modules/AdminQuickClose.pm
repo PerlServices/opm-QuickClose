@@ -12,6 +12,8 @@ package Kernel::Modules::AdminQuickClose;
 use strict;
 use warnings;
 
+use Kernel::Language qw(Translatable);
+
 our @ObjectDependencies = qw(
     Kernel::Config
     Kernel::System::Log
@@ -296,7 +298,10 @@ sub _MaskQuickCloseForm {
     );
 
     $Param{UnlockSelect} = $LayoutObject->BuildSelection(
-        Data        => { 0 => 'No', 1 => 'Yes' },
+        Data        => {
+            0 => Translatable('No'),
+            1 => Translatable('Yes'),
+        },
         Name        => 'Unlock',
         Size        => 1,
         SelectedID  => $Param{Unlock},
