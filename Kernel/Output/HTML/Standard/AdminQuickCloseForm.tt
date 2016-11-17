@@ -21,7 +21,7 @@
             <div class="Content">
                 <ul class="ActionList">
                     <li>
-                        <a href="[% Env("Baselink") %]Action=[% Env("Action") %]" class="CallForAction"><span>[% Translate("Go to overview") | html %]</span></a>
+                        <a href="[% Env("Baselink") %]Action=[% Env("Action") %]" class="CallForAction Fullsize Center"><span><i class="fa fa-caret-left"></i>[% Translate("Go to overview") | html %]</span></a>
                     </li>
                 </ul>
             </div>
@@ -48,10 +48,10 @@
                         <div class="Field">
                             <input type="text" id="Name" name="Name" value="[% Data.Name | html %]" class="W75pc Validate_Required [% Data.NameInvalid | html %]"/>
                             <div id="NameError" class="TooltipErrorMessage">
-                                <p>[% Translate("A headline for the news is required.") | html %]</p>
+                                <p>[% Translate("A name for the QuickClose text is required.") | html %]</p>
                             </div>
                             <div id="NameServerError" class="TooltipErrorMessage">
-                                <p>[% Translate("A headline for the news is required.") | html %]</p>
+                                <p>[% Translate("A name for the QuickClose text is required.") | html %]</p>
                             </div>
                         </div>
                         <div class="Clear"></div>
@@ -92,10 +92,10 @@
 
                             <textarea id="RichText" name="Body" class="W75pc RichText Validate_Required [% Data.BodyInvalid | html %]" rows="15" cols="[% Config("Ticket::Frontend::TextAreaNote") %]">[% Data.Body | html %]</textarea>
                             <div id="RichTextError" class="TooltipErrorMessage">
-                                <p>[% Translate("A news text is required.") | html %]</p>
+                                <p>[% Translate("A body text is required.") | html %]</p>
                             </div>
                             <div id="BodyServerError" class="TooltipErrorMessage">
-                                <p>[% Translate("A news text is required.") | html %]</p>
+                                <p>[% Translate("A body text is required.") | html %]</p>
                             </div>
                         </div>
                         <div class="Clear"></div>
@@ -142,28 +142,32 @@
 
                         <label for="Owner"> [% Translate("Owner") | html %]: </label>
                         <div class="Field">
-                            <input id="Owner" name="Owner" type="text"   value="[% Data.Owner | html %]" class="W75pc [% Data.OwnerError %]" />
+                            <input id="Owner" name="Owner" type="text" value="[% Data.Owner | html %]" class="W75pc [% Data.OwnerError %]" />
                             <input id="OwnerSelected" name="OwnerSelected" type="hidden" value="[% Data.OwnerID | html %]" />
                             <input id="OwnerType" name="OwnerType" type="hidden" value="[% Data.OwnerType | html %]" />
 
-                            <div id="OwnerIDServerError" class="TooltipErrorMessage"><p>[% Translate("User invalid.") | html %]</p></div>
+                            <div id="OwnerIDServerError" class="TooltipErrorMessage">
+                                <p>[% Translate("Invalid User.") | html %]</p>
+                            </div>
                         </div>
 
                         <div id="UserServerError" class="TooltipErrorMessage">
-                            <p>[% Translate("Invalid User") | html %]</p>
+                            <p>[% Translate("Invalid User.") | html %]</p>
                         </div>
 
                         <label for="Responsible"> [% Translate("Responsible") | html %]: </label>
                         <div class="Field">
-                            <input id="Responsible" name="Responsible" type="text"   value="[% Data.Responsible | html %]" class="W75pc [% Data.ResponsibleError %]" />
+                            <input id="Responsible" name="Responsible" type="text" value="[% Data.Responsible | html %]" class="W75pc [% Data.ResponsibleError %]" />
                             <input id="ResponsibleSelected" name="ResponsibleSelected" type="hidden" value="[% Data.ResponsibleID | html %]" />
                             <input id="ResponsibleType" name="ResponsibleType" type="hidden" value="[% Data.ResponsibleType | html %]" />
 
-                            <div id="ResponsibleIDServerError" class="TooltipErrorMessage"><p>[% Translate("User invalid.") | html %]</p></div>
+                            <div id="ResponsibleIDServerError" class="TooltipErrorMessage">
+                                <p>[% Translate("Invalid User.") | html %]</p>
+                            </div>
                         </div>
 
                         <div id="ResponsibleServerError" class="TooltipErrorMessage">
-                            <p>[% Translate("Invalid User") | html %]</p>
+                            <p>[% Translate("Invalid User.") | html %]</p>
                         </div>
 
                         <label for="ForceCurrentUserAsOwner">
@@ -193,7 +197,7 @@
 
                         <label for="ValidID" class="Mandatory">
                             <span class="Marker">*</span>
-                            [% Translate("Valid") | html %]:
+                            [% Translate("Validity") | html %]:
                         </label>
                         <div class="Field">
                             [% Data.ValidSelect %]
@@ -226,7 +230,7 @@
                         <div class="Clear"></div>
 
                         <div class="Field">
-                            <button class="Primary" type="submit" value="[% Translate("Save") | html %]">[% Translate("Save") | html %]</button>
+                            <button class="Primary CallForAction" type="submit" value="[% Translate("Save") | html %]"><span>[% Translate("Save") | html %]</span></button>
                             [% Translate("or") | html %]
                             <a href="[% Env("Baselink") %]Action=[% Env("Action") %]">[% Translate("Cancel") | html %]</a>
                         </div>

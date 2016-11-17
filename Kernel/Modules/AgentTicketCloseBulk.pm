@@ -12,6 +12,8 @@ package Kernel::Modules::AgentTicketCloseBulk;
 use strict;
 use warnings;
 
+use Kernel::Language qw(Translatable);
+
 our @ObjectDependencies = qw(
     Kernel::Config
     Kernel::System::Log
@@ -61,7 +63,6 @@ sub Run {
     my $ParamObject       = $Kernel::OM->Get('Kernel::System::Web::Request');
     my $UploadCacheObject = $Kernel::OM->Get('Kernel::System::Web::UploadCache');
     my $ConfigObject      = $Kernel::OM->Get('Kernel::Config');
-    my $LanguageObject    = $Kernel::OM->Get('Kernel::Language');
     my $LayoutObject      = $Kernel::OM->Get('Kernel::Output::HTML::Layout');
     my $QuickCloseObject  = $Kernel::OM->Get('Kernel::System::QuickClose');
     my $TicketObject      = $Kernel::OM->Get('Kernel::System::Ticket');
@@ -79,14 +80,14 @@ sub Run {
     if ( !$GetParam{Subject} ) {
         $GetParam{Subject} =
             $ConfigObject->Get( 'QuickClose::DefaultSubject' ) ||
-            $LanguageObject->Get( 'Close' );
+            $LayoutObject->{LanguageObject}->Translate('Close');
     }
 
     # check needed stuff
     if ( !@TicketIDs ) {
         return $LayoutObject->ErrorScreen(
-            Message => 'No TicketID is given!',
-            Comment => 'Please contact the admin.',
+            Message => Translatable('No TicketID is given!'),
+            Comment => Translatable('Please contact the administrator.'),
         );
     }
 
@@ -99,8 +100,8 @@ sub Run {
 
     if ( !%CloseData ) {
         return $LayoutObject->ErrorScreen(
-            Message => 'No QuickClose data found!',
-            Comment => 'Please contact the admin.',
+            Message => Translatable('No QuickClose data found!'),
+            Comment => Translatable('Please contact the administrator.'),
         );
     }
 
@@ -307,8 +308,8 @@ sub Run {
     }
     else {
         return $LayoutObject->ErrorScreen(
-            Message => 'No Access to these Tickets (IDs: ' . join( ", ", @NoAccess ) . ')',
-            Comment => 'Please contact the admin.',
+            Message => $LayoutObject->{LanguageObject}->Translate( 'No Access to these Tickets (IDs: %s)', join( ", ", @NoAccess ) ),
+            Comment => Translatable('Please contact the administrator.'),
         );
     }
 }
