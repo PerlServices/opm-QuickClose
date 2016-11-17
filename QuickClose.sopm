@@ -8,7 +8,7 @@
     <URL>http://www.perl-services.de</URL>
     <Description Lang="de">Ein Modul, mit dem Tickets schneller/einfacher geschlossen werden können.</Description>
     <Description Lang="en">A module to close tickets more quickly.</Description>
-    <Description Lang="en">Egy modul a jegyek gyorsabb lezárásához.</Description>
+    <Description Lang="hu">Egy modul a jegyek gyorsabb lezárásához.</Description>
     <License>GNU AFFERO GENERAL PUBLIC LICENSE Version 3, November 2007</License>
     <Filelist>
         <File Permission="644" Location="Kernel/Config/Files/QuickClose.xml" />
