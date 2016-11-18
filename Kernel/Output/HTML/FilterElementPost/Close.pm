@@ -89,7 +89,7 @@ sub Run {
             my $Label   = $Labels->{$Group} || $Config->{NoneLabel} || 'QuickClose';
             
             unshift @Data, {
-                Key   => '', 
+                Key   => '0',
                 Value => "- $Label -",
             };
             
@@ -99,7 +99,7 @@ sub Run {
                 ID           => 'QuickClose' . $Group,
                 Size         => 1,
                 HTMLQuote    => 1,
-                Class        => 'QuickCloseSelect',
+                Class        => 'QuickCloseSelect Modernize',
             );
     
             $Dropdowns .= $LayoutObject->Output(

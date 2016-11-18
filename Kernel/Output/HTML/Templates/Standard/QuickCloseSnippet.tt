@@ -17,6 +17,8 @@
                         </form>
 [% WRAPPER JSOnDocumentComplete %]
 <script type="text/javascript">//<![CDATA[
+    Core.UI.InputFields.InitSelect( $('.QuickCloseSelect') );
+
     $('.QuickCloseSelect').each( function() {
         $(this).unbind('change');
         $(this).bind('change', function (Event) {
@@ -26,7 +28,7 @@
     
             var thisObject = $(this);
     
-            if ( TID ) {
+            if ( TID > 0 ) {
                 thisObject.closest('form').submit();
             }
         });
