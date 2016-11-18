@@ -8,10 +8,12 @@
     <URL>http://www.perl-services.de</URL>
     <Description Lang="de">Ein Modul, mit dem Tickets schneller/einfacher geschlossen werden können.</Description>
     <Description Lang="en">A module to close tickets more quickly.</Description>
+    <Description Lang="hu">Egy modul a jegyek gyorsabb lezárásához.</Description>
     <License>GNU AFFERO GENERAL PUBLIC LICENSE Version 3, November 2007</License>
     <Filelist>
         <File Permission="644" Location="Kernel/Config/Files/QuickClose.xml" />
         <File Permission="644" Location="Kernel/Language/de_QuickClose.pm" />
+        <File Permission="644" Location="Kernel/Language/hu_QuickClose.pm" />
         <File Permission="644" Location="Kernel/Modules/AdminQuickClose.pm" />
         <File Permission="644" Location="Kernel/Modules/AgentQuickClose.pm" />
         <File Permission="644" Location="Kernel/Modules/AgentQuickCloseUserSearch.pm" />
@@ -27,6 +29,7 @@
         <File Permission="644" Location="Kernel/System/QuickClose/Permission.pm" />
         <File Permission="644" Location="doc/QuickClose.json" />
         <File Permission="644" Location="doc/en/QuickClose.pod" />
+        <File Permission="644" Location="doc/hu/QuickClose.pod" />
         <File Permission="644" Location="var/httpd/htdocs/js/QuickClose.Admin.UserSearch.js" />
     </Filelist>
     <DatabaseInstall Type="post">
@@ -142,5 +145,8 @@
     ]]></IntroInstall>
     <IntroInstall Type="post" Lang="de" Title="Vielen Dank!"><![CDATA[
             Vielen Dank für die Wahl des QuickClose Moduls.
+    ]]></IntroInstall>
+    <IntroInstall Type="post" Lang="hu" Title="Köszönjük!"><![CDATA[
+            Köszönjük, hogy a QuickClose modult választotta.
     ]]></IntroInstall>
 </otrs_package>

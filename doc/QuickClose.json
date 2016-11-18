@@ -11,7 +11,8 @@
     "license": "GNU AFFERO GENERAL PUBLIC LICENSE Version 3, November 2007",
     "description" : {
         "en": "A module to close tickets more quickly.",
-        "de": "Ein Modul, mit dem Tickets schneller/einfacher geschlossen werden können."
+        "de": "Ein Modul, mit dem Tickets schneller/einfacher geschlossen werden können.",
+        "hu": "Egy modul a jegyek gyorsabb lezárásához."
     },
     "database" : [
         {
@@ -220,6 +221,13 @@
             "lang": "de",
             "title": "Vielen Dank!",
             "text": "Vielen Dank für die Wahl des QuickClose Moduls."
-        }
+        },
+        {
+            "type": "Install",
+            "version": 0,
+            "lang": "hu",
+            "title": "Köszönjük!",
+            "text": "Köszönjük, hogy a QuickClose modult választotta."
+        },
     ]
 }

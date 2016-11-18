@@ -1,3 +1,5 @@
+=encoding utf-8
+
 =head1 NAME
 
 QuickClose - close tickets with one click
@@ -21,7 +23,7 @@ AgentTicketClose is started.
 
 =head1 AUTHOR AND LICENSE
 
-This package was written by Renee Baecker E<lt>otrs@perl-services.deE<gt>.
+This package was written by Renée Bäcker E<lt>otrs@perl-services.deE<gt>.
 
 The package is licensed unter AGPL. If you
 did not receive this file, see L<http://www.gnu.org/licenses/agpl.txt>.
@@ -38,7 +40,7 @@ Fix error when using QuickClose with pending state
 
 =head2 Finkregh
 
-fix encoding of German translation file
+Fix encoding of German translation file
 
 =head2 Torsten Thau (c.a.p.e IT)
 
@@ -46,7 +48,11 @@ OwnerID and PendingDiff should be set to 0 if no value is passed
 
 =head2 Sebastian
 
-Under some circumstances the ticket id wasn't detected correctly (happened with parent-child-tickets).
+Under some circumstances the ticket id wasn't detected correctly (happened with parent-child tickets)
+
+=head2 Balázs Úr, L<http://www.otrs-megoldasok.hu>
+
+Hungarian translation and small fixes
 
 =cut
 
