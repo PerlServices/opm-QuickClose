@@ -19,10 +19,7 @@ use Kernel::System::Web::UploadCache;
 
 our @ObjectDependencies = qw(
     Kernel::Config
-    Kernel::System::Encode
-    Kernel::System::Log
-    Kernel::System::Main
-    Kernel::System::Time
+    Kernel::System::Ticket
     Kernel::System::Group
     Kernel::Output::HTML::Layout
     Kernel::System::QuickClose
@@ -49,6 +46,7 @@ sub Run {
     my $ConfigObject      = $Kernel::OM->Get('Kernel::Config');
     my $LayoutObject      = $Kernel::OM->Get('Kernel::Output::HTML::Layout');
     my $GroupObject       = $Kernel::OM->Get('Kernel::System::Group');
+    my $TicketObject      = $Kernel::OM->Get('Kernel::System::Ticket');
 
     # get template name
     my $Templatename = $Param{TemplateFile} || '';
@@ -61,6 +59,19 @@ sub Run {
         );
 
         my ($TicketID) = $ParamObject->GetParam( Param => 'TicketID' );
+
+        return 1 if !$TicketID;
+
+        my %Ticket = $TicketObject->TicketGet(
+            TicketID => $TicketID,
+        );
+
+        return 1 if !%Ticket;
+
+        if ( $ConfigObject->Get('QuickClose::ShowOnlyForOwner') && $LayoutObject->{UserID} != $Ticket{OwnerID} ) {
+            return 1;
+        }
+
         my $FormID     = $UploadCacheObject->FormIDCreate();
         my %List       = $QuickCloseObject->QuickCloseList(
             Valid      => 1,
