@@ -41,6 +41,7 @@ sub Data {
     $Lang->{'Modul to show OuputfilterClose.'} = 'Egy modul a kimenetszűrő-lezárás megjelenítéséhez.';
     $Lang->{'Modul to show OuputfilterClose in ticket overviews.'} =
         'Egy modul a kimenetszűrő-lezárás megjelenítéséhez a jegyáttekintőkön.';
+    $Lang->{'Only the ticket owner sees the dropdown.'} = 'Csak a jegytulajdonos látja a legördülőt.';
     $Lang->{'Label for the NULL option in dropdown.'} = 'Címke a legördülő üres lehetőségéhez.';
     $Lang->{'Default subject for "close" notes.'} = 'Alapértelmezett tárgy a „lezárás” jegyzetekhez.';
     $Lang->{'Default "close". This is used when no "CloseID" is passed.'} =
