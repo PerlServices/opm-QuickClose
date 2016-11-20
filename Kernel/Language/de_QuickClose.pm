@@ -26,22 +26,22 @@ sub Data {
     # Kernel/Config/Files/QuickClose.xml
     $Lang->{'Frontend module registration for the QuickClose agent interface.'} = 'Frontendmodul-Registration für das QuickClose Agenten Interface.';
     $Lang->{'QuickClose'} = 'QuickClose';
-    $Lang->{'Frontend module registration for the quick close administration.'} = '';
+    $Lang->{'Frontend module registration for the quick close administration.'} = 'Frontendmodul-Registration für die QuickClose-Administration';
     $Lang->{'Create and manage QuickClose texts.'} = 'Erstellen und verwalten von QuickClose-Einstellungen.';
-    $Lang->{'Frontend module registration for the user search.'} = '';
+    $Lang->{'Frontend module registration for the user search.'} = 'Frontendmodul-Registration für die Benutzersuche.';
     $Lang->{'Search for owners.'} = 'Nach Besitzern suchen';
     $Lang->{'Frontend module registration for the bulk QuickClose agent interface.'} = 'Frontendmodul-Registration für das MassenQuickClose Agenten Interface.';
     $Lang->{'Bulk QuickClose.'} = 'Sammel-Schließen';
     $Lang->{'Bulk QuickClose'} = 'Sammel-Schließen';
     $Lang->{'Modul to show OuputfilterClose.'} = 'Modul zum Anzeigen von OuputfilterClose.';
     $Lang->{'Modul to show OuputfilterClose in ticket overviews.'} = 'Modul zum Anzeigen von OuputfilterClose in Ticketübersichten.';
-    $Lang->{'Only the ticket owner sees the dropdown.'} = '';
+    $Lang->{'Only the ticket owner sees the dropdown.'} = 'Nur der Ticketbesitzer sieht das Dropdown.';
     $Lang->{'Label for the NULL option in dropdown.'} = 'Text für die Leer-Option im Dropdown.';
     $Lang->{'Default subject for "close" notes.'} = 'Standardbetreff für "Schließen"-Notizen.';
     $Lang->{'Default "close". This is used when no "CloseID" is passed.'} = 'Standardgrund für das Schließen. Wird verwendet wenn keine "CloseID" übergeben wird.';
     $Lang->{'Use queue move functionality for quick close.'} = 'Verschieben-Funktionalität für QuickClose aktivieren';
     $Lang->{'State types for quick closes.'} = 'Statustypen für QuickCloses';
-    $Lang->{'Default time to wait when new state is a pending state.'} = '';
+    $Lang->{'Default time to wait when new state is a pending state.'} = 'Standardwartezeit wenn der neue Status ein Warten-Status ist.';
     $Lang->{'Enables or disables the autocomplete feature for the user search in the ITSM agent interface.'} = '';
     $Lang->{'Adapts the width of the autocomplete drop down to the length of the longest option.'} = '';
     $Lang->{'Sets the minimum number of characters before autocomplete query is sent.'} = '';
