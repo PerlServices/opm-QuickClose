@@ -35,6 +35,7 @@ sub Data {
     $Lang->{'Bulk QuickClose'} = 'Sammel-Schließen';
     $Lang->{'Modul to show OuputfilterClose.'} = 'Modul zum Anzeigen von OuputfilterClose.';
     $Lang->{'Modul to show OuputfilterClose in ticket overviews.'} = 'Modul zum Anzeigen von OuputfilterClose in Ticketübersichten.';
+    $Lang->{'Only the ticket owner sees the dropdown.'} = 'Nur der Ticketbesitzer sieht das Dropdown.';
     $Lang->{'Label for the NULL option in dropdown.'} = 'Text für die Leer-Option im Dropdown.';
     $Lang->{'Default subject for "close" notes.'} = 'Standardbetreff für "Schließen"-Notizen.';
     $Lang->{'Default "close". This is used when no "CloseID" is passed.'} = 'Standardgrund für das Schließen. Wird verwendet wenn keine "CloseID" übergeben wird.';
