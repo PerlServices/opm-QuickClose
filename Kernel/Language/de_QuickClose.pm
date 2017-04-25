@@ -24,11 +24,11 @@ sub Data {
     return if ref $Lang ne 'HASH';
 
     # Kernel/Config/Files/QuickClose.xml
-    $Lang->{'Frontend module registration for the QuickClose agent interface.'} = 'Frontendmodul-Registration für das QuickClose Agenten Interface.';
+    $Lang->{'Frontend module registration for the QuickClose agent interface.'} = 'Frontendmodul-Registrierung für das QuickClose Agenten Interface.';
     $Lang->{'QuickClose'} = 'QuickClose';
-    $Lang->{'Frontend module registration for the quick close administration.'} = 'Frontendmodul-Registration für die QuickClose-Administration';
+    $Lang->{'Frontend module registration for the quick close administration.'} = 'Frontendmodul für die QuickClose-Verwaltung';
     $Lang->{'Create and manage QuickClose texts.'} = 'Erstellen und verwalten von QuickClose-Einstellungen.';
-    $Lang->{'Frontend module registration for the user search.'} = 'Frontendmodul-Registration für die Benutzersuche.';
+    $Lang->{'Frontend module registration for the user search.'} = 'Frontendmodul-Registrierung für die Benutzersuche';
     $Lang->{'Search for owners.'} = 'Nach Besitzern suchen';
     $Lang->{'Frontend module registration for the bulk QuickClose agent interface.'} = 'Frontendmodul-Registration für das MassenQuickClose Agenten Interface.';
     $Lang->{'Bulk QuickClose.'} = 'Sammel-Schließen';
@@ -41,8 +41,8 @@ sub Data {
     $Lang->{'Default "close". This is used when no "CloseID" is passed.'} = 'Standardgrund für das Schließen. Wird verwendet wenn keine "CloseID" übergeben wird.';
     $Lang->{'Use queue move functionality for quick close.'} = 'Verschieben-Funktionalität für QuickClose aktivieren';
     $Lang->{'State types for quick closes.'} = 'Statustypen für QuickCloses';
-    $Lang->{'Default time to wait when new state is a pending state.'} = 'Standardwartezeit wenn der neue Status ein Warten-Status ist.';
-    $Lang->{'Enables or disables the autocomplete feature for the user search in the ITSM agent interface.'} = '';
+    $Lang->{'Default time to wait when new state is a pending state.'} = 'Standard-Wartezeit wenn der neue Status ein "Warten"-Status ist.';
+    $Lang->{'Enables or disables the autocomplete feature for the user search in the ITSM agent interface.'} = 'Aktiviere/Deaktivere das Autocomplete-Feature für die Benutzersuche im ITSM Agenteninterface';
     $Lang->{'Adapts the width of the autocomplete drop down to the length of the longest option.'} = '';
     $Lang->{'Sets the minimum number of characters before autocomplete query is sent.'} = '';
     $Lang->{'Sets the maximum number of search results for the autocomplete feature.'} = '';
@@ -83,9 +83,9 @@ sub Data {
     $Lang->{'Search Agent'} = 'Suche Agenten';
 
     # Kernel/Output/HTML/Templates/Standard/AdminQuickCloseForm.tt
-    $Lang->{'Go to overview'} = '';
+    $Lang->{'Go to overview'} = 'Zur Übersicht gehen';
     $Lang->{'Add/Change QuickClose texts'} = 'QuickClose hinzufügen/ändern';
-    $Lang->{'A name for the QuickClose text is required.'} = '';
+    $Lang->{'A name for the QuickClose text is required.'} = 'Es muss ein Name für den QuickClose-Text eingegeben werden';
     $Lang->{'Role'} = 'Rolle';
     $Lang->{'Group'} = 'Gruppe';
     $Lang->{'Subject'} = 'Betreff';
