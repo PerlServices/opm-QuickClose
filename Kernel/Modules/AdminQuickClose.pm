@@ -334,13 +334,15 @@ sub _MaskQuickCloseForm {
     }
 
     # get possible notes
-    my %DefaultNoteTypes = %{ $Self->{Config}->{ArticleTypes} };
+    my %DefaultNoteTypes = %{ $Self->{Config}->{ArticleTypes} || {} };
     my %NoteTypes = $TicketObject->ArticleTypeList( Result => 'HASH' );
+
     for my $KeyNoteType ( keys %NoteTypes ) {
-        if ( !$DefaultNoteTypes{ $NoteTypes{$KeyNoteType} } ) {
+        if ( %DefaultNoteTypes && !$DefaultNoteTypes{ $NoteTypes{$KeyNoteType} } ) {
             delete $NoteTypes{$KeyNoteType};
         }
     }
+
     $Param{ArticleTypeSelect} = $LayoutObject->BuildSelection(
         Data => \%NoteTypes,
         Name => 'ArticleTypeID',
