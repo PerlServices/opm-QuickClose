@@ -72,11 +72,17 @@
                         </div>
                         <div class="Clear"></div>
 
-                        <label for="Subject">
+                        <label for="Subject" class="Mandatory">
                             [% Translate("Subject") | html %]:
                         </label>
                         <div class="Field">
-                            <input type="text" id="Subject" name="Subject" value="[% Data.Subject | html %]" class="W75pc" />
+                            <input type="text" id="Subject" name="Subject" value="[% Data.Subject | html %]" class="W75pc Validate_Required [% Data.SubjectInvalid | html %]" />
+                            <div id="SubjectError" class="TooltipErrorMessage">
+                                <p>[% Translate("A subject for the note is required.") | html %]</p>
+                            </div>
+                            <div id="SubjectServerError" class="TooltipErrorMessage">
+                                <p>[% Translate("A subject for the note is required.") | html %]</p>
+                            </div>
                         </div>
                         <div class="Clear"></div>
 
