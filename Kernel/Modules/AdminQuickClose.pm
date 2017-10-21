@@ -1,6 +1,5 @@
 # --
-# Kernel/Modules/AdminQuickClose.pm - provides admin notification translations
-# Copyright (C) 2011 - 2015 Perl-Services.de, http://www.perl-services.de
+# Copyright (C) 2011 - 2017 Perl-Services.de, http://www.perl-services.de
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -58,7 +57,7 @@ sub Run {
         ID Name StateID Body ValidID UserID ArticleTypeID
         QueueID Subject Unlock OwnerSelected PendingDiff ForceCurrentUserAsOwner
         AssignToResponsible ShowTicketZoom FixHour Group PriorityID
-        ResponsibleSelected TimeUnits
+        ResponsibleSelected TimeUnits ToType ToAddress
     );
 
     my %GetParam;
@@ -125,6 +124,7 @@ sub Run {
                 %Param,
                 %Errors,
                 Subaction => 'Update',
+                Submitted => 1,
             );
             $Output .= $LayoutObject->Footer();
             return $Output;
@@ -241,6 +241,14 @@ sub _MaskQuickCloseForm {
         $Param{RoleID} = $QuickClose{Permission}->{Role} if !@{ $Param{RoleID} || [] };
     }
 
+    $Param{ToTypeSelect} = $LayoutObject->BuildSelection(
+        Data         => [ qw/Customer Owner Other/ ],
+        Name         => 'ToType',
+        PossibleNone => 1,
+        SelectedID   => $Param{ToType},
+        Class        => 'Modernize',
+    );
+
     $Param{RoleSelect} = $LayoutObject->BuildSelection(
         Data       => { $GroupObject->RoleList( Valid => 1 ) },
         Name       => 'RoleID',
@@ -248,6 +256,7 @@ sub _MaskQuickCloseForm {
         SelectedID => $Param{RoleID},
         HTMLQuote  => 1,
         Multiple   => 1,
+        Class      => 'Modernize',
     );
 
     # add rich text editor
@@ -266,6 +275,7 @@ sub _MaskQuickCloseForm {
         Size       => 1,
         SelectedID => $Param{ValidID} || $ValidID,
         HTMLQuote  => 1,
+        Class      => 'Modernize',
     );
 
     $Param{PrioritySelect} = $LayoutObject->BuildSelection(
@@ -275,6 +285,7 @@ sub _MaskQuickCloseForm {
         SelectedID   => $Param{PriorityID},
         HTMLQuote    => 1,
         PossibleNone => 1,
+        Class        => 'Modernize',
     );
 
     my $StateTypes = $ConfigObject->Get( 'QuickClose::StateTypes' ) || [ 'closed' ];
@@ -295,6 +306,7 @@ sub _MaskQuickCloseForm {
         SelectedID   => $Param{StateID},
         HTMLQuote    => 1,
         PossibleNone => 1,
+        Class        => 'Modernize',
     );
 
     $Param{UnlockSelect} = $LayoutObject->BuildSelection(
@@ -306,6 +318,7 @@ sub _MaskQuickCloseForm {
         Size        => 1,
         SelectedID  => $Param{Unlock},
         Translation => 1,
+        Class       => 'Modernize',
     );
 
     my %Queues;
@@ -322,6 +335,7 @@ sub _MaskQuickCloseForm {
         HTMLQuote    => 1,
         PossibleNone => 1,
         TreeView     => 1,
+        Class        => 'Modernize',
     );
 
     # build ArticleTypeID string
@@ -344,8 +358,9 @@ sub _MaskQuickCloseForm {
     }
 
     $Param{ArticleTypeSelect} = $LayoutObject->BuildSelection(
-        Data => \%NoteTypes,
-        Name => 'ArticleTypeID',
+        Data  => \%NoteTypes,
+        Name  => 'ArticleTypeID',
+        Class => 'Modernize',
         %ArticleType,
     );
 

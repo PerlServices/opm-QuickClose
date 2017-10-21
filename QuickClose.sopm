@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <otrs_package version="1.0">
-    <!-- GENERATED WITH OTRS::OPM::Maker::Command::sopm (1.36) -->
+    <!-- GENERATED WITH OTRS::OPM::Maker::Command::sopm (1.37) -->
     <Name>QuickClose</Name>
     <Version>5.0.14</Version>
     <Framework>5.0.x</Framework>
@@ -27,7 +27,6 @@
         <File Permission="644" Location="Kernel/Output/HTML/Templates/Standard/QuickCloseSnippetTicketView.tt" />
         <File Permission="644" Location="Kernel/System/QuickClose.pm" />
         <File Permission="644" Location="Kernel/System/QuickClose/Permission.pm" />
-        <File Permission="644" Location="doc/QuickClose.json" />
         <File Permission="644" Location="doc/en/QuickClose.pod" />
         <File Permission="644" Location="doc/hu/QuickClose.pod" />
         <File Permission="644" Location="var/httpd/htdocs/js/QuickClose.Admin.UserSearch.js" />
@@ -49,6 +48,8 @@
             <Column Name="show_ticket_zoom" Required="false" Type="SMALLINT" />
             <Column Name="fix_hour" Required="false" Type="VARCHAR" Size="5" />
             <Column Name="group_name" Required="false" Type="VARCHAR" Size="250" />
+            <Column Name="to_type" Required="false" Type="VARCHAR" Size="250" />
+            <Column Name="to_address" Required="false" Type="VARCHAR" Size="250" />
             <Column Name="owner_id" Required="false" Type="SMALLINT" />
             <Column Name="priority_id" Required="false" Type="SMALLINT" />
             <Column Name="time_units" Required="false" Type="VARCHAR" Size="10" />
@@ -134,6 +135,10 @@
         </TableAlter>
         <TableAlter Name="ps_quick_close" Version="5.0.4">
             <ColumnChange NameNew="time_units" NameOld="time_units" Required="false" Type="VARCHAR" Size="10" />
+        </TableAlter>
+        <TableAlter Name="ps_quick_close" Version="5.0.15">
+            <ColumnAdd Name="to_type" Required="false" Type="VARCHAR" Size="250" />
+            <ColumnAdd Name="to_address" Required="false" Type="VARCHAR" Size="250" />
         </TableAlter>
     </DatabaseUpgrade>
     <DatabaseUninstall Type="pre">

@@ -1,8 +1,5 @@
 # --
-# AgentQuickCloseForm.tt - provides HTML form for Quick Close texts
-# Copyright (C) 2011 Perl-Services.de, http://www.perl-services.de
-# --
-# $Id: AdminQuickCloseForm.dtl,v 1.1.1.1 2011/04/15 07:49:58 rb Exp $
+# Copyright (C) 2011 - 2017 Perl-Services.de, http://www.perl-services.de
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -69,6 +66,22 @@
                         </label>
                         <div class="Field">
                             <input type="text" id="Group" name="Group" value="[% Data.Group | html %]" class="W75pc" />
+                        </div>
+                        <div class="Clear"></div>
+
+                        <label for="ToType">
+                            [% Translate("To") | html %]:
+                        </label>
+                        <div class="Field">
+                            [% Data.ToTypeSelect %]
+                        </div>
+                        <div class="Clear"></div>
+
+                        <label for="ToAddress">
+                            [% Translate("To Address") | html %]:
+                        </label>
+                        <div class="Field">
+                            <input type="text" id="ToAddress" name="ToAddress" value="[% Data.ToAddress | html %]" class="W75pc" />
                         </div>
                         <div class="Clear"></div>
 

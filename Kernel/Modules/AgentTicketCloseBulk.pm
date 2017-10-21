@@ -1,6 +1,5 @@
 # --
-# Kernel/Modules/AgentTicketCloseBulk.pm - bulk closing of tickets
-# Copyright (C) 2012-2015 Perl-Services.de, http://perl-services.de
+# Copyright (C) 2012-2017 Perl-Services.de, http://perl-services.de
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -60,14 +59,15 @@ sub new {
 sub Run {
     my ( $Self, %Param ) = @_;
 
-    my $ParamObject       = $Kernel::OM->Get('Kernel::System::Web::Request');
-    my $UploadCacheObject = $Kernel::OM->Get('Kernel::System::Web::UploadCache');
-    my $ConfigObject      = $Kernel::OM->Get('Kernel::Config');
-    my $LayoutObject      = $Kernel::OM->Get('Kernel::Output::HTML::Layout');
-    my $QuickCloseObject  = $Kernel::OM->Get('Kernel::System::QuickClose');
-    my $TicketObject      = $Kernel::OM->Get('Kernel::System::Ticket');
-    my $TimeObject        = $Kernel::OM->Get('Kernel::System::Time');
-    my $UserObject        = $Kernel::OM->Get('Kernel::System::User');
+    my $ParamObject        = $Kernel::OM->Get('Kernel::System::Web::Request');
+    my $UploadCacheObject  = $Kernel::OM->Get('Kernel::System::Web::UploadCache');
+    my $ConfigObject       = $Kernel::OM->Get('Kernel::Config');
+    my $LayoutObject       = $Kernel::OM->Get('Kernel::Output::HTML::Layout');
+    my $QuickCloseObject   = $Kernel::OM->Get('Kernel::System::QuickClose');
+    my $TicketObject       = $Kernel::OM->Get('Kernel::System::Ticket');
+    my $TimeObject         = $Kernel::OM->Get('Kernel::System::Time');
+    my $UserObject         = $Kernel::OM->Get('Kernel::System::User');
+    my $CustomerUserObject = $Kernel::OM->Get('Kernel::System::CustomerUser');
 
     my @TicketIDs = $ParamObject->GetArray( Param => 'TicketID' );
     my $ID        = $ParamObject->GetParam( Param => 'QuickClose' );
@@ -183,6 +183,22 @@ sub Run {
             $To = qq~"$User{UserFullname}" <$User{UserEmail}>~;
         }
 
+        my $ToType = $CloseData{ToType} || '';
+        if ( $ToType eq 'Customer' && $Ticket{CustomerUserID} ) {
+            my %CustomerData = $CustomerUserObject->CustomerUserDataGet(
+                User => $Ticket{CustomerUserID},
+            );
+
+            $To = $Ticket{CustomerUserID};
+
+            if ( %CustomerData ) {
+                $To = qq~"$CustomerData{UserFullname}" <$CustomerData{UserEmail}>~;
+            }
+        }
+        elsif ( $ToType eq 'Other' && $CloseData{ToAddress} ) {
+            $To = $CloseData{ToAddress};
+        }
+
         # add note
         my $ArticleID = '';
         my $MimeType = 'text/plain';
@@ -194,6 +210,12 @@ sub Run {
                 String => $CloseData{Body},
             );
         }
+
+        my $Subject = $TicketObject->TicketSubjectBuild(
+            TicketNumber => $Ticket{TicketNumber},
+            Subject      => $CloseData{Subject} || $Ticket{Title},
+            Action       => 'Reply',
+        );
 
         my $From = "$Self->{UserFirstname} $Self->{UserLastname} <$Self->{UserEmail}>"; 
         $ArticleID = $TicketObject->ArticleCreate(
@@ -209,6 +231,7 @@ sub Run {
             ArticleTypeID  => $CloseData{ArticleTypeID},
             %GetParam,
             %CloseData,
+            Subject        => $Subject,
         );
 
         if ( !$ArticleID ) {

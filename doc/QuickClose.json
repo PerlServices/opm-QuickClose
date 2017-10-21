@@ -35,6 +35,8 @@
                 { "name": "show_ticket_zoom", "required": "false", "type": "SMALLINT" },
                 { "name": "fix_hour", "required": "false", "type": "VARCHAR", "size": 5 },
                 { "name": "group_name", "required": "false", "type": "VARCHAR", "size": 250 },
+                { "name": "to_type", "required": "false", "type": "VARCHAR", "size": 250 },
+                { "name": "to_address", "required": "false", "type": "VARCHAR", "size": 250 },
                 { "name": "owner_id", "required": "false", "type": "SMALLINT" },
                 { "name": "priority_id", "required": "false", "type": "SMALLINT" },
                 { "name": "time_units", "required": "false", "type": "VARCHAR", "size" : 10 },
@@ -205,6 +207,15 @@
             "columns":[
                 { "old_name": "time_units", "new_name": "time_units", "required": "false", "type": "VARCHAR", "size": 10 }
             ]
+        },
+        {
+            "type": "ColumnAdd",
+            "name": "ps_quick_close",
+            "version" : "5.0.15",
+            "columns":[
+                { "name": "to_type", "required": "false", "type": "VARCHAR", "size": 250 },
+                { "name": "to_address", "required": "false", "type": "VARCHAR", "size": 250 }
+            ]
         }
     ],
     "intro": [
@@ -228,6 +239,9 @@
             "lang": "hu",
             "title": "Köszönjük!",
             "text": "Köszönjük, hogy a QuickClose modult választotta."
-        },
+        }
+    ],
+    "exclude_files" : [
+        "doc/QuickClose.json"
     ]
 }
