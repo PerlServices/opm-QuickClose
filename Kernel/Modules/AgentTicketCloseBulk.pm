@@ -184,20 +184,31 @@ sub Run {
         }
 
         my $ToType = $CloseData{ToType} || '';
+        my $Method = 'ArticleCreate';
         if ( $ToType eq 'Customer' && $Ticket{CustomerUserID} ) {
             my %CustomerData = $CustomerUserObject->CustomerUserDataGet(
                 User => $Ticket{CustomerUserID},
             );
 
-            $To = $Ticket{CustomerUserID};
+            $Method = 'ArticleSend';
+            $To     = $Ticket{CustomerUserID};
 
             if ( %CustomerData ) {
                 $To = qq~"$CustomerData{UserFullname}" <$CustomerData{UserEmail}>~;
             }
         }
         elsif ( $ToType eq 'Other' && $CloseData{ToAddress} ) {
-            $To = $CloseData{ToAddress};
+            $Method = 'ArticleSend';
+            $To     = $CloseData{ToAddress};
         }
+
+        $CloseData{Body} = $Self->_ReplaceMacros(
+            Text      => $CloseData{Body},
+            RichText  => $LayoutObject->{BrowserRichText},
+            Ticket    => {%Ticket},
+            Language  => $LayoutObject->{UserLanguage},    # used for translating states and such
+            UserID    => 1,
+        );
 
         # add note
         my $ArticleID = '';
@@ -217,8 +228,16 @@ sub Run {
             Action       => 'Reply',
         );
 
+        $Subject = $Self->_ReplaceMacros(
+            Text      => $Subject,
+            RichText  => 0,
+            Ticket    => {%Ticket},
+            Language  => $LayoutObject->{UserLanguage},    # used for translating states and such
+            UserID    => 1,
+        );
+
         my $From = "$Self->{UserFirstname} $Self->{UserLastname} <$Self->{UserEmail}>"; 
-        $ArticleID = $TicketObject->ArticleCreate(
+        $ArticleID = $TicketObject->$Method(
             TicketID       => $TicketID,
             SenderType     => 'agent',
             From           => $From,
@@ -336,5 +355,119 @@ sub Run {
         );
     }
 }
+
+sub _ReplaceMacros {
+    my ( $Self, %Param ) = @_;
+
+    my $LogObject       = $Kernel::OM->Get('Kernel::System::Log');
+    my $ConfigObject    = $Kernel::OM->Get('Kernel::Config');
+    my $UserObject      = $Kernel::OM->Get('Kernel::System::User');
+    my $HTMLUtilsObject = $Kernel::OM->Get('Kernel::System::HTMLUtils');
+
+    # check needed stuff
+    for my $Needed (qw(Text UserID Ticket Language)) {
+        if ( !defined $Param{$Needed} ) {
+            $LogObject->Log(
+                Priority => 'error',
+                Message  => "Need $Needed!",
+            );
+            return;
+        }
+    }
+
+    my $Text = $Param{Text};
+
+    # determine what "macro" delimiters are used
+    my $Start = '<';
+    my $End   = '>';
+    my $NL    = "\n";
+
+    # with richtext enabled, the delimiters change
+    if ( $Param{RichText} ) {
+        $Start = '&lt;';
+        $End   = '&gt;';
+        $NL    = '<br />';
+        $Text =~ s{ (\n|\r) }{}xmsg;
+
+        $Param{Articles} = [ map{ $_ =~ s!\n!<br />!g; $_ }@{ $Param{Articles} || [] } ];
+    }
+
+    # translate Ticket values, where appropriate
+    my $LanguageObject = Kernel::Language->new(
+        UserLanguage => $Param{Language},
+    );
+
+    my %TicketData = %{ $Param{Ticket} };
+    for my $Field (qw(State Priority)) {
+        $TicketData{$Field} = $LanguageObject->Get( $TicketData{$Field} );
+    }
+
+    # replace config options
+    my $Tag = $Start . 'OTRS_CONFIG_';
+    $Text =~ s{ $Tag (.+?) $End }{$ConfigObject->Get($1)}egx;
+
+    # cleanup
+    $Text =~ s{ $Tag .+? $End }{-}gi;
+
+    $Tag = $Start . 'OTRS_Agent_';
+    my $Tag2 = $Start . 'OTRS_CURRENT_';
+    my %CurrentUser = $UserObject->GetUserData( UserID => $Param{UserID} );
+
+    # html quoting of content
+    if ( $Param{RichText} ) {
+        KEY:
+        for my $Key ( sort keys %CurrentUser ) {
+            next KEY if !$CurrentUser{$Key};
+            $CurrentUser{$Key} = $HTMLUtilsObject->ToHTML(
+                String => $CurrentUser{$Key},
+            );
+        }
+    }
+
+    # replace it
+    KEY:
+    for my $Key ( sort keys %CurrentUser ) {
+        next KEY if !defined $CurrentUser{$Key};
+        $Text =~ s{ $Tag $Key $End }{$CurrentUser{$Key}}gxmsi;
+        $Text =~ s{ $Tag2 $Key $End }{$CurrentUser{$Key}}gxmsi;
+    }
+
+    # replace other needed stuff
+    $Text =~ s{ $Start OTRS_FIRST_NAME $End }{$CurrentUser{UserFirstname}}gxms;
+    $Text =~ s{ $Start OTRS_LAST_NAME $End }{$CurrentUser{UserLastname}}gxms;
+
+    # cleanup
+    $Text =~ s{ $Tag .+? $End}{-}xmsgi;
+    $Text =~ s{ $Tag2 .+? $End}{-}xmsgi;
+
+    # replace <OTRS_TICKET_... tags
+    {
+        my $Tag = $Start . 'OTRS_TICKET_';
+
+        # html quoting of content
+        if ( $Param{RichText} ) {
+            KEY:
+            for my $Key ( sort keys %TicketData ) {
+                next KEY if !$TicketData{$Key};
+                $TicketData{$Key} = $HTMLUtilsObject->ToHTML(
+                    String => $TicketData{$Key},
+                );
+            }
+        }
+
+        # replace it
+        KEY:
+        for my $Key ( sort keys %TicketData ) {
+            next KEY if !defined $TicketData{$Key};
+            $Text =~ s{ $Tag $Key $End }{$TicketData{$Key}}gxmsi;
+        }
+
+        # cleanup
+        $Text =~ s{ $Tag .+? $End}{-}gxmsi;
+    }
+
+    return $Text;
+}
+
 
 1;
