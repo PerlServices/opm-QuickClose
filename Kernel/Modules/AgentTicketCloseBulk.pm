@@ -68,6 +68,7 @@ sub Run {
     my $TimeObject         = $Kernel::OM->Get('Kernel::System::Time');
     my $UserObject         = $Kernel::OM->Get('Kernel::System::User');
     my $CustomerUserObject = $Kernel::OM->Get('Kernel::System::CustomerUser');
+    my $TemplateGenerator  = $Kernel::OM->Get('Kernel::System::TemplateGenerator');
 
     my @TicketIDs = $ParamObject->GetArray( Param => 'TicketID' );
     my $ID        = $ParamObject->GetParam( Param => 'QuickClose' );
@@ -169,8 +170,9 @@ sub Run {
         }
 
         my %Ticket = $TicketObject->TicketGet(
-            TicketID => $TicketID,
-            UserID   => $Self->{UserID},
+            TicketID      => $TicketID,
+            UserID        => $Self->{UserID},
+            DynamicFields => 1,
         );
 
         my $To = '';
@@ -183,8 +185,16 @@ sub Run {
             $To = qq~"$User{UserFullname}" <$User{UserEmail}>~;
         }
 
+        my $Signature = $TemplateGenerator->Signature(
+            QueueID => $Ticket{QueueID},
+            UserID  => $Self->{UserID},
+            Data    => {},
+        );
+
         my $ToType = $CloseData{ToType} || '';
         my $Method = 'ArticleCreate';
+        my $BR     = $LayoutObject->{BrowserRichText} ? '<br>' : "\n";
+
         if ( $ToType eq 'Customer' && $Ticket{CustomerUserID} ) {
             my %CustomerData = $CustomerUserObject->CustomerUserDataGet(
                 User => $Ticket{CustomerUserID},
@@ -196,10 +206,14 @@ sub Run {
             if ( %CustomerData ) {
                 $To = qq~"$CustomerData{UserFullname}" <$CustomerData{UserEmail}>~;
             }
+
+            $CloseData{Body} .= "$BR$BR-- $BR" . $Signature if $Signature;
         }
         elsif ( $ToType eq 'Other' && $CloseData{ToAddress} ) {
             $Method = 'ArticleSend';
             $To     = $CloseData{ToAddress};
+
+            $CloseData{Body} .= "$BR$BR-- $BR" . $Signature if $Signature;
         }
 
         $CloseData{Body} = $Self->_ReplaceMacros(
@@ -207,13 +221,13 @@ sub Run {
             RichText  => $LayoutObject->{BrowserRichText},
             Ticket    => {%Ticket},
             Language  => $LayoutObject->{UserLanguage},    # used for translating states and such
-            UserID    => 1,
+            UserID    => $Self->{UserID},
         );
 
         # add note
         my $ArticleID = '';
         my $MimeType = 'text/plain';
-        if ( $Self->{LayoutObject}->{BrowserRichText} ) {
+        if ( $LayoutObject->{BrowserRichText} ) {
             $MimeType = 'text/html';
 
             # verify html document
