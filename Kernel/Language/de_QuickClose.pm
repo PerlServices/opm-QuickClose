@@ -110,6 +110,7 @@ sub Data {
     $Lang->{'Save'} = 'Speichern';
     $Lang->{'or'} = 'oder';
     $Lang->{'Cancel'} = 'Abbrechen';
+    $Lang->{'Article viewable for Customer'} = 'Article für Kunden sichtbar';
 
     return 1;
 }

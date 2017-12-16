@@ -217,12 +217,20 @@
                         </div>
                         <div class="Clear"></div>
 
-                        <label for="ArticleTypeID" class="Mandatory">
+                        <label for="ArticleType" class="Mandatory">
                             <span class="Marker">*</span>
                             [% Translate("Article Type") | html %]:
                         </label>
                         <div class="Field">
                             [% Data.ArticleTypeSelect %]
+                        </div>
+                        <div class="Clear"></div>
+
+                        <label for="ArticleCustomer">
+                            [% Translate("Article viewable for Customer") | html %]:
+                        </label>
+                        <div class="Field">
+                            <input type="checkbox" name="ArticleCustomer" [% Data.CustomerSelected %] value="1">
                         </div>
                         <div class="Clear"></div>
 

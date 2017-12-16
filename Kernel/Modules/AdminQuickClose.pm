@@ -54,7 +54,7 @@ sub Run {
     my $ValidObject      = $Kernel::OM->Get('Kernel::System::Valid');
 
     my @Params = qw(
-        ID Name StateID Body ValidID UserID ArticleTypeID
+        ID Name StateID Body ValidID UserID ArticleType ArticleCustomer
         QueueID Subject Unlock OwnerSelected PendingDiff ForceCurrentUserAsOwner
         AssignToResponsible ShowTicketZoom FixHour Group PriorityID
         ResponsibleSelected TimeUnits ToType ToAddress
@@ -298,6 +298,7 @@ sub _MaskQuickCloseForm {
     $Param{ForceSelected}       = $Param{ForceCurrentUserAsOwner} ? 'checked="checked"' : '';
     $Param{ResponsibleSelected} = $Param{AssignToResponsible}     ? 'checked="checked"' : '';
     $Param{ZoomSelected}        = $Param{ShowTicketZoom}          ? 'checked="checked"' : '';
+    $Param{CustomerSelected}    = $Param{ArticleCustomer}         ? 'checked="checked"' : '';
 
     $Param{StateSelect} = $LayoutObject->BuildSelection(
         Data         => \%States,
@@ -338,30 +339,14 @@ sub _MaskQuickCloseForm {
         Class        => 'Modernize',
     );
 
-    # build ArticleTypeID string
-    my %ArticleType;
-    if ( !$Param{ArticleTypeID} ) {
-        $ArticleType{SelectedValue} = $Self->{Config}->{ArticleTypeDefault};
-    }
-    else {
-        $ArticleType{SelectedID} = $Param{ArticleTypeID};
-    }
-
     # get possible notes
-    my %DefaultNoteTypes = %{ $Self->{Config}->{ArticleTypes} || {} };
-    my %NoteTypes = $TicketObject->ArticleTypeList( Result => 'HASH' );
-
-    for my $KeyNoteType ( keys %NoteTypes ) {
-        if ( %DefaultNoteTypes && !$DefaultNoteTypes{ $NoteTypes{$KeyNoteType} } ) {
-            delete $NoteTypes{$KeyNoteType};
-        }
-    }
+    my %NoteTypes = map{  $_ => $_ }qw/Internal Phone Email/;
 
     $Param{ArticleTypeSelect} = $LayoutObject->BuildSelection(
-        Data  => \%NoteTypes,
-        Name  => 'ArticleTypeID',
-        Class => 'Modernize',
-        %ArticleType,
+        Data       => \%NoteTypes,
+        Name       => 'ArticleType',
+        Class      => 'Modernize',
+        SelectedID => $Param{ArticleType},
     );
 
     my $UserAutoCompleteConfig

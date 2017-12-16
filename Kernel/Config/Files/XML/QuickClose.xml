@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+<otrs_config version="2.0" init="Application">
+    <CVS>$Id: QuickClose.xml,v 1.1.1.1 2011/04/15 07:49:58 rb Exp $</CVS>
+    <Setting Name="Frontend::Module###AgentQuickClose" Required="0" Valid="1">
+        <Description Translatable="1">Frontend module registration for the QuickClose agent interface.</Description>
+        <Navigation>Frontend::Agent::ModuleRegistration</Navigation>
+        <Value>
+            <Item ValueType="FrontendRegistration">
+                <Hash>
+                    <Item Key="Group">
+                        <Array>
+                        </Array>
+                    </Item>
+                    <Item Key="GroupRo">
+                        <Array>
+                        </Array>
+                    </Item>
+                    <Item Key="Description">QuickClose</Item>
+                    <Item Key="NavBarName"></Item>
+                    <Item Key="Title" Translatable="1">QuickClose</Item>
+                </Hash>
+            </Item>
+        </Value>
+    </Setting>
+    <Setting Name="Frontend::Navigation###AgentQuickClose###002-QuickClose" Required="0" Valid="0">
+        <Description Translatable="1">Main menu item registration.</Description>
+        <Navigation>Frontend::Agent::ModuleRegistration::MainMenu</Navigation>
+        <Value>
+            <Array>
+                <DefaultItem ValueType="FrontendNavigation">
+                    <Hash>
+                    </Hash>
+                </DefaultItem>
+            </Array>
+        </Value>
+    </Setting>
+    <Setting Name="Frontend::Module###AdminQuickClose" Required="0" Valid="1">
+        <Description Translatable="1">Frontend module registration for the quick close administration.</Description>
+        <Navigation>Frontend::Admin::ModuleRegistration</Navigation>
+        <Value>
+            <Item ValueType="FrontendRegistration">
+                <Hash>
+                    <Item Key="GroupRo">
+                        <Array>
+                        </Array>
+                    </Item>
+                    <Item Key="Group">
+                        <Array>
+                            <Item>admin</Item>
+                        </Array>
+                    </Item>
+                    <Item Key="Description" Translatable="1">Create and manage QuickClose texts.</Item>
+                    <Item Key="Title" Translatable="1">QuickClose</Item>
+                    <Item Key="NavBarName">Admin</Item>
+                </Hash>
+            </Item>
+        </Value>
+    </Setting>
+    <Setting Name="Loader::Module::AdminQuickClose###002-QuickClose" Required="0" Valid="1">
+        <Description Translatable="1">Loader module registration for the agent interface.</Description>
+        <Navigation>Frontend::Admin::ModuleRegistration::Loader</Navigation>
+        <Value>
+            <Hash>
+                <Item Key="JavaScript">
+                    <Array>
+                        <Item>QuickClose.Admin.UserSearch.js</Item>
+                    </Array>
+                </Item>
+            </Hash>
+        </Value>
+    </Setting>
+    <Setting Name="Frontend::Navigation###AdminQuickClose###002-QuickClose" Required="0" Valid="0">
+        <Description Translatable="1">Main menu item registration.</Description>
+        <Navigation>Frontend::Admin::ModuleRegistration::MainMenu</Navigation>
+        <Value>
+            <Array>
+                <DefaultItem ValueType="FrontendNavigation">
+                    <Hash>
+                    </Hash>
+                </DefaultItem>
+            </Array>
+        </Value>
+    </Setting>
+    <Setting Name="Frontend::NavigationModule###AdminQuickClose" Required="0" Valid="1">
+        <Description Translatable="1">Admin area navigation for the agent interface.</Description>
+        <Navigation>Frontend::Admin::ModuleRegistration::AdminOverview</Navigation>
+        <Value>
+            <Hash>
+                <Item Key="Group">
+                    <Array>
+                        <Item>admin</Item>
+                    </Array>
+                </Item>
+                <Item Key="GroupRo">
+                    <Array>
+                    </Array>
+                </Item>
+                <Item Key="Module">Kernel::Output::HTML::NavBar::ModuleAdmin</Item>
+                <Item Key="Name" Translatable="1">QuickClose</Item>
+                <Item Key="Block">System</Item>
+                <Item Key="Description" Translatable="1">Create and manage QuickClose texts.</Item>
+                <Item Key="IconBig"></Item>
+                <Item Key="IconSmall"></Item>
+            </Hash>
+        </Value>
+    </Setting>
+    <Setting Name="Frontend::Module###AgentQuickCloseUserSearch" Required="0" Valid="1">
+        <Description Translatable="1">Frontend module registration for the user search.</Description>
+        <Navigation>Frontend::Admin::ModuleRegistration</Navigation>
+        <Value>
+            <Item ValueType="FrontendRegistration">
+                <Hash>
+                    <Item Key="Group">
+                        <Array>
+                        </Array>
+                    </Item>
+                    <Item Key="GroupRo">
+                        <Array>
+                        </Array>
+                    </Item>
+                    <Item Key="Description" Translatable="1">Search for owners.</Item>
+                    <Item Key="NavBarName"></Item>
+                    <Item Key="Title" Translatable="1">QuickClose</Item>
+                </Hash>
+            </Item>
+        </Value>
+    </Setting>
+    <Setting Name="Frontend::Navigation###AgentQuickCloseUserSearch###002-QuickClose" Required="0" Valid="0">
+        <Description Translatable="1">Main menu item registration.</Description>
+        <Navigation>Frontend::Admin::ModuleRegistration::MainMenu</Navigation>
+        <Value>
+            <Array>
+                <DefaultItem ValueType="FrontendNavigation">
+                    <Hash>
+                    </Hash>
+                </DefaultItem>
+            </Array>
+        </Value>
+    </Setting>
+    <Setting Name="Frontend::Module###AgentTicketCloseBulk" Required="0" Valid="1">
+        <Description Translatable="1">Frontend module registration for the bulk QuickClose agent interface.</Description>
+        <Navigation>Frontend::Agent::ModuleRegistration</Navigation>
+        <Value>
+            <Item ValueType="FrontendRegistration">
+                <Hash>
+                    <Item Key="Group">
+                        <Array>
+                        </Array>
+                    </Item>
+                    <Item Key="GroupRo">
+                        <Array>
+                        </Array>
+                    </Item>
+                    <Item Key="Description" Translatable="1">Bulk QuickClose.</Item>
+                    <Item Key="NavBarName"></Item>
+                    <Item Key="Title" Translatable="1">Bulk QuickClose</Item>
+                </Hash>
+            </Item>
+        </Value>
+    </Setting>
+    <Setting Name="Frontend::Navigation###AgentTicketCloseBulk###002-QuickClose" Required="0" Valid="0">
+        <Description Translatable="1">Main menu item registration.</Description>
+        <Navigation>Frontend::Agent::ModuleRegistration::MainMenu</Navigation>
+        <Value>
+            <Array>
+                <DefaultItem ValueType="FrontendNavigation">
+                    <Hash>
+                    </Hash>
+                </DefaultItem>
+            </Array>
+        </Value>
+    </Setting>
+    <Setting Name="Frontend::Output::FilterElementPost###OutputFilterClose" Required="0" Valid="1">
+        <Description Translatable="1">Modul to show OuputfilterClose.</Description>
+        <Navigation>OutputFilterClose</Navigation>
+        <Value>
+            <Hash>
+                <Item Key="Module">Kernel::Output::HTML::FilterElementPost::Close</Item>
+                <Item Key="Debug">0</Item>
+                <Item Key="Templates">
+                    <Hash>
+                        <Item Key="AgentTicketZoom">1</Item>
+                    </Hash>
+                </Item>
+            </Hash>
+        </Value>
+    </Setting>
+    <Setting Name="Frontend::Output::FilterElementPost###OutputFilterCloseTicketView" Required="0" Valid="1">
+        <Description Translatable="1">Modul to show OuputfilterClose in ticket overviews.</Description>
+        <Navigation>OutputFilterClose</Navigation>
+        <Value>
+            <Hash>
+                <Item Key="Module">Kernel::Output::HTML::FilterElementPost::CloseTicketView</Item>
+                <Item Key="Debug">0</Item>
+                <Item Key="Templates">
+                    <Hash>
+                        <Item Key="AgentTicketOverviewSmall">1</Item>
+                        <Item Key="AgentTicketOverviewMedium">1</Item>
+                        <Item Key="AgentTicketOverviewPreview">1</Item>
+                    </Hash>
+                </Item>
+            </Hash>
+        </Value>
+    </Setting>
+    <Setting Name="QuickClose::ShowOnlyForOwner" Required="1" Valid="1">
+        <Description Translatable="1">Only the ticket owner sees the dropdown.</Description>
+        <Navigation>Core</Navigation>
+        <Value>
+            <Item ValueType="Checkbox">0</Item>
+        </Value>
+    </Setting>
+    <Setting Name="QuickClose###NoneLabel" Required="0" Valid="1">
+        <Description Translatable="1">Label for the NULL option in dropdown.</Description>
+        <Navigation>Core</Navigation>
+        <Value>
+            <Item ValueType="String" ValueRegex="">QuickClose</Item>
+        </Value>
+    </Setting>
+    <Setting Name="QuickClose::DefaultSubject" Required="0" Valid="1">
+        <Description Translatable="1">Default subject for "close" notes.</Description>
+        <Navigation>Core</Navigation>
+        <Value>
+            <Item ValueType="String" ValueRegex="">Close</Item>
+        </Value>
+    </Setting>
+    <Setting Name="QuickClose::DefaultID" Required="0" Valid="1">
+        <Description Translatable="1">Default "close". This is used when no "CloseID" is passed.</Description>
+        <Navigation>Core</Navigation>
+        <Value>
+            <Item ValueType="String" ValueRegex="^\d+$">1</Item>
+        </Value>
+    </Setting>
+    <Setting Name="QuickClose::QueueMove" Required="1" Valid="1">
+        <Description Translatable="1">Use queue move functionality for quick close.</Description>
+        <Navigation>Core</Navigation>
+        <Value>
+            <Item ValueType="Checkbox">0</Item>
+        </Value>
+    </Setting>
+    <Setting Name="QuickClose::StateTypes" Required="1" Valid="1">
+        <Description Translatable="1">State types for quick closes.</Description>
+        <Navigation>Core</Navigation>
+        <Value>
+            <Array>
+                <Item>closed</Item>
+            </Array>
+        </Value>
+    </Setting>
+    <Setting Name="QuickClose::PendingDiffDefault" Required="0" Valid="1">
+        <Description Translatable="1">Default time to wait when new state is a pending state.</Description>
+        <Navigation>Core</Navigation>
+        <Value>
+            <Item ValueType="String" ValueRegex="^\d+$">1</Item>
+        </Value>
+    </Setting>
+    <Setting Name="QuickClose::Frontend::UserSearchAutoComplete###Active" Required="1" Valid="1">
+        <Description Translatable="1">Enables or disables the autocomplete feature for the user search in the ITSM agent interface.</Description>
+        <Navigation>Frontend::Agent::UserSearch</Navigation>
+        <Value>
+            <Item ValueType="Checkbox">1</Item>
+        </Value>
+    </Setting>
+    <Setting Name="QuickClose::Frontend::UserSearchAutoComplete::DynamicWidth" Required="1" Valid="1">
+        <Description Translatable="1">Adapts the width of the autocomplete drop down to the length of the longest option.</Description>
+        <Navigation>Frontend::Agent::UserSearch</Navigation>
+        <Value>
+            <Item ValueType="Checkbox">1</Item>
+        </Value>
+    </Setting>
+    <Setting Name="QuickClose::Frontend::UserSearchAutoComplete###MinQueryLength" Required="1" Valid="1">
+        <Description Translatable="1">Sets the minimum number of characters before autocomplete query is sent.</Description>
+        <Navigation>Frontend::Agent::UserSearch</Navigation>
+        <Value>
+            <Item ValueType="String" ValueRegex="^[1-9]$">2</Item>
+        </Value>
+    </Setting>
+    <Setting Name="QuickClose::Frontend::UserSearchAutoComplete###MaxResultsDisplayed" Required="1" Valid="1">
+        <Description Translatable="1">Sets the maximum number of search results for the autocomplete feature.</Description>
+        <Navigation>Frontend::Agent::UserSearch</Navigation>
+        <Value>
+            <Item ValueType="String" ValueRegex="^\d+$">20</Item>
+        </Value>
+    </Setting>
+    <Setting Name="QuickClose::Frontend::UserSearchAutoComplete###QueryDelay" Required="1" Valid="1">
+        <Description Translatable="1">Delay time between autocomplete queries in milliseconds.</Description>
+        <Navigation>Frontend::Agent::UserSearch</Navigation>
+        <Value>
+            <Item ValueType="String" ValueRegex="^[0-9]+$">100</Item>
+        </Value>
+    </Setting>
+    <Setting Name="QuickClose::Frontend::UserSearchAutoComplete###TypeAhead" Required="1" Valid="1">
+        <Description Translatable="1">Enables or disables TypeAhead for the autocomplete feature.</Description>
+        <Navigation>Frontend::Agent::UserSearch</Navigation>
+        <Value>
+            <Item ValueType="Select" SelectedID="false">
+                <Item ValueType="Option" Value="false" Translatable="1">No</Item>
+                <Item ValueType="Option" Value="true" Translatable="1">Yes</Item>
+            </Item>
+        </Value>
+    </Setting>
+    <Setting Name="QuickClose::UseGroups" Required="1" Valid="1">
+        <Description Translatable="1">Use group functionality for quick close.</Description>
+        <Navigation>Core</Navigation>
+        <Value>
+            <Item ValueType="Checkbox">0</Item>
+        </Value>
+    </Setting>
+    <Setting Name="QuickClose::Labels" Required="1" Valid="1">
+        <Description Translatable="1">Labels for groups.</Description>
+        <Navigation>Core</Navigation>
+        <Value>
+            <Hash>
+            </Hash>
+        </Value>
+    </Setting>
+</otrs_config>

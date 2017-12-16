@@ -41,7 +41,8 @@
                 { "name": "priority_id", "required": "false", "type": "SMALLINT" },
                 { "name": "time_units", "required": "false", "type": "VARCHAR", "size" : 10 },
                 { "name": "responsible_id", "required": "false", "type": "SMALLINT" },
-                { "name": "article_type_id", "required": "true", "type": "SMALLINT" },
+                { "name": "article_type", "required": "true", "type": "VARCHAR", "size" : 20 },
+                { "name": "article_customer", "required": "true", "type": "SMALLINT" },
                 { "name": "create_time", "required": "true", "type": "DATE" },
                 { "name": "create_by", "required": "true", "type": "INTEGER" },
                 { "name": "change_time", "required": "true", "type": "DATE" },
@@ -59,12 +60,6 @@
                     "name": "valid",
                     "references": [
                         { "local": "valid_id", "foreign": "id" }
-                    ]
-                },
-                {
-                    "name": "article_type",
-                    "references": [
-                        { "local": "article_type_id", "foreign": "id" }
                     ]
                 }
             ]
@@ -216,6 +211,23 @@
                 { "name": "to_type", "required": "false", "type": "VARCHAR", "size": 250 },
                 { "name": "to_address", "required": "false", "type": "VARCHAR", "size": 250 }
             ]
+        },
+        {
+            "type": "ForeignKeyDrop",
+            "name": "ps_quick_close",
+            "version" : "6.0.1",
+            "references":[
+                { "name": "article_type", "foreign" : "id", "local" : "article_type_id" }
+            ]
+        },
+        {
+            "type": "ColumnAdd",
+            "name": "ps_quick_close",
+            "version" : "6.0.1",
+            "columns":[
+                { "name": "article_type", "required": "true", "type": "VARCHAR", "size": 20 },
+                { "name": "article_customer", "required": "true", "type": "SMALLINT" }
+            ]
         }
     ],
     "intro": [
@@ -243,5 +255,8 @@
     ],
     "exclude_files" : [
         "doc/QuickClose.json"
+    ],
+    "code" : [
+        { "type" : "Upgrade", "version" : "6.0.1", "function" : "CodeUpgrade_6_0_1" }
     ]
 }

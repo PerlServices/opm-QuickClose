@@ -79,7 +79,7 @@ sub QuickCloseAdd {
     my $PermissionObject = $Kernel::OM->Get('Kernel::System::QuickClose::Permission');
 
     # check needed stuff
-    for my $Needed (qw(Name Body ValidID UserID ArticleTypeID)) {
+    for my $Needed (qw(Name Body ValidID UserID ArticleType)) {
         if ( !$Param{$Needed} ) {
             $LogObject->Log(
                 Priority => 'error',
@@ -102,16 +102,17 @@ sub QuickCloseAdd {
     $Param{TimeUnits}               ||= 0;
     $Param{ToAddress}               ||= '';
     $Param{ToType}                  ||= '';
+    $Param{ArticleCustomer}         ||= 0;
 
     # insert new news
     return if !$DBObject->Do(
         SQL => 'INSERT INTO ps_quick_close '
             . '(close_name, state_id, body, create_time, create_by, valid_id, '
-            . ' article_type_id, change_time, change_by, comments, queue_id, '
+            . ' article_type, article_customer, change_time, change_by, comments, queue_id, '
             . ' subject, ticket_unlock, owner_id, pending_diff, force_owner_change, '
             . ' assign_to_responsible, show_ticket_zoom, fix_hour, group_name,'
             . ' responsible_id, priority_id, time_units, to_address, to_type) '
-            . 'VALUES (?, ?, ?, current_timestamp, ?, ?, ?, current_timestamp, '
+            . 'VALUES (?, ?, ?, current_timestamp, ?, ?, ?, ?, current_timestamp, '
             . ' ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
         Bind => [
             \$Param{Name},
@@ -119,7 +120,8 @@ sub QuickCloseAdd {
             \$Param{Body},
             \$Param{UserID},
             \$Param{ValidID},
-            \$Param{ArticleTypeID},
+            \$Param{ArticleType},
+            \$Param{ArticleCustomer},
             \$Param{UserID},
             \' ', # empty comment as we have no comments field
             \$Param{QueueID},
@@ -196,7 +198,7 @@ sub QuickCloseUpdate {
     my $PermissionObject = $Kernel::OM->Get('Kernel::System::QuickClose::Permission');
 
     # check needed stuff
-    for my $Needed (qw(ID Name Body ValidID UserID ArticleTypeID)) {
+    for my $Needed (qw(ID Name Body ValidID UserID ArticleType)) {
         if ( !$Param{$Needed} ) {
             $LogObject->Log(
                 Priority => 'error',
@@ -213,6 +215,7 @@ sub QuickCloseUpdate {
     $Param{PendingDiff}             ||= 0;
     $Param{ForceCurrentUserAsOwner} ||= 0;
     $Param{AssignToResponsible}     ||= 0;
+    $Param{ArticleCustomer}         ||= 0;
     $Param{Unlock}                  ||= 0;
     $Param{StateID}                 ||= 0;
     $Param{ShowTicketZoom}          ||= 0;
@@ -223,11 +226,11 @@ sub QuickCloseUpdate {
     # insert new news
     return if !$DBObject->Do(
         SQL => 'UPDATE ps_quick_close SET close_name = ?, state_id = ?, body = ?, '
-            . 'valid_id = ?, change_time = current_timestamp, change_by = ?, article_type_id = ?, '
+            . 'valid_id = ?, change_time = current_timestamp, change_by = ?, article_type = ?, '
             . 'queue_id = ?, subject = ?, ticket_unlock = ?, owner_id = ?, pending_diff = ?, '
             . 'force_owner_change = ?, assign_to_responsible = ?, show_ticket_zoom = ?, '
             . 'fix_hour = ?, group_name = ?, responsible_id = ?, priority_id = ?, time_units = ?, '
-            . 'to_address = ?, to_type = ? '
+            . 'to_address = ?, to_type = ?, article_customer = ? '
             . 'WHERE id = ?',
         Bind => [
             \$Param{Name},
@@ -235,7 +238,7 @@ sub QuickCloseUpdate {
             \$Param{Body},
             \$Param{ValidID},
             \$Param{UserID},
-            \$Param{ArticleTypeID},
+            \$Param{ArticleType},
             \$Param{QueueID},
             \$Param{Subject},
             \$Param{Unlock},
@@ -251,6 +254,7 @@ sub QuickCloseUpdate {
             \$Param{TimeUnits},
             \$Param{ToAddress},
             \$Param{ToType},
+            \$Param{ArticleCustomer},
             \$Param{ID},
         ],
     );
@@ -313,9 +317,9 @@ sub QuickCloseGet {
     # sql
     return if !$DBObject->Prepare(
         SQL => 'SELECT id, close_name, state_id, body, create_time, create_by, valid_id, '
-            . 'article_type_id, queue_id, subject, ticket_unlock, owner_id, pending_diff, '
+            . 'article_type, queue_id, subject, ticket_unlock, owner_id, pending_diff, '
             . 'force_owner_change, assign_to_responsible, show_ticket_zoom, fix_hour, group_name, '
-            . 'responsible_id, priority_id, time_units, to_address, to_type '
+            . 'responsible_id, priority_id, time_units, to_address, to_type, article_customer '
             . 'FROM ps_quick_close WHERE id = ?',
         Bind  => [ \$Param{ID} ],
         Limit => 1,
@@ -331,7 +335,7 @@ sub QuickCloseGet {
             CreateTime    => $Data[4],
             CreateBy      => $Data[5],
             ValidID       => $Data[6],
-            ArticleTypeID => $Data[7],
+            ArticleType   => $Data[7],
             QueueID       => $Data[8],
             Subject       => $Data[9],
             Unlock        => $Data[10],
@@ -348,6 +352,7 @@ sub QuickCloseGet {
             TimeUnits               => $Data[20],
             ToAddress               => $Data[21] || '',
             ToType                  => $Data[22] || '',
+            ArticleCustomer         => $Data[23] || 0,
         );
     }
 

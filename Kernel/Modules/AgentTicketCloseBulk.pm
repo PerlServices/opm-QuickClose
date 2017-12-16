@@ -65,6 +65,7 @@ sub Run {
     my $LayoutObject       = $Kernel::OM->Get('Kernel::Output::HTML::Layout');
     my $QuickCloseObject   = $Kernel::OM->Get('Kernel::System::QuickClose');
     my $TicketObject       = $Kernel::OM->Get('Kernel::System::Ticket');
+    my $ArticleObject      = $Kernel::OM->Get('Kernel::System::Ticket::Article');
     my $TimeObject         = $Kernel::OM->Get('Kernel::System::Time');
     my $UserObject         = $Kernel::OM->Get('Kernel::System::User');
     my $CustomerUserObject = $Kernel::OM->Get('Kernel::System::CustomerUser');
@@ -250,8 +251,12 @@ sub Run {
             UserID    => 1,
         );
 
-        my $From = "$Self->{UserFirstname} $Self->{UserLastname} <$Self->{UserEmail}>"; 
-        $ArticleID = $TicketObject->$Method(
+        $CloseData{IsVisibleForCustomer} = $CloseData{ArticleCustomer};
+
+        my $From                 = "$Self->{UserFirstname} $Self->{UserLastname} <$Self->{UserEmail}>"; 
+        my $ArticleBackendObject = $ArticleObject->BackendForChannel( ChannelName => $CloseData{ArticleType} );
+
+        $ArticleID = $ArticleBackendObject->$Method(
             TicketID       => $TicketID,
             SenderType     => 'agent',
             From           => $From,
@@ -413,7 +418,7 @@ sub _ReplaceMacros {
 
     my %TicketData = %{ $Param{Ticket} };
     for my $Field (qw(State Priority)) {
-        $TicketData{$Field} = $LanguageObject->Get( $TicketData{$Field} );
+        $TicketData{$Field} = $LanguageObject->Translate( $TicketData{$Field} );
     }
 
     # replace config options

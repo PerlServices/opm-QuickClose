@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <otrs_package version="1.0">
-    <!-- GENERATED WITH OTRS::OPM::Maker::Command::sopm (1.37) -->
+    <!-- GENERATED WITH OTRS::OPM::Maker::Command::sopm (1.4) -->
     <Name>QuickClose</Name>
     <Version>5.0.17</Version>
     <Framework>5.0.x</Framework>
@@ -11,7 +11,7 @@
     <Description Lang="hu">Egy modul a jegyek gyorsabb lezárásához.</Description>
     <License>GNU AFFERO GENERAL PUBLIC LICENSE Version 3, November 2007</License>
     <Filelist>
-        <File Permission="644" Location="Kernel/Config/Files/QuickClose.xml" />
+        <File Permission="644" Location="Kernel/Config/Files/XML/QuickClose.xml" />
         <File Permission="644" Location="Kernel/Language/de_QuickClose.pm" />
         <File Permission="644" Location="Kernel/Language/hu_QuickClose.pm" />
         <File Permission="644" Location="Kernel/Modules/AdminQuickClose.pm" />
@@ -30,6 +30,7 @@
         <File Permission="644" Location="doc/en/QuickClose.pod" />
         <File Permission="644" Location="doc/hu/QuickClose.pod" />
         <File Permission="644" Location="var/httpd/htdocs/js/QuickClose.Admin.UserSearch.js" />
+        <File Permission="644" Location="var/packagesetup/QuickClose.pm" />
     </Filelist>
     <DatabaseInstall Type="post">
         <TableCreate Name="ps_quick_close">
@@ -54,7 +55,8 @@
             <Column Name="priority_id" Required="false" Type="SMALLINT" />
             <Column Name="time_units" Required="false" Type="VARCHAR" Size="10" />
             <Column Name="responsible_id" Required="false" Type="SMALLINT" />
-            <Column Name="article_type_id" Required="true" Type="SMALLINT" />
+            <Column Name="article_type" Required="true" Type="VARCHAR" Size="20" />
+            <Column Name="article_customer" Required="true" Type="SMALLINT" />
             <Column Name="create_time" Required="true" Type="DATE" />
             <Column Name="create_by" Required="true" Type="INTEGER" />
             <Column Name="change_time" Required="true" Type="DATE" />
@@ -65,9 +67,6 @@
             </ForeignKey>
             <ForeignKey ForeignTable="valid">
                 <Reference Local="valid_id" Foreign="id" />
-            </ForeignKey>
-            <ForeignKey ForeignTable="article_type">
-                <Reference Local="article_type_id" Foreign="id" />
             </ForeignKey>
         </TableCreate>
         <TableCreate Name="ps_quick_close_perm">
@@ -140,11 +139,23 @@
             <ColumnAdd Name="to_type" Required="false" Type="VARCHAR" Size="250" />
             <ColumnAdd Name="to_address" Required="false" Type="VARCHAR" Size="250" />
         </TableAlter>
+        <TableAlter Name="ps_quick_close" Version="6.0.1">
+            <ForeignKeyDrop ForeignTable="article_type">
+                <Reference Local="article_type_id" Foreign="id" />
+            </ForeignKeyDrop>
+        </TableAlter>
+        <TableAlter Name="ps_quick_close" Version="6.0.1">
+            <ColumnAdd Name="article_type" Required="true" Type="VARCHAR" Size="20" />
+            <ColumnAdd Name="article_customer" Required="true" Type="SMALLINT" />
+        </TableAlter>
     </DatabaseUpgrade>
     <DatabaseUninstall Type="pre">
         <TableDrop Name="ps_quick_close_perm" />
         <TableDrop Name="ps_quick_close" />
     </DatabaseUninstall>
+    <CodeUpgrade Type="post" Version="6.0.1"><![CDATA[
+        $Kernel::OM->Get('var::packagesetup::' . $Param{Structure}->{Name}->{Content} )->CodeUpgrade_6_0_1();
+    ]]></CodeUpgrade>
     <IntroInstall Type="post" Lang="en" Title="Thank you!"><![CDATA[
             Thank you for choosing the QuickClose module.
     ]]></IntroInstall>
