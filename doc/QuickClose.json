@@ -1,8 +1,8 @@
 {
     "name": "QuickClose",
-    "version": "5.0.17",
+    "version": "6.0.1",
     "framework": [
-        "5.0.x"
+        "6.0.x"
     ],
     "vendor": {
         "name":  "Perl-Services.de",
