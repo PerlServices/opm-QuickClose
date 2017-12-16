@@ -151,16 +151,16 @@ sub CodeUpgrade_6_0_1 {
     ~;
 
     for my $ID ( sort keys %NewData ) {
-        my @Bind = ( @{ $NewData{$Id} }{qw/ArticleType ArticleCustomer/}, $ID );
+        my @Bind = ( @{ $NewData{$ID} }{qw/ArticleType ArticleCustomer/}, $ID );
 
         $DBObject->Do(
             SQL  => $Update,
-            Bind => \@Bind,
+            Bind => [ map { \$_ }@Bind ],
         );
     }
 
     # Delete table column
-    my $Delete = q~DROP COLUMN article_type_id FROM ps_quick_close~;
+    my $Delete = q~ALTER TABLE ps_quick_close DROP COLUMN article_type_id~;
     $DBObject->Do(
         SQL => $Delete,
     );
