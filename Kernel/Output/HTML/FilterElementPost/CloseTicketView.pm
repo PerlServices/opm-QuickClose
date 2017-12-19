@@ -110,10 +110,10 @@ sub Run {
         }
 
         #scan html output and generate new html input
-        ${ $Param{Data} } =~ s{(<ul \s+ class="Actions"> \s* <li .*? /li>)}{$1 $Dropdowns}xmgs;
+        ${ $Param{Data} } =~ s{<ul \s+ class="Actions"> \s* <li .*? /li>\K}{$Dropdowns}xmgs;
     }
 
-    return ${ $Param{Data} };
+    return 1;
 }
 
 1;

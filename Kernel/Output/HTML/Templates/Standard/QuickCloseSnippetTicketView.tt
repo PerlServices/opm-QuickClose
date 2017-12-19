@@ -1,8 +1,5 @@
 # --
-# QuickCloseSnippetTicketView.tt - provides HTML for QuickCloseSnippetTicketView.pm
-# Copyright (C) 2011 Perl-Services.de, http://www.perl-services.de 
-# --
-# $Id: QuickCloseSnippetTicketView.dtl,v 1.33 2011/01/27 18:44:38 rb Exp $
+# Copyright (C) 2011 - 2017 Perl-Services.de, http://www.perl-services.de 
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -10,53 +7,11 @@
 # --
 
                     <li class="Bulk AlwaysPresent [% Data.Class | html %]">
-                        <form title="[% Translate("QuickClose ticket") | html %]" action="[% Env("CGIHandle") %]" method="post" name="quickclose" id="quickclose">
+                        <form title="[% Translate("QuickClose ticket") | html %]" action="[% Env("CGIHandle") %]" method="post" name="quickclose" id="quickclose" class="QuickCloseView">
                             <input type="hidden" name="Action" value="AgentTicketCloseBulk"/>
                             <input type="hidden" name="Subject" value="[% Translate("Close") | html %]"/>
                             <input type="hidden" name="FormID" value="[% Data.FormID | html %]" />
                             <label for="QuickClose" class="InvisibleText">[% Translate("QuickClose") | html %]:</label>
                             [% Data.QuickCloseSelect %]
                         </form>
-[% WRAPPER JSOnDocumentComplete %]
-<script type="text/javascript">//<![CDATA[
-    $('.QuickCloseSelect').each( function() {
-        $(this).unbind('change');
-        $(this).bind('change', function (Event) {
-            // retrieve body for quickclose
-            var URL = Core.Config.Get('Baselink');
-            var TID = $(this).val();
-            var $SelectedTickets;
-            var CloseForm = $(this).closest('form');
-            var TicketElementSelectors = {
-                'Small': 'div.Overview table td input:checkbox[name=TicketID]',
-                'Medium': 'ul.Overview input:checkbox[name=TicketID]',
-                'Large': 'ul.Overview input:checkbox[name=TicketID]'
-            };
-            var TicketView;
-    
-            var thisObject = $(this);
-    
-            if ($('#TicketOverviewMedium').length) {
-                TicketView = 'Medium';
-            }
-            else if ($('#TicketOverviewLarge').length) {
-                TicketView = 'Large';
-            }
-            else {
-                TicketView = 'Small';
-            }
-    
-            if ( TID ) {
-                $SelectedTickets = $(TicketElementSelectors[TicketView] + ':checked');
-                $SelectedTickets.each(function () {
-                    var HiddenField = $('<input type="hidden" name="TicketID">');
-                    HiddenField.val( $(this).val() );
-                    CloseForm.append( HiddenField );
-                });
-                CloseForm.submit();
-            }
-        });
-    });
-//]]></script>
-[% END %]
                     </li>
