@@ -97,7 +97,7 @@ sub Run {
                 ID           => 'QuickClose' . $Group,
                 Size         => 1,
                 HTMLQuote    => 1,
-                Class        => 'QuickCloseSelect',
+                Class        => 'QuickCloseSelect Modernize',
             );
 
             $Dropdowns .= $LayoutObject->Output(
