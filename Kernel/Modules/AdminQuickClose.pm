@@ -108,7 +108,14 @@ sub Run {
             $Errors{ValidIDInvalid} = 'ServerError';
         }
 
-        for my $Param (qw(Name Body)) {
+        my $CreateArticle = $ParamObject->GetParam( Param => 'CreateArticle' );
+
+        my @RequiredParams;
+        if ( $CreateArticle ) {
+            @RequiredParams = qw/Body Subject/;
+        }
+
+        for my $Param (qw(Name), @RequiredParams ) {
             if ( !$GetParam{$Param} ) {
                 $Errors{ $Param . 'Invalid' } = 'ServerError';
             }
@@ -164,11 +171,20 @@ sub Run {
             $Errors{ValidIDInvalid} = 'ServerError';
         }
 
-        for my $Param (qw(Name Body)) {
+        my $CreateArticle = $ParamObject->GetParam( Param => 'CreateArticle' );
+
+        my @RequiredParams;
+        if ( $CreateArticle ) {
+            @RequiredParams = qw/Body Subject/;
+        }
+
+        for my $Param (qw(Name), @RequiredParams ) {
             if ( !$GetParam{$Param} ) {
                 $Errors{ $Param . 'Invalid' } = 'ServerError';
             }
         }
+
+        $GetParam{Body} //= '';
 
         if ( %Errors ) {
             $Self->{Subaction} = 'Add';
@@ -240,6 +256,8 @@ sub _MaskQuickCloseForm {
 
         $Param{RoleID} = $QuickClose{Permission}->{Role} if !@{ $Param{RoleID} || [] };
     }
+
+    $Param{CreateArticle} = 1 if $Param{Body};
 
     $Param{ToTypeSelect} = $LayoutObject->BuildSelection(
         Data         => [ qw/Customer Owner Other/ ],

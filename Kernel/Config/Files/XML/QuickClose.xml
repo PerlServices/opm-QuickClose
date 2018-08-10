@@ -63,6 +63,7 @@
                 <Item Key="JavaScript">
                     <Array>
                         <Item>QuickClose.Admin.UserSearch.js</Item>
+                        <Item>QuickClose.Core.js</Item>
                     </Array>
                 </Item>
             </Hash>

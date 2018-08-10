@@ -225,64 +225,66 @@ sub Run {
             UserID    => $Self->{UserID},
         );
 
-        # add note
-        my $ArticleID = '';
-        my $MimeType = 'text/plain';
-        if ( $LayoutObject->{BrowserRichText} ) {
-            $MimeType = 'text/html';
+        if ( $CloseData{Body} ) {
+            # add note
+            my $ArticleID = '';
+            my $MimeType = 'text/plain';
+            if ( $LayoutObject->{BrowserRichText} ) {
+                $MimeType = 'text/html';
 
-            # verify html document
-            $CloseData{Body} = $LayoutObject->RichTextDocumentComplete(
-                String => $CloseData{Body},
+                # verify html document
+                $CloseData{Body} = $LayoutObject->RichTextDocumentComplete(
+                    String => $CloseData{Body},
+                );
+            }
+
+            my $Subject = $TicketObject->TicketSubjectBuild(
+                TicketNumber => $Ticket{TicketNumber},
+                Subject      => $CloseData{Subject} || $Ticket{Title},
+                Action       => 'Reply',
             );
-        }
 
-        my $Subject = $TicketObject->TicketSubjectBuild(
-            TicketNumber => $Ticket{TicketNumber},
-            Subject      => $CloseData{Subject} || $Ticket{Title},
-            Action       => 'Reply',
-        );
-
-        $Subject = $Self->_ReplaceMacros(
-            Text      => $Subject,
-            RichText  => 0,
-            Ticket    => {%Ticket},
-            Language  => $LayoutObject->{UserLanguage},    # used for translating states and such
-            UserID    => 1,
-        );
-
-        $CloseData{IsVisibleForCustomer} = $CloseData{ArticleCustomer};
-
-        my $From                 = "$Self->{UserFirstname} $Self->{UserLastname} <$Self->{UserEmail}>"; 
-        my $ArticleBackendObject = $ArticleObject->BackendForChannel( ChannelName => $CloseData{ArticleType} );
-
-        $ArticleID = $ArticleBackendObject->$Method(
-            TicketID       => $TicketID,
-            SenderType     => 'agent',
-            From           => $From,
-            To             => $To,
-            MimeType       => $MimeType,
-            Charset        => $LayoutObject->{UserCharset},
-            UserID         => $Self->{UserID},
-            HistoryType    => $Self->{Config}->{HistoryType}, 
-            HistoryComment => $Self->{Config}->{HistoryComment}, 
-            ArticleTypeID  => $CloseData{ArticleTypeID},
-            %GetParam,
-            %CloseData,
-            Subject        => $Subject,
-        );
-
-        if ( !$ArticleID ) {
-            return $LayoutObject->ErrorScreen();
-        }
-
-        if ( $ArticleID && $CloseData{TimeUnits} ) {
-            $TicketObject->TicketAccountTime(
-                TicketID  => $TicketID,
-                ArticleID => $ArticleID,
-                TimeUnit  => $CloseData{TimeUnits},
-                UserID    => $Self->{UserID},
+            $Subject = $Self->_ReplaceMacros(
+                Text      => $Subject,
+                RichText  => 0,
+                Ticket    => {%Ticket},
+                Language  => $LayoutObject->{UserLanguage},    # used for translating states and such
+                UserID    => 1,
             );
+
+            $CloseData{IsVisibleForCustomer} = $CloseData{ArticleCustomer};
+
+            my $From                 = "$Self->{UserFirstname} $Self->{UserLastname} <$Self->{UserEmail}>"; 
+            my $ArticleBackendObject = $ArticleObject->BackendForChannel( ChannelName => $CloseData{ArticleType} );
+
+            $ArticleID = $ArticleBackendObject->$Method(
+                TicketID       => $TicketID,
+                SenderType     => 'agent',
+                From           => $From,
+                To             => $To,
+                MimeType       => $MimeType,
+                Charset        => $LayoutObject->{UserCharset},
+                UserID         => $Self->{UserID},
+                HistoryType    => $Self->{Config}->{HistoryType}, 
+                HistoryComment => $Self->{Config}->{HistoryComment}, 
+                ArticleTypeID  => $CloseData{ArticleTypeID},
+                %GetParam,
+                %CloseData,
+                Subject        => $Subject,
+            );
+
+            if ( !$ArticleID ) {
+                return $LayoutObject->ErrorScreen();
+            }
+
+            if ( $ArticleID && $CloseData{TimeUnits} ) {
+                $TicketObject->TicketAccountTime(
+                    TicketID  => $TicketID,
+                    ArticleID => $ArticleID,
+                    TimeUnit  => $CloseData{TimeUnits},
+                    UserID    => $Self->{UserID},
+                );
+            }
         }
 
         if ( $CloseData{PriorityID} ) {

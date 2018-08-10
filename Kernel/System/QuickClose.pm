@@ -79,7 +79,7 @@ sub QuickCloseAdd {
     my $PermissionObject = $Kernel::OM->Get('Kernel::System::QuickClose::Permission');
 
     # check needed stuff
-    for my $Needed (qw(Name Body ValidID UserID ArticleType)) {
+    for my $Needed (qw(Name ValidID UserID ArticleType)) {
         if ( !$Param{$Needed} ) {
             $LogObject->Log(
                 Priority => 'error',
@@ -102,6 +102,7 @@ sub QuickCloseAdd {
     $Param{TimeUnits}               ||= 0;
     $Param{ToAddress}               ||= '';
     $Param{ToType}                  ||= '';
+    $Param{Body}                    ||= '';
     $Param{ArticleCustomer}         ||= 0;
 
     # insert new news
@@ -198,7 +199,7 @@ sub QuickCloseUpdate {
     my $PermissionObject = $Kernel::OM->Get('Kernel::System::QuickClose::Permission');
 
     # check needed stuff
-    for my $Needed (qw(ID Name Body ValidID UserID ArticleType)) {
+    for my $Needed (qw(ID Name ValidID UserID ArticleType)) {
         if ( !$Param{$Needed} ) {
             $LogObject->Log(
                 Priority => 'error',
@@ -222,6 +223,7 @@ sub QuickCloseUpdate {
     $Param{TimeUnits}               ||= 0;
     $Param{ToType}                  ||= '';
     $Param{ToAddress}               ||= '';
+    $Param{Body}                    ||= '';
 
     # insert new news
     return if !$DBObject->Do(

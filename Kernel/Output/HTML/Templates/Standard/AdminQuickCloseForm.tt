@@ -85,11 +85,30 @@
                         </div>
                         <div class="Clear"></div>
 
-                        <label for="Subject">
+                        <label for="CreateArticle">
+                            [% Translate("Create Article") | html %]:
+                        </label>
+                        <div class="Field">
+                            <input type="checkbox" id="CreateArticle" name="CreateArticle" value="1" [% IF Data.CreateArticle %]checked="checked"[% END %] class="" />
+                            <span style="color: red">[% Translate("Check this when you want to create an article") %]</span>
+                        </div>
+                        <div class="Clear"></div>
+
+                        <div id="ArticleFields" class="Hidden TableLike">
+                        <fieldset class="TableLike">
+                        <label for="Subject" class="Mandatory">
+                            <span class="Marker">*</span>
                             [% Translate("Subject") | html %]:
                         </label>
                         <div class="Field">
                             <input type="text" id="Subject" name="Subject" value="[% Data.Subject | html %]" class="W75pc" />
+
+                            <div id="SubjectError" class="TooltipErrorMessage">
+                                <p>[% Translate("A subject text is required.") | html %]</p>
+                            </div>
+                            <div id="SubjectServerError" class="TooltipErrorMessage">
+                                <p>[% Translate("A subject text is required.") | html %]</p>
+                            </div>
                         </div>
                         <div class="Clear"></div>
 
@@ -98,7 +117,7 @@
                             [% Translate("Body") | html %]:
                         </label>
                         <div class="RichTextField">
-                            <textarea id="RichText" name="Body" class="W75pc RichText Validate_Required [% Data.BodyInvalid | html %]" rows="15" cols="[% Config("Ticket::Frontend::TextAreaNote") %]">[% Data.Body | html %]</textarea>
+                            <textarea id="RichText" name="Body" class="W75pc RichText [% Data.BodyInvalid | html %]" rows="15" cols="[% Config("Ticket::Frontend::TextAreaNote") %]">[% Data.Body | html %]</textarea>
                             <div id="RichTextError" class="TooltipErrorMessage">
                                 <p>[% Translate("A body text is required.") | html %]</p>
                             </div>
@@ -115,6 +134,26 @@
                             <input type="text" name="TimeUnits" id="TimeUnits" value="[% Data.TimeUnits | html %]" />
                         </div>
                         <div class="Clear"></div>
+
+                        <label for="ArticleType" class="Mandatory">
+                            <span class="Marker">*</span>
+                            [% Translate("Article Type") | html %]:
+                        </label>
+                        <div class="Field">
+                            [% Data.ArticleTypeSelect %]
+                        </div>
+                        <div class="Clear"></div>
+
+                        <label for="ArticleCustomer">
+                            [% Translate("Article viewable for Customer") | html %]:
+                        </label>
+                        <div class="Field">
+                            <input type="checkbox" name="ArticleCustomer" [% Data.CustomerSelected %] value="1">
+                        </div>
+                        <div class="Clear"></div>
+
+                        </fieldset>
+                        </div>
 
                         <label for="StateID">
                             [% Translate("State after close") | html %]:
@@ -209,23 +248,6 @@
                         </label>
                         <div class="Field">
                             [% Data.ValidSelect %]
-                        </div>
-                        <div class="Clear"></div>
-
-                        <label for="ArticleType" class="Mandatory">
-                            <span class="Marker">*</span>
-                            [% Translate("Article Type") | html %]:
-                        </label>
-                        <div class="Field">
-                            [% Data.ArticleTypeSelect %]
-                        </div>
-                        <div class="Clear"></div>
-
-                        <label for="ArticleCustomer">
-                            [% Translate("Article viewable for Customer") | html %]:
-                        </label>
-                        <div class="Field">
-                            <input type="checkbox" name="ArticleCustomer" [% Data.CustomerSelected %] value="1">
                         </div>
                         <div class="Clear"></div>
 
