@@ -56,7 +56,7 @@ sub Run {
                 var URL = Core.Config.Get('Baselink');
                 var TID = $(this).val();
 
-                if ( !TID || TID == "" ) {
+                if ( !TID || TID == "" || TID <= 0 ) {
                     return;
                 }
 

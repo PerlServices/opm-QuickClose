@@ -87,7 +87,7 @@ sub Run {
             my $Label   = $Labels->{$Group} || $Config->{NoneLabel} || 'QuickClose';
 
             unshift @Data, {
-                Key   => '',
+                Key   => '0',
                 Value => "- $Label -",
             };
 
