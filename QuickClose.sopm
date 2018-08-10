@@ -2,7 +2,7 @@
 <otrs_package version="1.0">
     <!-- GENERATED WITH OTRS::OPM::Maker::Command::sopm (1.4) -->
     <Name>QuickClose</Name>
-    <Version>6.0.3</Version>
+    <Version>6.0.4</Version>
     <Framework>6.0.x</Framework>
     <Vendor>Perl-Services.de</Vendor>
     <URL>http://www.perl-services.de</URL>
@@ -31,6 +31,7 @@
         <File Permission="644" Location="doc/en/QuickClose.pod" />
         <File Permission="644" Location="doc/hu/QuickClose.pod" />
         <File Permission="644" Location="var/httpd/htdocs/js/QuickClose.Admin.UserSearch.js" />
+        <File Permission="644" Location="var/httpd/htdocs/js/QuickClose.Core.js" />
         <File Permission="644" Location="var/packagesetup/QuickClose.pm" />
     </Filelist>
     <DatabaseInstall Type="post">
