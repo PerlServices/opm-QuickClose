@@ -259,14 +259,6 @@ sub _MaskQuickCloseForm {
         Class      => 'Modernize',
     );
 
-    # add rich text editor
-    if ( $ConfigObject->Get( 'Frontend::RichText' ) ) {
-        $LayoutObject->Block(
-            Name => 'RichText',
-            Data => \%Param,
-        );
-    }
-
     my $ValidID = $ValidObject->ValidLookup( Valid => 'valid' );
 
     $Param{ValidSelect} = $LayoutObject->BuildSelection(
@@ -411,6 +403,21 @@ sub _MaskQuickCloseForm {
 
     my $TemplateFile = 'AdminQuickCloseList';
     $TemplateFile = 'AdminQuickCloseForm' if $Self->{Subaction};
+
+    # add rich text editor
+    if ( $LayoutObject->{BrowserRichText} ) {
+
+        my $Config = $Kernel::OM->Get('Kernel::Config')->Get("Ticket::Frontend::AgentTicketEmail");
+
+        # use height/width defined for this screen
+        $Param{RichTextHeight} = $Config->{RichTextHeight} || 0;
+        $Param{RichTextWidth}  = $Config->{RichTextWidth}  || 0;
+
+        # set up rich text editor
+        $LayoutObject->SetRichTextParameters(
+            Data => \%Param,
+        );
+    }
 
     return $LayoutObject->Output(
         TemplateFile => $TemplateFile,

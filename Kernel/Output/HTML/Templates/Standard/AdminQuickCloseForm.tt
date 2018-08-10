@@ -98,11 +98,6 @@
                             [% Translate("Body") | html %]:
                         </label>
                         <div class="RichTextField">
- 
-[% RenderBlockStart("RichText") %]
-[% InsertTemplate("RichTextEditor.tt") %]
-[% RenderBlockEnd("RichText") %]
-
                             <textarea id="RichText" name="Body" class="W75pc RichText Validate_Required [% Data.BodyInvalid | html %]" rows="15" cols="[% Config("Ticket::Frontend::TextAreaNote") %]">[% Data.Body | html %]</textarea>
                             <div id="RichTextError" class="TooltipErrorMessage">
                                 <p>[% Translate("A body text is required.") | html %]</p>
