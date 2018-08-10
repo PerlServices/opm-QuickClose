@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="iso-8859-1" ?>
 <otrs_config version="2.0" init="Application">
-    <CVS>$Id: QuickClose.xml,v 1.1.1.1 2011/04/15 07:49:58 rb Exp $</CVS>
     <Setting Name="Frontend::Module###AgentQuickClose" Required="0" Valid="1">
         <Description Translatable="1">Frontend module registration for the QuickClose agent interface.</Description>
         <Navigation>Frontend::Agent::ModuleRegistration</Navigation>
@@ -328,6 +327,13 @@
         <Value>
             <Hash>
             </Hash>
+        </Value>
+    </Setting>
+    <Setting Name="QuickClose::RequiredLock" Required="1" Valid="1">
+        <Description Translatable="1">When ticket is locked, show dropdown only to the owner in ticket zoom.</Description>
+        <Navigation>Core</Navigation>
+        <Value>
+            <Item ValueType="Checkbox">0</Item>
         </Value>
     </Setting>
 </otrs_config>

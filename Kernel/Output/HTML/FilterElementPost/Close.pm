@@ -72,6 +72,10 @@ sub Run {
             return 1;
         }
 
+        if ( $Ticket{Lock} eq 'lock' && $ConfigObject->Get('QuickClose::RequiredLock') && $LayoutObject->{UserID} != $Ticket{OwnerID} ) {
+            return 1;
+        }
+
         my $FormID     = $UploadCacheObject->FormIDCreate();
         my %List       = $QuickCloseObject->QuickCloseList(
             Valid      => 1,
