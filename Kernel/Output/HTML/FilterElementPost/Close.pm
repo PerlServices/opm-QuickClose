@@ -95,7 +95,7 @@ sub Run {
 
             %List = ( '' => \%Tmp );
         }
-   
+
         for my $Group ( sort { $a cmp $b }keys %List ) { 
             my %Entries = %{ $List{$Group} };
             my @Indexes = sort{ $Entries{$a} cmp $Entries{$b} }keys %Entries;
@@ -114,7 +114,7 @@ sub Run {
                 ID           => 'QuickClose' . $Group,
                 Size         => 1,
                 HTMLQuote    => 1,
-                Class        => 'QuickCloseSelect Modernize',
+                Class        => 'Modernize Small',
             );
     
             $Dropdowns .= $LayoutObject->Output(
