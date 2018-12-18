@@ -81,6 +81,15 @@ sub Run {
                     TicketView = 'Small';
                 }
 
+                var TicketID = $(this).data('ticket-id');
+                if ( TicketID && TicketID > 0 ) {
+                    var HiddenField = $('<input type="hidden" name="TicketID">');
+                    HiddenField.val( TicketID );
+                    CloseForm.append( HiddenField );
+                    CloseForm.submit();
+		    return;
+                }
+
                 if ( TID ) {
                     $SelectedTickets = $(TicketElementSelectors[TicketView] + ':checked');
                     $SelectedTickets.each(function () {
@@ -88,8 +97,9 @@ sub Run {
                         HiddenField.val( $(this).val() );
                         CloseForm.append( HiddenField );
                     });
+
                     CloseForm.submit();
-                }
+		}
             });
         });
         });

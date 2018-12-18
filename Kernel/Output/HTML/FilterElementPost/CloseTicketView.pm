@@ -110,10 +110,24 @@ sub Run {
         }
 
         #scan html output and generate new html input
-        ${ $Param{Data} } =~ s{<ul \s+ class="Actions"> \s* <li .*? /li>\K}{$Dropdowns}xmgs;
+        ${ $Param{Data} } =~ s{(<ul \s+ class="Actions"> \s* <li .*? /li>)\K}{$Self->_InsertDropdown( $Dropdowns, $1)}xmgse;
     }
 
     return 1;
+}
+
+sub _InsertDropdown {
+    my ($Self, $Dropdown, $Actions) = @_;
+
+    return $Dropdown if $Actions !~ m{TicketID=(\d+)};
+
+    my $TicketID = $1;
+
+    my $Copy = $Dropdown;
+    $Copy =~ s{<select \K}{data-ticket-id="$TicketID" };
+    $Copy =~ s{id="QuickClose\K}{-$TicketID };
+
+    return $Copy;
 }
 
 1;
