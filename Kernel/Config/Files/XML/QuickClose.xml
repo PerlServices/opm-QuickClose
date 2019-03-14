@@ -337,4 +337,11 @@
             <Item ValueType="Checkbox">0</Item>
         </Value>
     </Setting>
+    <Setting Name="QuickClose::UseQueueSender" Required="1" Valid="1">
+        <Description Translatable="1">Use the system address assigned to the queue as the sender address.</Description>
+        <Navigation>Core</Navigation>
+        <Value>
+            <Item ValueType="Checkbox">0</Item>
+        </Value>
+    </Setting>
 </otrs_config>

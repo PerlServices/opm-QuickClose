@@ -254,7 +254,15 @@ sub Run {
 
             $CloseData{IsVisibleForCustomer} = $CloseData{ArticleCustomer};
 
-            my $From                 = "$Self->{UserFirstname} $Self->{UserLastname} <$Self->{UserEmail}>"; 
+            my $From = "$Self->{UserFirstname} $Self->{UserLastname} <$Self->{UserEmail}>";
+
+            if ( $ConfigObject->Get('QuickClose::UseQueueSender') ) {
+                $From = $TemplateGenerator->Sender(
+                    QueueID => $Ticket{QueueID},
+                    UserID  => $Self->{UserID},
+                );
+            }
+
             my $ArticleBackendObject = $ArticleObject->BackendForChannel( ChannelName => $CloseData{ArticleType} );
 
             $ArticleID = $ArticleBackendObject->$Method(
