@@ -60,6 +60,7 @@ sub Data {
     $Lang->{'Please contact the admin.'} = 'Bitte kontaktieren Sie den OTRS-Administrator';
     $Lang->{'No QuickClose data found!'} = 'Keine QuickClose-Daten gefunden';
     $Lang->{'No Access to these Tickets (IDs: %s)'} = 'Kein Zugriff auf diese Tickets (IDs: %s)';
+    $Lang->{'QuickClose not applicable for these Tickets (IDs: %s)'} = 'Aktion kann nicht auf diese Tickets angewendet werden (IDs: %s)';
 
     # Kernel/Output/HTML/Templates/Standard/QuickCloseSnippetTicketView.tt
     $Lang->{'QuickClose ticket'} = 'Ticket schnellschließen';

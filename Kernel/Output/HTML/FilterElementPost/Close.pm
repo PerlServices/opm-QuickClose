@@ -1,6 +1,5 @@
 # --
-# Kernel/Output/HTML/FilterElementPost/Close.pm
-# Copyright (C) 2011 - 2015 Perl-Services.de, http://www.perl-services.de/
+# Copyright (C) 2011 - 2021 Perl-Services.de, http://www.perl-services.de/
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -52,92 +51,124 @@ sub Run {
     my $Templatename = $Param{TemplateFile} || '';
     return 1 if !$Templatename;
 
-    if ( $Templatename  =~ m{AgentTicketZoom\z} ) {
-        my @UserRoles = $GroupObject->GroupUserRoleMemberList(
-            UserID => $LayoutObject->{UserID},
-            Result => 'ID',
-        );
+    return if $Templatename  !~ m{AgentTicketZoom\z};
 
-        my ($TicketID) = $ParamObject->GetParam( Param => 'TicketID' );
+    my @UserRoles = $GroupObject->GroupUserRoleMemberList(
+        UserID => $LayoutObject->{UserID},
+        Result => 'ID',
+    );
 
-        return 1 if !$TicketID;
+    my ($TicketID) = $ParamObject->GetParam( Param => 'TicketID' );
 
-        my %Ticket = $TicketObject->TicketGet(
-            TicketID => $TicketID,
-        );
+    return 1 if !$TicketID;
 
-        return 1 if !%Ticket;
+    my %Ticket = $TicketObject->TicketGet(
+        TicketID      => $TicketID,
+        UserID        => $LayoutObject->{UserID},
+        DynamicFields => 1,
+    );
 
-        if ( $ConfigObject->Get('QuickClose::ShowOnlyForOwner') && $LayoutObject->{UserID} != $Ticket{OwnerID} ) {
-            return 1;
-        }
+    return 1 if !%Ticket;
 
-        if ( $Ticket{Lock} eq 'lock' && $ConfigObject->Get('QuickClose::RequiredLock') && $LayoutObject->{UserID} != $Ticket{OwnerID} ) {
-            return 1;
-        }
-
-        my $FormID     = $UploadCacheObject->FormIDCreate();
-        my %List       = $QuickCloseObject->QuickCloseList(
-            Valid      => 1,
-            GroupBy    => 1,
-            Permission => {
-                RoleID => \@UserRoles,
-            },
-        );
-        
-        my $Config    = $ConfigObject->Get('QuickClose') || {};
-        my $Labels    = $ConfigObject->Get( 'QuickClose::Labels' ) || {};
-        my $Dropdowns = '';
-        my $UseGroups = $ConfigObject->Get('QuickClose::UseGroups');
-
-        if ( !$UseGroups ) {
-            my %Tmp = %List;
-
-            %List = ( '' => \%Tmp );
-        }
-
-        for my $Group ( sort { $a cmp $b }keys %List ) { 
-            my %Entries = %{ $List{$Group} };
-            my @Indexes = sort{ $Entries{$a} cmp $Entries{$b} }keys %Entries;
-            my @Data    = map{ { Key => $_, Value => $Entries{$_} } }@Indexes;
-
-            my $Label   = $Labels->{$Group} || $Config->{NoneLabel} || 'QuickClose';
-            
-            unshift @Data, {
-                Key   => '0',
-                Value => "- $Label -",
-            };
-            
-            my $Select = $LayoutObject->BuildSelection(
-                Data         => \@Data,
-                Name         => 'QuickClose',
-                ID           => 'QuickClose' . $Group,
-                Size         => 1,
-                HTMLQuote    => 1,
-                Class        => 'QuickCloseSelect Modernize Small',
-            );
-    
-            $Dropdowns .= $LayoutObject->Output(
-                TemplateFile => 'QuickCloseSnippet',
-                Data         => {
-                    TicketID         => $TicketID,
-                    QuickCloseSelect => $Select,
-                    FormID           => $FormID,
-                },
-            ); 
-        }
-
-        #scan html output and generate new html input
-        my $LinkType = $ConfigObject->Get('Ticket::Frontend::MoveType');
-        if ( $LinkType eq 'form' ) {
-            ${ $Param{Data} } =~ s{(<select name="DestQueueID".*?</li>)}{$1 $Dropdowns}mgs;
-        }
-        else {
-            ${ $Param{Data} } =~ s{(<a href=".*?Action=AgentTicketMove;TicketID=\d+;".*?</li>)}{$1 $Dropdowns}mgs;
-        }
+    if ( $ConfigObject->Get('QuickClose::ShowOnlyForOwner') && $LayoutObject->{UserID} != $Ticket{OwnerID} ) {
+        return 1;
     }
 
-    return ${ $Param{Data} };
+    if ( $Ticket{Lock} eq 'lock' && $ConfigObject->Get('QuickClose::RequiredLock') && $LayoutObject->{UserID} != $Ticket{OwnerID} ) {
+        return 1;
+    }
+
+    my $FormID     = $UploadCacheObject->FormIDCreate();
+    my %List       = $QuickCloseObject->QuickCloseList(
+        Valid      => 1,
+        GroupBy    => 1,
+        Permission => {
+            RoleID => \@UserRoles,
+        },
+    );
+
+    return 1 if !%List;
+
+    my $Config    = $ConfigObject->Get('QuickClose') || {};
+    my $Labels    = $ConfigObject->Get( 'QuickClose::Labels' ) || {};
+    my $Dropdowns = '';
+    my $UseGroups = $ConfigObject->Get('QuickClose::UseGroups');
+
+    if ( !$UseGroups ) {
+        my %Tmp = %List;
+
+        %List = ( '' => \%Tmp );
+    }
+
+    GROUP:
+    for my $Group ( sort { $a cmp $b }keys %List ) {
+        my %Entries = %{ $List{$Group} || {} };
+
+        # check ticket ACLs
+        my %FakeActions = map {
+            my $Name       = $Entries{$_};
+            my $FakeAction = sprintf 'AgentTicketQuickClose_%s', $Name;
+            $FakeAction => $FakeAction;
+        } keys %Entries;
+
+        my $Success = $TicketObject->TicketAcl(
+            %Ticket,
+            Data          => \%FakeActions,
+            ReturnType    => 'Action',
+            ReturnSubType => '-',
+            UserID        => $LayoutObject->{UserID},
+        );
+
+        my %AllowedActions = $TicketObject->TicketAclData();
+
+        if ( $Success ) {
+            for my $ID ( keys %Entries ) {
+                my $FakeAction = sprintf 'AgentTicketQuickClose_%s', $Entries{$ID};
+                delete $Entries{$ID} if !$AllowedActions{$FakeAction};
+            }
+        }
+
+        next GROUP if !%Entries;
+
+        my @Indexes = sort{ $Entries{$a} cmp $Entries{$b} }keys %Entries;
+        my @Data    = map{ { Key => $_, Value => $Entries{$_} } }@Indexes;
+
+        my $Label   = $Labels->{$Group} || $Config->{NoneLabel} || 'QuickClose';
+
+        unshift @Data, {
+            Key   => '0',
+            Value => "- $Label -",
+        };
+
+        my $Select = $LayoutObject->BuildSelection(
+            Data         => \@Data,
+            Name         => 'QuickClose',
+            ID           => 'QuickClose' . $Group,
+            Size         => 1,
+            HTMLQuote    => 1,
+            Class        => 'QuickCloseSelect Modernize Small',
+        );
+
+        $Dropdowns .= $LayoutObject->Output(
+            TemplateFile => 'QuickCloseSnippet',
+            Data         => {
+                TicketID         => $TicketID,
+                QuickCloseSelect => $Select,
+                FormID           => $FormID,
+            },
+        );
+    }
+
+    #scan html output and generate new html input
+    my $LinkType = $ConfigObject->Get('Ticket::Frontend::MoveType');
+    if ( $LinkType eq 'form' ) {
+        ${ $Param{Data} } =~ s{(<select name="DestQueueID".*?</li>)}{$1 $Dropdowns}mgs;
+    }
+    else {
+        ${ $Param{Data} } =~ s{(<a href=".*?Action=AgentTicketMove;TicketID=\d+;".*?</li>)}{$1 $Dropdowns}mgs;
+    }
+
+    return 1;
 }
 
 1;

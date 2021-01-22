@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2012-2017 Perl-Services.de, http://perl-services.de
+# Copyright (C) 2012 - 2021 Perl-Services.de, http://perl-services.de
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -110,6 +110,7 @@ sub Run {
     delete $CloseData{Subject} if !length $CloseData{Subject};
 
     my @NoAccess;
+    my @CloseNotAllowed;
 
     TICKETID:
     for my $TicketID ( @TicketIDs ) {
@@ -127,17 +128,37 @@ sub Run {
             next TICKETID;
         }
 
+        my %Ticket = $TicketObject->TicketGet(
+            TicketID      => $TicketID,
+            UserID        => $Self->{UserID},
+            DynamicFields => 1,
+        );
+
+        # check if the Quickclose action is forbidden via Ticket ACLs
+        my $FakeAction = sprintf 'AgentTicketQuickClose_%s', $CloseData{Name};
+
+        my $ACLInAction = $TicketObject->TicketAcl(
+            %Ticket,
+            Data => { 
+                $FakeAction => $FakeAction,
+            },
+            ReturnType => 'Action',
+            ReturnSubType => '-',
+            UserID        => $Self->{UserID},
+        );
+
+        my %ACLData = $TicketObject->TicketAclData();
+        if ( $ACLInAction && !exists $ACLData{$FakeAction} ) {
+            push @CloseNotAllowed, $TicketID;
+            next TICKETID;
+        }
+
         # challenge token check for write action
         $LayoutObject->ChallengeTokenCheck();
 
         my $ResponsibleEnabled = $ConfigObject->Get('Ticket::Responsible');
 
         if ( $ResponsibleEnabled && $CloseData{AssignToResponsible} ) {
-            my %Ticket = $TicketObject->TicketGet(
-                TicketID => $TicketID,
-                UserID   => $Self->{UserID},
-            );
-
             if ( $Ticket{ResponsibleID} ) {
                 $TicketObject->TicketOwnerSet(
                     TicketID  => $TicketID,
@@ -169,12 +190,6 @@ sub Run {
                 UserID    => $Self->{UserID},
             );
         }
-
-        my %Ticket = $TicketObject->TicketGet(
-            TicketID      => $TicketID,
-            UserID        => $Self->{UserID},
-            DynamicFields => 1,
-        );
 
         my $To = '';
 
@@ -362,7 +377,7 @@ sub Run {
     }
 
     # redirect parent window to last screen overview on closed tickets
-    if ( !@NoAccess ) {
+    if ( !@NoAccess && !@CloseNotAllowed ) {
         my $LastView = $Self->{LastScreenOverview} || $Self->{LastScreenView} || 'Action=AgentDashboard';
 
         if ( scalar( @TicketIDs ) == 1 && $CloseData{ShowTicketZoom} ) {
@@ -378,8 +393,15 @@ sub Run {
 
     }
     else {
+        my @NotAllowed    = ('No Access to these Tickets (IDs: %s)', join( ", ", @NoAccess ));
+        my @NotApplicable = ('QuickClose not applicable for these Tickets (IDs: %s)', join( ", ", @CloseNotAllowed ));
+
+        my @Messages;
+        push @Messages, $LayoutObject->{LanguageObject}->Translate( @NotAllowed )    if @NoAccess;
+        push @Messages, $LayoutObject->{LanguageObject}->Translate( @NotApplicable ) if @CloseNotAllowed;
+
         return $LayoutObject->ErrorScreen(
-            Message => $LayoutObject->{LanguageObject}->Translate( 'No Access to these Tickets (IDs: %s)', join( ", ", @NoAccess ) ),
+            Message => (join ', ', @Messages),
             Comment => Translatable('Please contact the administrator.'),
         );
     }
