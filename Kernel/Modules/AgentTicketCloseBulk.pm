@@ -211,6 +211,8 @@ sub Run {
         my $Method = 'ArticleCreate';
         my $BR     = $LayoutObject->{BrowserRichText} ? '<br>' : "\n";
 
+        my $Body = $CloseData{Body};
+
         if ( $ToType eq 'Customer' && $Ticket{CustomerUserID} ) {
             my %CustomerData = $CustomerUserObject->CustomerUserDataGet(
                 User => $Ticket{CustomerUserID},
@@ -223,24 +225,24 @@ sub Run {
                 $To = qq~"$CustomerData{UserFullname}" <$CustomerData{UserEmail}>~;
             }
 
-            $CloseData{Body} .= "$BR$BR-- $BR" . $Signature if $Signature;
+            $Body .= "$BR$BR-- $BR" . $Signature if $Signature;
         }
         elsif ( $ToType eq 'Other' && $CloseData{ToAddress} ) {
             $Method = 'ArticleSend';
             $To     = $CloseData{ToAddress};
 
-            $CloseData{Body} .= "$BR$BR-- $BR" . $Signature if $Signature;
+            $Body .= "$BR$BR-- $BR" . $Signature if $Signature;
         }
 
-        $CloseData{Body} = $Self->_ReplaceMacros(
-            Text      => $CloseData{Body},
+        $Body = $Self->_ReplaceMacros(
+            Text      => $Body,
             RichText  => $LayoutObject->{BrowserRichText},
             Ticket    => {%Ticket},
             Language  => $LayoutObject->{UserLanguage},    # used for translating states and such
             UserID    => $Self->{UserID},
         );
 
-        if ( $CloseData{Body} ) {
+        if ( $Body ) {
             # add note
             my $ArticleID = '';
             my $MimeType = 'text/plain';
@@ -248,8 +250,8 @@ sub Run {
                 $MimeType = 'text/html';
 
                 # verify html document
-                $CloseData{Body} = $LayoutObject->RichTextDocumentComplete(
-                    String => $CloseData{Body},
+                $Body = $LayoutObject->RichTextDocumentComplete(
+                    String => $Body,
                 );
             }
 
@@ -293,6 +295,7 @@ sub Run {
                 ArticleTypeID  => $CloseData{ArticleTypeID},
                 %GetParam,
                 %CloseData,
+                Body           => $Body,
                 Subject        => $Subject,
             );
 
