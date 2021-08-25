@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<otrs_package version="1.0">
-    <!-- GENERATED WITH OTRS::OPM::Maker::Command::sopm (1.4) -->
+<otobo_package version="1.0">
+    <!-- GENERATED WITH OTRS::OPM::Maker::Command::sopm (1.44) -->
     <Name>QuickClose</Name>
-    <Version>6.0.10</Version>
-    <Framework>6.0.x</Framework>
+    <Version>10.0.1</Version>
+    <Framework>10.0.x</Framework>
     <Vendor>Perl-Services.de</Vendor>
     <URL>http://www.perl-services.de</URL>
     <Description Lang="de">Ein Modul, mit dem Tickets schneller/einfacher geschlossen werden können.</Description>
@@ -167,4 +167,4 @@
     <IntroInstall Type="post" Lang="hu" Title="Köszönjük!"><![CDATA[
             Köszönjük, hogy a QuickClose modult választotta.
     ]]></IntroInstall>
-</otrs_package>
+</otobo_package>

@@ -1,8 +1,9 @@
 {
     "name": "QuickClose",
-    "version": "6.0.10",
+    "version": "10.0.1",
+    "product": "otobo",
     "framework": [
-        "6.0.x"
+        "10.0.x"
     ],
     "vendor": {
         "name":  "Perl-Services.de",
