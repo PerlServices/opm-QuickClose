@@ -2,7 +2,7 @@
 <otobo_package version="1.0">
     <!-- GENERATED WITH OTRS::OPM::Maker::Command::sopm (1.44) -->
     <Name>QuickClose</Name>
-    <Version>10.0.1</Version>
+    <Version>10.0.2</Version>
     <Framework>10.0.x</Framework>
     <Vendor>Perl-Services.de</Vendor>
     <URL>http://www.perl-services.de</URL>
@@ -47,6 +47,7 @@
             <Column Name="pending_diff" Required="false" Type="SMALLINT" />
             <Column Name="ticket_unlock" Required="false" Type="SMALLINT" />
             <Column Name="force_owner_change" Required="false" Type="SMALLINT" />
+            <Column Name="force_responsible_change" Required="false" Type="SMALLINT" />
             <Column Name="assign_to_responsible" Required="false" Type="SMALLINT" />
             <Column Name="show_ticket_zoom" Required="false" Type="SMALLINT" />
             <Column Name="fix_hour" Required="false" Type="VARCHAR" Size="5" />
@@ -149,6 +150,9 @@
         <TableAlter Name="ps_quick_close" Version="6.0.1">
             <ColumnAdd Name="article_type" Required="true" Type="VARCHAR" Size="20" />
             <ColumnAdd Name="article_customer" Required="true" Type="SMALLINT" />
+        </TableAlter>
+        <TableAlter Name="ps_quick_close" Version="10.0.2">
+            <ColumnAdd Name="force_responsible_change" Required="false" Type="SMALLINT" />
         </TableAlter>
     </DatabaseUpgrade>
     <DatabaseUninstall Type="pre">
