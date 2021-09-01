@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2011 - 2017 Perl-Services.de, http://www.perl-services.de
+# Copyright (C) 2011 - 2021 Perl-Services.de, https://www.perl-services.de
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -58,6 +58,7 @@ sub Run {
         QueueID Subject Unlock OwnerSelected PendingDiff ForceCurrentUserAsOwner
         AssignToResponsible ShowTicketZoom FixHour Group PriorityID
         ResponsibleSelected TimeUnits ToType ToAddress
+        ForceCurrentUserAsResponsible
     );
 
     my %GetParam;
@@ -305,10 +306,17 @@ sub _MaskQuickCloseForm {
         Result    => 'HASH',
     );
 
-    $Param{ForceSelected}       = $Param{ForceCurrentUserAsOwner} ? 'checked="checked"' : '';
-    $Param{ResponsibleSelected} = $Param{AssignToResponsible}     ? 'checked="checked"' : '';
-    $Param{ZoomSelected}        = $Param{ShowTicketZoom}          ? 'checked="checked"' : '';
-    $Param{CustomerSelected}    = $Param{ArticleCustomer}         ? 'checked="checked"' : '';
+    $Param{ResponsibleSelected} = $Param{AssignToResponsible} ? 'checked="checked"' : '';
+    $Param{ZoomSelected}        = $Param{ShowTicketZoom}      ? 'checked="checked"' : '';
+    $Param{CustomerSelected}    = $Param{ArticleCustomer}     ? 'checked="checked"' : '';
+
+    $Param{ForceSelected} = $Param{ForceCurrentUserAsOwner} ?
+        'checked="checked"' :
+        '';
+
+    $Param{ForceResponsibleSelected} = $Param{ForceCurrentUserAsResponsible} ?
+        'checked="checked"' :
+        '';
 
     $Param{StateSelect} = $LayoutObject->BuildSelection(
         Data         => \%States,

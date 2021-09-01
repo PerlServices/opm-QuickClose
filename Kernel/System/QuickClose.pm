@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2011-2017 Perl-Services.de, http://www.perl-services.de
+# Copyright (C) 2011 - 2021 Perl-Services.de, https://www.perl-services.de
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -89,21 +89,22 @@ sub QuickCloseAdd {
         }
     }
 
-    $Param{QueueID}                 ||= 0;
-    $Param{OwnerID}                 ||= 0;
-    $Param{ResponsibleID}           ||= 0;
-    $Param{PriorityID}              ||= 0;
-    $Param{PendingDiff}             ||= 0;
-    $Param{ForceCurrentUserAsOwner} ||= 0;
-    $Param{AssignToResponsible}     ||= 0;
-    $Param{Unlock}                  ||= 0;
-    $Param{StateID}                 ||= 0;
-    $Param{ShowTicketZoom}          ||= 0;
-    $Param{TimeUnits}               ||= 0;
-    $Param{ToAddress}               ||= '';
-    $Param{ToType}                  ||= '';
-    $Param{Body}                    ||= '';
-    $Param{ArticleCustomer}         ||= 0;
+    $Param{QueueID}                       ||= 0;
+    $Param{OwnerID}                       ||= 0;
+    $Param{ResponsibleID}                 ||= 0;
+    $Param{PriorityID}                    ||= 0;
+    $Param{PendingDiff}                   ||= 0;
+    $Param{ForceCurrentUserAsOwner}       ||= 0;
+    $Param{ForceCurrentUserAsResponsible} ||= 0;
+    $Param{AssignToResponsible}           ||= 0;
+    $Param{Unlock}                        ||= 0;
+    $Param{StateID}                       ||= 0;
+    $Param{ShowTicketZoom}                ||= 0;
+    $Param{TimeUnits}                     ||= 0;
+    $Param{ToAddress}                     ||= '';
+    $Param{ToType}                        ||= '';
+    $Param{Body}                          ||= '';
+    $Param{ArticleCustomer}               ||= 0;
 
     # insert new news
     return if !$DBObject->Do(
@@ -112,9 +113,10 @@ sub QuickCloseAdd {
             . ' article_type, article_customer, change_time, change_by, comments, queue_id, '
             . ' subject, ticket_unlock, owner_id, pending_diff, force_owner_change, '
             . ' assign_to_responsible, show_ticket_zoom, fix_hour, group_name,'
-            . ' responsible_id, priority_id, time_units, to_address, to_type) '
+            . ' responsible_id, priority_id, time_units, to_address, to_type, '
+            . ' force_responsible_change) '
             . 'VALUES (?, ?, ?, current_timestamp, ?, ?, ?, ?, current_timestamp, '
-            . ' ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            . ' ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
         Bind => [
             \$Param{Name},
             \$Param{StateID},
@@ -140,6 +142,7 @@ sub QuickCloseAdd {
             \$Param{TimeUnits},
             \$Param{ToAddress},
             \$Param{ToType},
+            \$Param{ForceCurrentUserAsResponsible},
         ],
     );
 
@@ -209,21 +212,22 @@ sub QuickCloseUpdate {
         }
     }
 
-    $Param{QueueID}                 ||= 0;
-    $Param{OwnerID}                 ||= 0;
-    $Param{ResponsibleID}           ||= 0;
-    $Param{PriorityID}              ||= 0;
-    $Param{PendingDiff}             ||= 0;
-    $Param{ForceCurrentUserAsOwner} ||= 0;
-    $Param{AssignToResponsible}     ||= 0;
-    $Param{ArticleCustomer}         ||= 0;
-    $Param{Unlock}                  ||= 0;
-    $Param{StateID}                 ||= 0;
-    $Param{ShowTicketZoom}          ||= 0;
-    $Param{TimeUnits}               ||= 0;
-    $Param{ToType}                  ||= '';
-    $Param{ToAddress}               ||= '';
-    $Param{Body}                    ||= '';
+    $Param{QueueID}                       ||= 0;
+    $Param{OwnerID}                       ||= 0;
+    $Param{ResponsibleID}                 ||= 0;
+    $Param{PriorityID}                    ||= 0;
+    $Param{PendingDiff}                   ||= 0;
+    $Param{ForceCurrentUserAsOwner}       ||= 0;
+    $Param{AssignToResponsible}           ||= 0;
+    $Param{ArticleCustomer}               ||= 0;
+    $Param{Unlock}                        ||= 0;
+    $Param{StateID}                       ||= 0;
+    $Param{ShowTicketZoom}                ||= 0;
+    $Param{TimeUnits}                     ||= 0;
+    $Param{ToType}                        ||= '';
+    $Param{ToAddress}                     ||= '';
+    $Param{Body}                          ||= '';
+    $Param{ForceCurrentUserAsResponsible} ||= 0;
 
     # insert new news
     return if !$DBObject->Do(
@@ -232,7 +236,7 @@ sub QuickCloseUpdate {
             . 'queue_id = ?, subject = ?, ticket_unlock = ?, owner_id = ?, pending_diff = ?, '
             . 'force_owner_change = ?, assign_to_responsible = ?, show_ticket_zoom = ?, '
             . 'fix_hour = ?, group_name = ?, responsible_id = ?, priority_id = ?, time_units = ?, '
-            . 'to_address = ?, to_type = ?, article_customer = ? '
+            . 'to_address = ?, to_type = ?, article_customer = ?, force_responsible_change = ? '
             . 'WHERE id = ?',
         Bind => [
             \$Param{Name},
@@ -248,7 +252,7 @@ sub QuickCloseUpdate {
             \$Param{PendingDiff},
             \$Param{ForceCurrentUserAsOwner},
             \$Param{AssignToResponsible},
-	    \$Param{ShowTicketZoom},
+            \$Param{ShowTicketZoom},
             \$Param{FixHour},
             \$Param{Group},
             \$Param{ResponsibleID},
@@ -257,6 +261,7 @@ sub QuickCloseUpdate {
             \$Param{ToAddress},
             \$Param{ToType},
             \$Param{ArticleCustomer},
+            \$Param{ForceCurrentUserAsResponsible},
             \$Param{ID},
         ],
     );
@@ -321,7 +326,8 @@ sub QuickCloseGet {
         SQL => 'SELECT id, close_name, state_id, body, create_time, create_by, valid_id, '
             . 'article_type, queue_id, subject, ticket_unlock, owner_id, pending_diff, '
             . 'force_owner_change, assign_to_responsible, show_ticket_zoom, fix_hour, group_name, '
-            . 'responsible_id, priority_id, time_units, to_address, to_type, article_customer '
+            . 'responsible_id, priority_id, time_units, to_address, to_type, article_customer, '
+            . 'force_responsible_change '
             . 'FROM ps_quick_close WHERE id = ?',
         Bind  => [ \$Param{ID} ],
         Limit => 1,
@@ -344,17 +350,18 @@ sub QuickCloseGet {
             OwnerID       => $Data[11],
             PendingDiff   => $Data[12],
 
-            ForceCurrentUserAsOwner => $Data[13],
-            AssignToResponsible     => $Data[14],
-            ShowTicketZoom          => $Data[15],
-            FixHour                 => $Data[16],
-            Group                   => $Data[17],
-            ResponsibleID           => $Data[18],
-            PriorityID              => $Data[19],
-            TimeUnits               => $Data[20],
-            ToAddress               => $Data[21] || '',
-            ToType                  => $Data[22] || '',
-            ArticleCustomer         => $Data[23] || 0,
+            ForceCurrentUserAsOwner       => $Data[13],
+            AssignToResponsible           => $Data[14],
+            ShowTicketZoom                => $Data[15],
+            FixHour                       => $Data[16],
+            Group                         => $Data[17],
+            ResponsibleID                 => $Data[18],
+            PriorityID                    => $Data[19],
+            TimeUnits                     => $Data[20],
+            ToAddress                     => $Data[21] || '',
+            ToType                        => $Data[22] || '',
+            ArticleCustomer               => $Data[23] || 0,
+            ForceCurrentUserAsResponsible => $Data[24],
         );
     }
 

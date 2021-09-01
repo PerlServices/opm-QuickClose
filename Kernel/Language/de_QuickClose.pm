@@ -1,6 +1,5 @@
 # --
-# Kernel/Language/de_QuickClose.pm - the German translation for QuickClose
-# Copyright (C) 2011-2016 Perl-Services, http://www.perl-services.de
+# Copyright (C) 2011 - 2021 Perl-Services.de, https://www.perl-services.de
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -101,6 +100,7 @@ sub Data {
     $Lang->{'Invalid User.'} = 'Ungültiger Benutzer.';
     $Lang->{'Responsible'} = 'Verantwortlich';
     $Lang->{'Acting user should become ticket owner'} = 'Ausführender Benutzer wird Besitzer';
+    $Lang->{'Acting user should become ticket responsible'} = 'Ausführender Benutzer wird Verantwortlicher';
     $Lang->{'Responsible should become ticket owner'} = 'Verantwortlicher wird Besitzer';
     $Lang->{'Unlock Ticket'} = 'Ticket freigeben';
     $Lang->{'Tickets are unlocked automatically on \'closed\' states'} = 'Tickets werden bei \'geschlossen\' Status automatisch freigegeben';
