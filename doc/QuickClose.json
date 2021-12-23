@@ -1,9 +1,10 @@
 {
     "name": "QuickClose",
-    "version": "6.1.1",
+    "version": "6.2.1",
     "framework": [
         "6.0.x",
-        "6.1.x"
+        "6.1.x",
+        "6.2.x"
     ],
     "vendor": {
         "name":  "Perl-Services.de",
