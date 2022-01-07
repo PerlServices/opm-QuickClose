@@ -1,10 +1,10 @@
 {
     "name": "QuickClose",
-    "version": "6.2.1",
+    "version": "10.0.2",
+    "product": "otobo",
     "framework": [
-        "6.0.x",
-        "6.1.x",
-        "6.2.x"
+        "10.0.x",
+        "10.1.x"
     ],
     "vendor": {
         "name":  "Perl-Services.de",
@@ -33,6 +33,7 @@
                 { "name": "pending_diff", "required": "false", "type": "SMALLINT" },
                 { "name": "ticket_unlock", "required": "false", "type": "SMALLINT" },
                 { "name": "force_owner_change", "required": "false", "type": "SMALLINT" },
+                { "name": "force_responsible_change", "required": "false", "type": "SMALLINT" },
                 { "name": "assign_to_responsible", "required": "false", "type": "SMALLINT" },
                 { "name": "show_ticket_zoom", "required": "false", "type": "SMALLINT" },
                 { "name": "fix_hour", "required": "false", "type": "VARCHAR", "size": 5 },
@@ -229,6 +230,14 @@
             "columns":[
                 { "name": "article_type", "required": "true", "type": "VARCHAR", "size": 20 },
                 { "name": "article_customer", "required": "true", "type": "SMALLINT" }
+            ]
+        },
+        {
+            "type": "ColumnAdd",
+            "name": "ps_quick_close",
+            "version" : "10.0.2",
+            "columns":[
+                { "name": "force_responsible_change", "required": "false", "type": "SMALLINT" }
             ]
         }
     ],

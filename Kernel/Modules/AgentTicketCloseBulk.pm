@@ -1,5 +1,5 @@
 # --
-# Copyright (C) 2012 - 2021 Perl-Services.de, http://perl-services.de
+# Copyright (C) 2012 - 2021 Perl-Services.de, https://perl-services.de
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -169,6 +169,14 @@ sub Run {
         }
         elsif ( $CloseData{ForceCurrentUserAsOwner} ) {
             $TicketObject->TicketOwnerSet(
+                TicketID  => $TicketID,
+                NewUserID => $Self->{UserID},
+                UserID    => $Self->{UserID},
+            );
+        }
+
+        if ( $CloseData{ForceCurrentUserAsResponsible} && $ResponsibleEnabled) {
+            $TicketObject->TicketResponsibleSet(
                 TicketID  => $TicketID,
                 NewUserID => $Self->{UserID},
                 UserID    => $Self->{UserID},

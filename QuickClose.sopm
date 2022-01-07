@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<otrs_package version="1.0">
-    <!-- GENERATED WITH OTRS::OPM::Maker::Command::sopm (1.44) -->
+<otobo_package version="1.0">
+    <!-- GENERATED WITH OPM::Maker::Command::sopm (1.1.0) -->
     <Name>QuickClose</Name>
-    <Version>6.2.1</Version>
-    <Framework>6.0.x</Framework>
-    <Framework>6.1.x</Framework>
-    <Framework>6.2.x</Framework>
+    <Version>10.0.2</Version>
+    <Framework>10.0.x</Framework>
+    <Framework>10.1.x</Framework>
     <Vendor>Perl-Services.de</Vendor>
     <URL>http://www.perl-services.de</URL>
     <Description Lang="de">Ein Modul, mit dem Tickets schneller/einfacher geschlossen werden können.</Description>
@@ -49,6 +48,7 @@
             <Column Name="pending_diff" Required="false" Type="SMALLINT" />
             <Column Name="ticket_unlock" Required="false" Type="SMALLINT" />
             <Column Name="force_owner_change" Required="false" Type="SMALLINT" />
+            <Column Name="force_responsible_change" Required="false" Type="SMALLINT" />
             <Column Name="assign_to_responsible" Required="false" Type="SMALLINT" />
             <Column Name="show_ticket_zoom" Required="false" Type="SMALLINT" />
             <Column Name="fix_hour" Required="false" Type="VARCHAR" Size="5" />
@@ -152,6 +152,9 @@
             <ColumnAdd Name="article_type" Required="true" Type="VARCHAR" Size="20" />
             <ColumnAdd Name="article_customer" Required="true" Type="SMALLINT" />
         </TableAlter>
+        <TableAlter Name="ps_quick_close" Version="10.0.2">
+            <ColumnAdd Name="force_responsible_change" Required="false" Type="SMALLINT" />
+        </TableAlter>
     </DatabaseUpgrade>
     <DatabaseUninstall Type="pre">
         <TableDrop Name="ps_quick_close_perm" />
@@ -169,4 +172,4 @@
     <IntroInstall Type="post" Lang="hu" Title="Köszönjük!"><![CDATA[
             Köszönjük, hogy a QuickClose modult választotta.
     ]]></IntroInstall>
-</otrs_package>
+</otobo_package>
