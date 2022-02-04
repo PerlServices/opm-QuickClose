@@ -1,6 +1,6 @@
 {
     "name": "QuickClose",
-    "version": "6.2.2",
+    "version": "6.2.3",
     "framework": [
         "6.0.x",
         "6.1.x",
@@ -170,7 +170,7 @@
             "name": "ps_quick_close",
             "version" : "4.0.10",
             "columns":[
-                { "name": "group_name", "required": "false", "type": "SMALLINT" }
+                { "name": "group_name", "required": "false", "type": "VARCHAR", "size": "250" }
             ]
         },
         {
@@ -229,6 +229,14 @@
             "columns":[
                 { "name": "article_type", "required": "true", "type": "VARCHAR", "size": 20 },
                 { "name": "article_customer", "required": "true", "type": "SMALLINT" }
+            ]
+        },
+        {
+            "type": "ColumnChange",
+            "name": "ps_quick_close",
+            "version" : "6.2.3",
+            "columns":[
+                { "old_name": "group_name", "new_name": "group_name", "required": "false", "type": "VARCHAR", "size": "250" }
             ]
         }
     ],
