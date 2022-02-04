@@ -104,6 +104,7 @@ sub QuickCloseAdd {
     $Param{ToType}                  ||= '';
     $Param{Body}                    ||= '';
     $Param{ArticleCustomer}         ||= 0;
+    $Param{FixHour}                 ||= 0;
 
     # insert new news
     return if !$DBObject->Do(
@@ -224,6 +225,7 @@ sub QuickCloseUpdate {
     $Param{ToType}                  ||= '';
     $Param{ToAddress}               ||= '';
     $Param{Body}                    ||= '';
+    $Param{FixHour}                 ||= 0;
 
     # insert new news
     return if !$DBObject->Do(
@@ -248,7 +250,7 @@ sub QuickCloseUpdate {
             \$Param{PendingDiff},
             \$Param{ForceCurrentUserAsOwner},
             \$Param{AssignToResponsible},
-	    \$Param{ShowTicketZoom},
+            \$Param{ShowTicketZoom},
             \$Param{FixHour},
             \$Param{Group},
             \$Param{ResponsibleID},
