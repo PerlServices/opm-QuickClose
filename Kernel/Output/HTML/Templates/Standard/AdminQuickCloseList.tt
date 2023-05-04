@@ -9,9 +9,8 @@
 # did not receive this file, see http://www.gnu.org/licenses/agpl.txt.
 # --
 
-<div class="MainBox ARIARoleMain LayoutFixedSidebar SidebarFirst">
-    <h1>[% Translate("QuickClose Management") | html %]</h1>
-    <div class="SidebarColumn">
+<div class="MainBox ARIARoleMain LayoutFixedSidebar SidebarFirst ActionsSideBar">
+    <div class="SidebarColumn ActionsSideBarComp">
         <div class="WidgetSimple">
             <div class="Header">
                 <h2>[% Translate("Actions") | html %]</h2>
@@ -24,9 +23,40 @@
                 </ul>
             </div>
         </div>
+        <div class="WidgetSimple">
+            <div class="Header">
+                <h2>[% Translate("Related Actions") | html %]</h2>
+            </div>
+            <div class="Content">
+                <ul class="ActionList">
+                    <li>
+                        <a href="[% Env("Baselink") %]Action=AdminSystemAddress" class="CallForAction Fullsize Center"><span><i class="fa fa-plus-square"></i>[% Translate("Email Addresses") | html %]</span></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 
     <div class="ContentColumn">
+        <h1 class="InvisibleText">[% Translate("QuickClose Management") | html %]</h1>
+
+       [% BreadcrumbPath = [
+                {
+                    Name => Translate('QuickClose Management'),
+                    Link => Env("Action"),
+                },
+            ]
+        %]
+
+        [% SWITCH Data.Action %]
+            [% CASE 'Add' %]
+                [% BreadcrumbPath.push({ Name => Translate('Add Queue Sender'),}) %]
+            [% CASE 'Change' %]
+                [% USE EditTitle = String(Translate("Edit Queue Sender")) %]
+                [% BreadcrumbPath.push({ Name => EditTitle.append( ': ', Data.Name ) }) %]
+        [% END %]
+
+        [% INCLUDE "Breadcrumb.tt" Path = BreadcrumbPath %]
         <div class="WidgetSimple">
             <div class="Header">
                 <h2>[% Translate("List") | html %]</h2>
