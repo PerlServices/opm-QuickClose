@@ -8,9 +8,8 @@
 
 [% InsertTemplate("AdminQuickCloseUserSearch.tt") %]
 
-<div class="MainBox ARIARoleMain LayoutFixedSidebar SidebarFirst">
-    <h1>[% Translate("QuickClose Management") | html %]</h1>
-    <div class="SidebarColumn">
+<div class="MainBox ARIARoleMain LayoutFixedSidebar SidebarFirst ActionsSideBar">
+    <div class="SidebarColumn ActionsSideBarComp">
         <div class="WidgetSimple">
             <div class="Header">
                 <h2>[% Translate("Actions") | html %]</h2>
@@ -26,6 +25,27 @@
     </div>
 
     <div class="ContentColumn">
+        <h1 class="InvisibleText">[% Translate("QuickClose Management") | html %]</h1>
+       [% BreadcrumbPath = [
+                {
+                    Name => Translate('QuickClose Management'),
+                    Link => Env("Action"),
+                },
+            ]
+        %]
+
+        [% SWITCH Data.Action %]
+            [% CASE 'Add' %]
+                [% BreadcrumbPath.push({ Name => Translate('Add QuickClose'),}) %]
+            [% CASE 'Edit' %]
+                [% USE EditTitle = String(Translate("Edit QuickClose")) %]
+                [% BreadcrumbPath.push({ Name => EditTitle.append( ': ', Data.Name ) }) %]
+            [% CASE 'Delete' %]
+                [% USE DeleteTitle = String(Translate("Delete QuickClose")) %]
+                [% BreadcrumbPath.push({ Name => DeleteTitle.append( ': ', Data.Name ) }) %]
+        [% END %]
+
+        [% INCLUDE "Breadcrumb.tt" Path = BreadcrumbPath %]
         <div class="WidgetSimple">
             <div class="Header">
                 <h2>[% Translate("Add/Change QuickClose texts") | html %]</h2>
