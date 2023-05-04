@@ -38,10 +38,13 @@
 
         [% SWITCH Data.Action %]
             [% CASE 'Add' %]
-                [% BreadcrumbPath.push({ Name => Translate('Add Queue Sender'),}) %]
-            [% CASE 'Change' %]
-                [% USE EditTitle = String(Translate("Edit Queue Sender")) %]
+                [% BreadcrumbPath.push({ Name => Translate('Add QuickClose'),}) %]
+            [% CASE 'Edit' %]
+                [% USE EditTitle = String(Translate("Edit QuickClose")) %]
                 [% BreadcrumbPath.push({ Name => EditTitle.append( ': ', Data.Name ) }) %]
+            [% CASE 'Delete' %]
+                [% USE DeleteTitle = String(Translate("Delete QuickClose")) %]
+                [% BreadcrumbPath.push({ Name => DeleteTitle.append( ': ', Data.Name ) }) %]
         [% END %]
 
         [% INCLUDE "Breadcrumb.tt" Path = BreadcrumbPath %]
