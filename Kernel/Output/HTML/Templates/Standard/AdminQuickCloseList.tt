@@ -23,18 +23,6 @@
                 </ul>
             </div>
         </div>
-        <div class="WidgetSimple">
-            <div class="Header">
-                <h2>[% Translate("Related Actions") | html %]</h2>
-            </div>
-            <div class="Content">
-                <ul class="ActionList">
-                    <li>
-                        <a href="[% Env("Baselink") %]Action=AdminSystemAddress" class="CallForAction Fullsize Center"><span><i class="fa fa-plus-square"></i>[% Translate("Email Addresses") | html %]</span></a>
-                    </li>
-                </ul>
-            </div>
-        </div>
     </div>
 
     <div class="ContentColumn">
