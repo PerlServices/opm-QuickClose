@@ -127,8 +127,8 @@ sub PermissionGet {
     return {} if !$DBObject->Prepare(
         SQL => 'SELECT quick_close_id, perm_type, type_id '
             . ' FROM ps_quick_close_perm '
-            . 'WHERE quick_close_id = ?'
-            . 'ORDER BY perm_type, type_id',
+            . ' WHERE quick_close_id = ?'
+            . ' ORDER BY perm_type, type_id',
         Bind => [
             \$Param{QuickCloseID},
         ],
