@@ -58,241 +58,268 @@
                     <input type="hidden" name="ID" value="[% Data.ID | html %]"/>
 
                     <fieldset class="TableLike">
-                        <label for="Name" class="Mandatory">
-                            <span class="Marker">*</span>
-                            [% Translate("Name") | html %]:
-                        </label>
-                        <div class="Field">
-                            <input type="text" id="Name" name="Name" value="[% Data.Name | html %]" class="W75pc Validate_Required [% Data.NameInvalid | html %]"/>
-                            <div id="NameError" class="TooltipErrorMessage">
-                                <p>[% Translate("A name for the QuickClose text is required.") | html %]</p>
+                        <div class="field-wrapper">
+                            <label for="Name" class="Mandatory">
+                                <span class="Marker">*</span>
+                                [% Translate("Name") | html %]:
+                            </label>
+                            <div class="Field">
+                                <input type="text" id="Name" name="Name" value="[% Data.Name | html %]" class="W75pc Validate_Required [% Data.NameInvalid | html %]"/>
+                                <div id="NameError" class="TooltipErrorMessage">
+                                    <p>[% Translate("A name for the QuickClose text is required.") | html %]</p>
+                                </div>
+                                <div id="NameServerError" class="TooltipErrorMessage">
+                                    <p>[% Translate("A name for the QuickClose text is required.") | html %]</p>
+                                </div>
                             </div>
-                            <div id="NameServerError" class="TooltipErrorMessage">
-                                <p>[% Translate("A name for the QuickClose text is required.") | html %]</p>
+                        </div>
+
+                        <div class="field-wrapper">
+                            <label for="RoleID">
+                                [% Translate("Role") | html %]:
+                            </label>
+                            <div class="Field">
+                                [% Data.RoleSelect %]
                             </div>
                         </div>
-                        <div class="Clear"></div>
 
-                        <label for="RoleID">
-                            [% Translate("Role") | html %]:
-                        </label>
-                        <div class="Field">
-                            [% Data.RoleSelect %]
+                        <div class="field-wrapper">
+                            <label for="Group">
+                                [% Translate("Group") | html %]:
+                            </label>
+                            <div class="Field">
+                                <input type="text" id="Group" name="Group" value="[% Data.Group | html %]" class="W75pc" />
+                            </div>
                         </div>
-                        <div class="Clear"></div>
 
-                        <label for="Group">
-                            [% Translate("Group") | html %]:
-                        </label>
-                        <div class="Field">
-                            <input type="text" id="Group" name="Group" value="[% Data.Group | html %]" class="W75pc" />
+                        <div class="field-wrapper">
+                            <label for="ToType">
+                                [% Translate("To") | html %]:
+                            </label>
+                            <div class="Field">
+                                [% Data.ToTypeSelect %]
+                            </div>
                         </div>
-                        <div class="Clear"></div>
 
-                        <label for="ToType">
-                            [% Translate("To") | html %]:
-                        </label>
-                        <div class="Field">
-                            [% Data.ToTypeSelect %]
+                        <div class="field-wrapper">
+                            <label for="ToAddress">
+                                [% Translate("To Address") | html %]:
+                            </label>
+                            <div class="Field">
+                                <input type="text" id="ToAddress" name="ToAddress" value="[% Data.ToAddress | html %]" class="W75pc" />
+                            </div>
                         </div>
-                        <div class="Clear"></div>
 
-                        <label for="ToAddress">
-                            [% Translate("To Address") | html %]:
-                        </label>
-                        <div class="Field">
-                            <input type="text" id="ToAddress" name="ToAddress" value="[% Data.ToAddress | html %]" class="W75pc" />
+                        <div class="field-wrapper">
+                            <label for="CreateArticle">
+                                [% Translate("Create Article") | html %]:
+                            </label>
+                            <div class="Field">
+                                <input type="checkbox" id="CreateArticle" name="CreateArticle" value="1" [% IF Data.CreateArticle %]checked="checked"[% END %] class="" />
+                                <span style="color: red">[% Translate("Check this when you want to create an article") %]</span>
+                            </div>
                         </div>
-                        <div class="Clear"></div>
+                    </fieldset>
 
-                        <label for="CreateArticle">
-                            [% Translate("Create Article") | html %]:
-                        </label>
-                        <div class="Field">
-                            <input type="checkbox" id="CreateArticle" name="CreateArticle" value="1" [% IF Data.CreateArticle %]checked="checked"[% END %] class="" />
-                            <span style="color: red">[% Translate("Check this when you want to create an article") %]</span>
-                        </div>
-                        <div class="Clear"></div>
-
-                        <div id="ArticleFields" class="Hidden TableLike">
+                    <div id="ArticleFields" class="Hidden TableLike">
                         <fieldset class="TableLike">
-                        <label for="Subject" class="Mandatory">
-                            <span class="Marker">*</span>
-                            [% Translate("Subject") | html %]:
-                        </label>
-                        <div class="Field">
-                            <input type="text" id="Subject" name="Subject" value="[% Data.Subject | html %]" class="W75pc" />
+                            <div class="field-wrapper">
+                                <label for="Subject" class="Mandatory">
+                                    <span class="Marker">*</span>
+                                    [% Translate("Subject") | html %]:
+                                </label>
+                                <div class="Field">
+                                    <input type="text" id="Subject" name="Subject" value="[% Data.Subject | html %]" class="W75pc" />
 
-                            <div id="SubjectError" class="TooltipErrorMessage">
-                                <p>[% Translate("A subject text is required.") | html %]</p>
+                                    <div id="SubjectError" class="TooltipErrorMessage">
+                                        <p>[% Translate("A subject text is required.") | html %]</p>
+                                    </div>
+                                    <div id="SubjectServerError" class="TooltipErrorMessage">
+                                        <p>[% Translate("A subject text is required.") | html %]</p>
+                                    </div>
+                                </div>
                             </div>
-                            <div id="SubjectServerError" class="TooltipErrorMessage">
-                                <p>[% Translate("A subject text is required.") | html %]</p>
+
+                            <div class="field-wrapper">
+                                <label for="RichText" class="Mandatory">
+                                    <span class="Marker">*</span>
+                                    [% Translate("Body") | html %]:
+                                </label>
+                                <div class="RichTextField">
+                                    <textarea id="RichText" name="Body" class="W75pc RichText [% Data.BodyInvalid | html %]" rows="15" cols="[% Config("Ticket::Frontend::TextAreaNote") %]">[% Data.Body | html %]</textarea>
+                                    <div id="RichTextError" class="TooltipErrorMessage">
+                                        <p>[% Translate("A body text is required.") | html %]</p>
+                                    </div>
+                                    <div id="BodyServerError" class="TooltipErrorMessage">
+                                        <p>[% Translate("A body text is required.") | html %]</p>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="Clear"></div>
 
-                        <label for="RichText" class="Mandatory">
-                            <span class="Marker">*</span>
-                            [% Translate("Body") | html %]:
-                        </label>
-                        <div class="RichTextField">
-                            <textarea id="RichText" name="Body" class="W75pc RichText [% Data.BodyInvalid | html %]" rows="15" cols="[% Config("Ticket::Frontend::TextAreaNote") %]">[% Data.Body | html %]</textarea>
-                            <div id="RichTextError" class="TooltipErrorMessage">
-                                <p>[% Translate("A body text is required.") | html %]</p>
+                            <div class="field-wrapper">
+                                <label for="TimeUnits">
+                                    [% Translate("Time units") | html %]:
+                                </label>
+                                <div class="Field">
+                                    <input type="text" name="TimeUnits" id="TimeUnits" value="[% Data.TimeUnits | html %]" />
+                                </div>
                             </div>
-                            <div id="BodyServerError" class="TooltipErrorMessage">
-                                <p>[% Translate("A body text is required.") | html %]</p>
+
+                            <div class="field-wrapper">
+                                <label for="ArticleType" class="Mandatory">
+                                    <span class="Marker">*</span>
+                                    [% Translate("Article Type") | html %]:
+                                </label>
+                                <div class="Field">
+                                    [% Data.ArticleTypeSelect %]
+                                </div>
                             </div>
-                        </div>
-                        <div class="Clear"></div>
 
-                        <label for="TimeUnits">
-                            [% Translate("Time units") | html %]:
-                        </label>
-                        <div class="Field">
-                            <input type="text" name="TimeUnits" id="TimeUnits" value="[% Data.TimeUnits | html %]" />
-                        </div>
-                        <div class="Clear"></div>
-
-                        <label for="ArticleType" class="Mandatory">
-                            <span class="Marker">*</span>
-                            [% Translate("Article Type") | html %]:
-                        </label>
-                        <div class="Field">
-                            [% Data.ArticleTypeSelect %]
-                        </div>
-                        <div class="Clear"></div>
-
-                        <label for="ArticleCustomer">
-                            [% Translate("Article viewable for Customer") | html %]:
-                        </label>
-                        <div class="Field">
-                            <input type="checkbox" name="ArticleCustomer" [% Data.CustomerSelected %] value="1">
-                        </div>
-                        <div class="Clear"></div>
-
+                            <div class="field-wrapper">
+                                <label for="ArticleCustomer">
+                                    [% Translate("Article viewable for Customer") | html %]:
+                                </label>
+                                <div class="Field">
+                                    <input type="checkbox" name="ArticleCustomer" [% Data.CustomerSelected %] value="1">
+                                </div>
+                            </div>
                         </fieldset>
+                    </div>
+
+                    <fieldset class="TableLike">
+                        <div class="field-wrapper">
+                            <label for="StateID">
+                                [% Translate("State after close") | html %]:
+                            </label>
+                            <div class="Field">
+                                [% Data.StateSelect %]
+                            </div>
                         </div>
 
-                        <label for="StateID">
-                            [% Translate("State after close") | html %]:
-                        </label>
-                        <div class="Field">
-                            [% Data.StateSelect %]
+                        <div class="field-wrapper">
+                            <label for="PendingDiff">
+                                [% Translate("Pending Diff (in minutes)") | html %]:
+                            </label>
+                            <div class="Field">
+                                <input type="text" name="PendingDiff" id="PendingDiff" value="[% Data.PendingDiff | html %]" />
+                            </div>
                         </div>
-                        <div class="Clear"></div>
 
-                        <label for="PendingDiff">
-                            [% Translate("Pending Diff (in minutes)") | html %]:
-                        </label>
-                        <div class="Field">
-                            <input type="text" name="PendingDiff" id="PendingDiff" value="[% Data.PendingDiff | html %]" />
+                        <div class="field-wrapper">
+                            <label for="FixHour">
+                                [% Translate("Fix Hour:Minute for pending time") | html %]:
+                            </label>
+                            <div class="Field">
+                                <input type="text" name="FixHour" id="FixHour" value="[% Data.FixHour | html %]" />
+                            </div>
                         </div>
-                        <div class="Clear"></div>
 
-                        <label for="FixHour">
-                            [% Translate("Fix Hour:Minute for pending time") | html %]:
-                        </label>
-                        <div class="Field">
-                            <input type="text" name="FixHour" id="FixHour" value="[% Data.FixHour | html %]" />
+                        <div class="field-wrapper">
+                            <label for="PriorityID">
+                                [% Translate("Priority") | html %]:
+                            </label>
+                            <div class="Field">
+                                [% Data.PrioritySelect %]
+                            </div>
                         </div>
-                        <div class="Clear"></div>
 
-                        <label for="PriorityID">
-                            [% Translate("Priority") | html %]:
-                        </label>
-                        <div class="Field">
-                            [% Data.PrioritySelect %]
-                        </div>
-                        <div class="Clear"></div>
+                        <div class="field-wrapper">
+                            <label for="Owner"> [% Translate("Owner") | html %]: </label>
+                            <div class="Field">
+                                <input id="Owner" name="Owner" type="text" value="[% Data.Owner | html %]" class="W75pc [% Data.OwnerError %]" />
+                                <input id="OwnerSelected" name="OwnerSelected" type="hidden" value="[% Data.OwnerID | html %]" />
+                                <input id="OwnerType" name="OwnerType" type="hidden" value="[% Data.OwnerType | html %]" />
 
-                        <label for="Owner"> [% Translate("Owner") | html %]: </label>
-                        <div class="Field">
-                            <input id="Owner" name="Owner" type="text" value="[% Data.Owner | html %]" class="W75pc [% Data.OwnerError %]" />
-                            <input id="OwnerSelected" name="OwnerSelected" type="hidden" value="[% Data.OwnerID | html %]" />
-                            <input id="OwnerType" name="OwnerType" type="hidden" value="[% Data.OwnerType | html %]" />
+                                <div id="OwnerIDServerError" class="TooltipErrorMessage">
+                                    <p>[% Translate("Invalid User.") | html %]</p>
+                                </div>
+                            </div>
 
-                            <div id="OwnerIDServerError" class="TooltipErrorMessage">
+                            <div id="UserServerError" class="TooltipErrorMessage">
                                 <p>[% Translate("Invalid User.") | html %]</p>
                             </div>
                         </div>
 
-                        <div id="UserServerError" class="TooltipErrorMessage">
-                            <p>[% Translate("Invalid User.") | html %]</p>
-                        </div>
+                        <div class="field-wrapper">
+                            <label for="Responsible"> [% Translate("Responsible") | html %]: </label>
+                            <div class="Field">
+                                <input id="Responsible" name="Responsible" type="text" value="[% Data.Responsible | html %]" class="W75pc [% Data.ResponsibleError %]" />
+                                <input id="ResponsibleSelected" name="ResponsibleSelected" type="hidden" value="[% Data.ResponsibleID | html %]" />
+                                <input id="ResponsibleType" name="ResponsibleType" type="hidden" value="[% Data.ResponsibleType | html %]" />
 
-                        <label for="Responsible"> [% Translate("Responsible") | html %]: </label>
-                        <div class="Field">
-                            <input id="Responsible" name="Responsible" type="text" value="[% Data.Responsible | html %]" class="W75pc [% Data.ResponsibleError %]" />
-                            <input id="ResponsibleSelected" name="ResponsibleSelected" type="hidden" value="[% Data.ResponsibleID | html %]" />
-                            <input id="ResponsibleType" name="ResponsibleType" type="hidden" value="[% Data.ResponsibleType | html %]" />
+                                <div id="ResponsibleIDServerError" class="TooltipErrorMessage">
+                                    <p>[% Translate("Invalid User.") | html %]</p>
+                                </div>
+                            </div>
 
-                            <div id="ResponsibleIDServerError" class="TooltipErrorMessage">
+                            <div id="ResponsibleServerError" class="TooltipErrorMessage">
                                 <p>[% Translate("Invalid User.") | html %]</p>
                             </div>
                         </div>
 
-                        <div id="ResponsibleServerError" class="TooltipErrorMessage">
-                            <p>[% Translate("Invalid User.") | html %]</p>
+                        <div class="field-wrapper">
+                            <label for="ForceCurrentUserAsOwner">
+                                [% Translate("Acting user should become ticket owner") | html %]:
+                            </label>
+                            <div class="Field">
+                                <input type="checkbox" value="1" name="ForceCurrentUserAsOwner" id="ForceCurrentUserAsOwner" [% Data.ForceSelected %] />
+                            </div>
                         </div>
 
-                        <label for="ForceCurrentUserAsOwner">
-                            [% Translate("Acting user should become ticket owner") | html %]:
-                        </label>
-                        <div class="Field">
-                            <input type="checkbox" value="1" name="ForceCurrentUserAsOwner" id="ForceCurrentUserAsOwner" [% Data.ForceSelected %] />
+                        <div class="field-wrapper">
+                            <label for="AssignToResponsible">
+                                [% Translate("Responsible should become ticket owner") | html %]:
+                            </label>
+                            <div class="Field">
+                                <input type="checkbox" value="1" name="AssignToResponsible" id="AssignToResponsible" [% Data.ResponsibleSelected %] />
+                            </div>
                         </div>
-                        <div class="Clear"></div>
 
-                        <label for="AssignToResponsible">
-                            [% Translate("Responsible should become ticket owner") | html %]:
-                        </label>
-                        <div class="Field">
-                            <input type="checkbox" value="1" name="AssignToResponsible" id="AssignToResponsible" [% Data.ResponsibleSelected %] />
+                        <div class="field-wrapper">
+                            <label for="Unlock">
+                                [% Translate("Unlock Ticket") | html %] <br />
+                                [% Translate("Tickets are unlocked automatically on 'closed' states") | html %]:
+                            </label>
+                            <div class="Field">
+                                [% Data.UnlockSelect %]
+                            </div>
                         </div>
-                        <div class="Clear"></div>
 
-                        <label for="Unlock">
-                            [% Translate("Unlock Ticket") | html %] <br />
-                            [% Translate("Tickets are unlocked automatically on 'closed' states") | html %]:
-                        </label>
-                        <div class="Field">
-                            [% Data.UnlockSelect %]
+                        <div class="field-wrapper">
+                            <label for="ValidID" class="Mandatory">
+                                <span class="Marker">*</span>
+                                [% Translate("Validity") | html %]:
+                            </label>
+                            <div class="Field">
+                                [% Data.ValidSelect %]
+                            </div>
                         </div>
-                        <div class="Clear"></div>
 
-                        <label for="ValidID" class="Mandatory">
-                            <span class="Marker">*</span>
-                            [% Translate("Validity") | html %]:
-                        </label>
-                        <div class="Field">
-                            [% Data.ValidSelect %]
+                        <div class="field-wrapper">
+                            <label for="QueueID">
+                                [% Translate("Queue") | html %]:
+                            </label>
+                            <div class="Field">
+                                [% Data.QueueSelect %]
+                            </div>
                         </div>
-                        <div class="Clear"></div>
 
-                        <label for="QueueID">
-                            [% Translate("Queue") | html %]:
-                        </label>
-                        <div class="Field">
-                            [% Data.QueueSelect %]
+                        <div class="field-wrapper">
+                            <label for="ShowTicketZoom">
+                                [% Translate("Show ticket Zoom after QuickClose") | html %]:
+                            </label>
+                            <div class="Field">
+                                <input type="checkbox" value="1" name="ShowTicketZoom" id="ShowTicketZoom" [% Data.ZoomSelected %] />
+                            </div>
                         </div>
-                        <div class="Clear"></div>
 
-                        <label for="ShowTicketZoom">
-                            [% Translate("Show ticket Zoom after QuickClose") | html %]:
-                        </label>
-                        <div class="Field">
-                            <input type="checkbox" value="1" name="ShowTicketZoom" id="ShowTicketZoom" [% Data.ZoomSelected %] />
+                        <div class="field-wrapper">
+                            <div class="Field">
+                                <button class="Primary CallForAction" type="submit" value="[% Translate("Save") | html %]"><span>[% Translate("Save") | html %]</span></button>
+                                [% Translate("or") | html %]
+                                <a href="[% Env("Baselink") %]Action=[% Env("Action") %]">[% Translate("Cancel") | html %]</a>
+                            </div>
                         </div>
-                        <div class="Clear"></div>
-
-                        <div class="Field">
-                            <button class="Primary CallForAction" type="submit" value="[% Translate("Save") | html %]"><span>[% Translate("Save") | html %]</span></button>
-                            [% Translate("or") | html %]
-                            <a href="[% Env("Baselink") %]Action=[% Env("Action") %]">[% Translate("Cancel") | html %]</a>
-                        </div>
-                        <div class="Clear"></div>
                     </fieldset>
                 </form>
             </div>
