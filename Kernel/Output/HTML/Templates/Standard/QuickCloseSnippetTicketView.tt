@@ -6,7 +6,7 @@
 # did not receive this file, see http://www.gnu.org/licenses/agpl.txt.
 # --
 
-                    <li class="Bulk AlwaysPresent [% Data.Class | html %]">
+                    <li class="Bulk AlwaysPresent [% Data.Class | html %]" style="flex-wrap: nowrap">
                         <form title="[% Translate("QuickClose ticket") | html %]" action="[% Env("CGIHandle") %]" method="post" name="quickclose" id="quickclose" class="QuickCloseView">
                             <input type="hidden" name="Action" value="AgentTicketCloseBulk"/>
                             <input type="hidden" name="Subject" value="[% Translate("Close") | html %]"/>
