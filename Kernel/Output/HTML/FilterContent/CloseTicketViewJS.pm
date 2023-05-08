@@ -50,8 +50,7 @@ sub Run {
         <script type="text/javascript">//<![CDATA[
         Core.App.Ready( function() {
         $('.QuickCloseSelect').each( function( SelectIndex, SelectElement) {
-            $(SelectElement).unbind('change');
-            $(SelectElement).bind('change', function (Event) {
+            $(SelectElement).off('change').on('change', function (Event) {
                 // retrieve body for quickclose
                 var URL = Core.Config.Get('Baselink');
                 var TID = $(this).val();
@@ -63,7 +62,7 @@ sub Run {
                 var $SelectedTickets;
                 var CloseForm = $(this).closest('form');
                 var TicketElementSelectors = {
-                    'Small': 'div.Overview form table tbody tr td input:checkbox[name="TicketID"]',
+                    'Small': 'ul.Overview form table tbody tr td input:checkbox[name="TicketID"]',
                     'Medium': 'ul.Overview input:checkbox[name="TicketID"]',
                     'Large': 'ul.Overview input:checkbox[name="TicketID"]'
                 };
@@ -82,6 +81,7 @@ sub Run {
                 }
 
                 var TicketID = $(this).data('ticket-id');
+
                 if ( TicketID && TicketID > 0 ) {
                     var HiddenField = $('<input type="hidden" name="TicketID">');
                     HiddenField.val( TicketID );
