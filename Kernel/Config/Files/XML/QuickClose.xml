@@ -172,7 +172,7 @@
     </Setting>
     <Setting Name="Frontend::Output::FilterElementPost###OutputFilterClose" Required="0" Valid="1">
         <Description Translatable="1">Modul to show OuputfilterClose.</Description>
-        <Navigation>OutputFilterClose</Navigation>
+        <Navigation>PerlServices::QuickClose::OutputFilter</Navigation>
         <Value>
             <Hash>
                 <Item Key="Module">Kernel::Output::HTML::FilterElementPost::Close</Item>
@@ -187,7 +187,7 @@
     </Setting>
     <Setting Name="Frontend::Output::FilterElementPost###OutputFilterCloseTicketView" Required="0" Valid="1">
         <Description Translatable="1">Modul to show OuputfilterClose in ticket overviews.</Description>
-        <Navigation>OutputFilterClose</Navigation>
+        <Navigation>PerlServices::QuickClose::OutputFilter</Navigation>
         <Value>
             <Hash>
                 <Item Key="Module">Kernel::Output::HTML::FilterElementPost::CloseTicketView</Item>
@@ -204,7 +204,7 @@
     </Setting>
     <Setting Name="Frontend::Output::FilterContent###QuickCloseViewJS" Required="0" Valid="1">
         <Description Translatable="1">Modul to show OuputfilterClose in ticket overviews.</Description>
-        <Navigation>OutputFilterClose</Navigation>
+        <Navigation>PerlServices::QuickClose::OutputFilter</Navigation>
         <Value>
             <Hash>
                 <Item Key="Module">Kernel::Output::HTML::FilterContent::CloseTicketViewJS</Item>
@@ -221,42 +221,42 @@
     </Setting>
     <Setting Name="QuickClose::ShowOnlyForOwner" Required="1" Valid="1">
         <Description Translatable="1">Only the ticket owner sees the dropdown.</Description>
-        <Navigation>Core</Navigation>
+        <Navigation>PerlServices::QuickClose::Core</Navigation>
         <Value>
             <Item ValueType="Checkbox">0</Item>
         </Value>
     </Setting>
     <Setting Name="QuickClose###NoneLabel" Required="0" Valid="1">
         <Description Translatable="1">Label for the NULL option in dropdown.</Description>
-        <Navigation>Core</Navigation>
+        <Navigation>PerlServices::QuickClose::Core</Navigation>
         <Value>
             <Item ValueType="String" ValueRegex="">QuickClose</Item>
         </Value>
     </Setting>
     <Setting Name="QuickClose::DefaultSubject" Required="0" Valid="1">
         <Description Translatable="1">Default subject for "close" notes.</Description>
-        <Navigation>Core</Navigation>
+        <Navigation>PerlServices::QuickClose::Core</Navigation>
         <Value>
             <Item ValueType="String" ValueRegex="">Close</Item>
         </Value>
     </Setting>
     <Setting Name="QuickClose::DefaultID" Required="0" Valid="1">
         <Description Translatable="1">Default "close". This is used when no "CloseID" is passed.</Description>
-        <Navigation>Core</Navigation>
+        <Navigation>PerlServices::QuickClose::Core</Navigation>
         <Value>
             <Item ValueType="String" ValueRegex="^\d+$">1</Item>
         </Value>
     </Setting>
     <Setting Name="QuickClose::QueueMove" Required="1" Valid="1">
         <Description Translatable="1">Use queue move functionality for quick close.</Description>
-        <Navigation>Core</Navigation>
+        <Navigation>PerlServices::QuickClose::Core</Navigation>
         <Value>
             <Item ValueType="Checkbox">0</Item>
         </Value>
     </Setting>
     <Setting Name="QuickClose::StateTypes" Required="1" Valid="1">
         <Description Translatable="1">State types for quick closes.</Description>
-        <Navigation>Core</Navigation>
+        <Navigation>PerlServices::QuickClose::Core</Navigation>
         <Value>
             <Array>
                 <Item>closed</Item>
@@ -265,7 +265,7 @@
     </Setting>
     <Setting Name="QuickClose::PendingDiffDefault" Required="0" Valid="1">
         <Description Translatable="1">Default time to wait when new state is a pending state.</Description>
-        <Navigation>Core</Navigation>
+        <Navigation>PerlServices::QuickClose::Core</Navigation>
         <Value>
             <Item ValueType="String" ValueRegex="^\d+$">1</Item>
         </Value>
@@ -317,14 +317,14 @@
     </Setting>
     <Setting Name="QuickClose::UseGroups" Required="1" Valid="1">
         <Description Translatable="1">Use group functionality for quick close.</Description>
-        <Navigation>Core</Navigation>
+        <Navigation>PerlServices::QuickClose::Core</Navigation>
         <Value>
             <Item ValueType="Checkbox">0</Item>
         </Value>
     </Setting>
     <Setting Name="QuickClose::Labels" Required="1" Valid="1">
         <Description Translatable="1">Labels for groups.</Description>
-        <Navigation>Core</Navigation>
+        <Navigation>PerlServices::QuickClose::Core</Navigation>
         <Value>
             <Hash>
             </Hash>
@@ -332,14 +332,14 @@
     </Setting>
     <Setting Name="QuickClose::RequiredLock" Required="1" Valid="1">
         <Description Translatable="1">When ticket is locked, show dropdown only to the owner in ticket zoom.</Description>
-        <Navigation>Core</Navigation>
+        <Navigation>PerlServices::QuickClose::Core</Navigation>
         <Value>
             <Item ValueType="Checkbox">0</Item>
         </Value>
     </Setting>
     <Setting Name="QuickClose::UseQueueSender" Required="1" Valid="1">
         <Description Translatable="1">Use the system address assigned to the queue as the sender address.</Description>
-        <Navigation>Core</Navigation>
+        <Navigation>PerlServices::QuickClose::Core</Navigation>
         <Value>
             <Item ValueType="Checkbox">0</Item>
         </Value>
