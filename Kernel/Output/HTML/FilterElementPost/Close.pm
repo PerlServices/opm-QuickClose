@@ -162,10 +162,10 @@ sub Run {
     #scan html output and generate new html input
     my $LinkType = $ConfigObject->Get('Ticket::Frontend::MoveType');
     if ( $LinkType eq 'form' ) {
-        ${ $Param{Data} } =~ s{(<select name="DestQueueID".*?</li>)}{$1 $Dropdowns}mgs;
+        ${ $Param{Data} } =~ s{(<li \s+ class="" .*? <select [^>]*? name="DestQueueID".*?</li>)}{$Dropdowns $1}xms;
     }
     else {
-        ${ $Param{Data} } =~ s{(<a href=".*?Action=AgentTicketMove;TicketID=\d+;".*?</li>)}{$1 $Dropdowns}mgs;
+        ${ $Param{Data} } =~ s{(<li> \s+ <a \s+ href="[^"]*?Action=AgentTicketMove;TicketID=\d+;".*?</li>)}{$Dropdowns $1}xms;
     }
 
     return 1;

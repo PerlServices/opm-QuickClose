@@ -7,7 +7,7 @@
 # did not receive this file, see http://www.gnu.org/licenses/agpl.txt.
 # --
 
-                    <li class="[% Data.Class | html %]">
+                    <li class="[% Data.Class | html %]" style="flex-wrap: nowrap">
                         <form title="[% Translate("QuickClose ticket") | html %]" action="[% Env("CGIHandle") %]" method="post">
                             <input type="hidden" name="Action" value="AgentTicketCloseBulk"/>
                             <input type="hidden" name="TicketID" value="[% Data.TicketID | html %]"/>
