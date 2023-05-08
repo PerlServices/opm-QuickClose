@@ -1,6 +1,6 @@
 # --
 # Kernel/Language/de_QuickClose.pm - the German translation for QuickClose
-# Copyright (C) 2011 - 2022 Perl-Services, https://www.perl-services.de
+# Copyright (C) 2011 - 2023 Perl-Services, https://www.perl-services.de
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
