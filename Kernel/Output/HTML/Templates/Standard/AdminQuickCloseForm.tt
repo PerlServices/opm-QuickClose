@@ -313,11 +313,9 @@
                             </div>
                         </div>
 
-                        <div class="field-wrapper">
-                            <div class="Field">
-                                <button class="Primary CallForAction" type="submit" value="[% Translate("Save") | html %]"><span>[% Translate("Save") | html %]</span></button>
-                                [% Translate("or") | html %]
-                                <a href="[% Env("Baselink") %]Action=[% Env("Action") %]">[% Translate("Cancel") | html %]</a>
+                        <div class="field-wrapper form-button-actions">
+                            <div class="Field buttons-field">
+                                <button class="Primary CallForAction btn-primary btn-main  btn-width-md" type="submit" value="[% Translate("Save") | html %]"><span>[% Translate("Save") | html %]</span></button>
                             </div>
                         </div>
                     </fieldset>
